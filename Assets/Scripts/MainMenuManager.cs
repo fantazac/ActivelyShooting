@@ -1,0 +1,127 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class MainMenuManager : MonoBehaviour
+{
+    [SerializeField]
+    private GameObject mainMenuCamera;
+    [SerializeField]
+    private GameObject playerCamera;
+
+    private string playerParentPrefabPath;
+    private GameObject playerParentPrefab;
+
+    private MainMenuState state;
+
+    private Vector3 spawnPoint;
+
+    private MainMenuManager()
+    {
+        spawnPoint = Vector3.zero;
+
+        playerParentPrefabPath = "PlayerTemplatePrefab/PlayerTemplate";
+    }
+
+    private void Start()
+    {
+        state = MainMenuState.MAIN;
+
+        LoadPrefabs();
+    }
+
+    private void LoadPrefabs()
+    {
+        playerParentPrefab = Resources.Load<GameObject>(playerParentPrefabPath);
+    }
+
+    private void OnGUI()
+    {
+        switch (state)
+        {
+            case MainMenuState.MAIN:
+                if (GUILayout.Button("Connect", GUILayout.Height(40)))
+                {
+                    state = MainMenuState.CONNECTING;
+                    PhotonNetwork.ConnectUsingSettings("MOBA v1.0.0");
+                }
+                if (GUILayout.Button("Quit", GUILayout.Height(40)))
+                {
+                    #if UNITY_EDITOR
+                    UnityEditor.EditorApplication.isPlaying = false;
+                    #else
+                    Application.Quit();
+                    #endif
+                }
+                break;
+            case MainMenuState.CONNECTING:
+                GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
+                break;
+            case MainMenuState.CHARACTER_SELECT:
+                GUILayout.Label("Ping: " + PhotonNetwork.GetPing().ToString() + " - Players: " + PhotonNetwork.room.PlayerCount);
+                if (GUILayout.Button("Gunner", GUILayout.Height(40)))
+                {
+                    SpawnPlayer("Gunner");
+                }
+                if (GUILayout.Button("Mage", GUILayout.Height(40)))
+                {
+                    SpawnPlayer("Mage");
+                }
+                if (GUILayout.Button("Fighter", GUILayout.Height(40)))
+                {
+                    SpawnPlayer("Fighter");
+                }
+                if (GUILayout.Button("Quit", GUILayout.Height(30)))
+                {
+                    PhotonNetwork.Disconnect();
+                    state = MainMenuState.MAIN;
+                }
+                break;
+            case MainMenuState.IN_GAME:
+                GUILayout.Label("Ping: " + PhotonNetwork.GetPing().ToString() + " - Players: " + PhotonNetwork.room.PlayerCount);
+                break;
+        }
+    }
+
+    private void OnJoinedLobby()
+    {
+        PhotonNetwork.JoinRandomRoom();
+    }
+
+    private void OnPhotonRandomJoinFailed()
+    {
+        PhotonNetwork.CreateRoom(null);
+    }
+
+    private void OnJoinedRoom()
+    {
+        //Debug.Log(PhotonNetwork.player.ID);//This increments everytime someone joins, doesn't go down if someone leaves
+        if (PhotonNetwork.playerList.Length > 1)
+        {
+            //Load players position and character
+        }
+        state = MainMenuState.CHARACTER_SELECT;
+    }
+
+    private void SpawnPlayer(string characterName)
+    {
+        state = MainMenuState.IN_GAME;
+
+        GameObject playerTemplate = Instantiate(playerParentPrefab);
+        GameObject player = PhotonNetwork.Instantiate(characterName, spawnPoint, new Quaternion(), 0);
+        player.transform.parent = playerTemplate.transform;
+        StaticObjects.Player = player.GetComponent<Player>();
+        StaticObjects.PlayerCamera = playerTemplate.GetComponentInChildren<Camera>();
+
+        playerCamera.SetActive(true);
+        mainMenuCamera.SetActive(false);
+    }
+}
+
+enum MainMenuState
+{
+    MAIN,
+    CONNECTING,
+    CHARACTER_SELECT,
+    IN_GAME,
+}
