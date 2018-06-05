@@ -14,9 +14,9 @@ public class PlayerMovement : MonoBehaviour
     private bool isMovingLeft;
     private bool isMovingRight;
     private float horizontalMovement;
-    private Vector3 lastImmobilePosition;
 
-    private bool waitForImmobility;
+    private Vector3 lastPositionOnNetwork;
+    private float lastYSpeedOnNetwork;
 
     private const float TERMINAL_SPEED = -18;
 
@@ -24,8 +24,6 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontalSpeed = 7;
         jumpingSpeed = 17;
-
-        lastImmobilePosition = Vector3.zero;
     }
 
     private void Awake()
@@ -39,6 +37,11 @@ public class PlayerMovement : MonoBehaviour
 
         playerHitbox = GetComponent<BoxCollider2D>();
         rigidBody = GetComponent<Rigidbody2D>();
+
+        /*if (!player.PhotonView.isMine)
+        {
+            rigidBody.gravityScale = 0;
+        }*/
     }
 
     private void OnGUI()
@@ -52,18 +55,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (waitForImmobility && PlayerIsImmobile())
-        {
-            waitForImmobility = false;
-            SendToServer_Movement(MovementType.RUBBERBAND, transform.position);
-        }
-
-        if (PlayerIsMovingVertically() && rigidBody.velocity.y < TERMINAL_SPEED)
-        {
-            rigidBody.velocity += Vector2.up * (TERMINAL_SPEED - rigidBody.velocity.y);
-        }
-
-        if (isMovingLeft || isMovingRight)
+        if (player.PhotonView.isMine)
         {
             horizontalMovement = 0;
             if (isMovingLeft)
@@ -74,75 +66,52 @@ public class PlayerMovement : MonoBehaviour
             {
                 horizontalMovement += horizontalSpeed;
             }
-            rigidBody.velocity = new Vector2(horizontalMovement, rigidBody.velocity.y);
+            rigidBody.velocity = new Vector2(horizontalMovement, rigidBody.velocity.y < TERMINAL_SPEED ? TERMINAL_SPEED : rigidBody.velocity.y);
+
+            SendToServer_Movement(transform.position, rigidBody.velocity.y);
         }
         else
         {
-            rigidBody.velocity = new Vector2(0, rigidBody.velocity.y);
-            if (lastImmobilePosition != Vector3.zero && PlayerIsImmobile() && lastImmobilePosition != transform.position)
-            {
-                transform.position = Vector2.MoveTowards(new Vector2(transform.position.x, transform.position.y), new Vector2(lastImmobilePosition.x, transform.position.y), Time.deltaTime * horizontalSpeed);
-            }
-            else if (lastImmobilePosition == transform.position)
-            {
-                lastImmobilePosition = Vector3.zero;
-            }
+            MovePlayerOverNetwork();
         }
     }
 
-    private void SendToServer_Movement(MovementType movementType, Vector3 position, bool goesLeft = false, bool goesRight = false)
+    private void MovePlayerOverNetwork()
     {
-        player.PhotonView.RPC("ReceiveFromServer_Movement", PhotonTargets.Others, movementType, position, goesLeft, goesRight);
+        Vector3 xMove = Vector3.MoveTowards(new Vector2(transform.position.x, 0), new Vector2(lastPositionOnNetwork.x, 0), Time.deltaTime * horizontalSpeed);
+        //Vector2 yMove = Vector2.MoveTowards(new Vector2(0, transform.position.y), new Vector2(0, lastPositionOnNetwork.y), Time.deltaTime * -lastYSpeedOnNetwork);//works but height is not good
+        transform.position += new Vector3(xMove.x - transform.position.x, 0);// + yMove;
+        //rigidBody.velocity = new Vector2(0, lastYSpeedOnNetwork);
+    }
+
+    private void SendToServer_Movement(Vector3 position, float ySpeed)
+    {
+        player.PhotonView.RPC("ReceiveFromServer_Movement", PhotonTargets.Others, position, ySpeed);
     }
 
     [PunRPC]
-    private void ReceiveFromServer_Movement(MovementType movementType, Vector3 position, bool goesLeft, bool goesRight)
+    private void ReceiveFromServer_Movement(Vector3 position, float ySpeed)
     {
-        switch (movementType)
+        lastPositionOnNetwork = position;
+        if (lastYSpeedOnNetwork == 0 && ySpeed != 0)
         {
-            case MovementType.JUMP:
-                Jump(position);
-                break;
-            case MovementType.MOVE:
-                Move(position, goesLeft, goesRight);
-                break;
-            case MovementType.RUBBERBAND:
-                lastImmobilePosition = position;
-                break;
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, ySpeed);
         }
+        lastYSpeedOnNetwork = ySpeed;
     }
 
     private void OnJump()
     {
         if (!PlayerIsJumping())
         {
-            SendToServer_Movement(MovementType.JUMP, transform.position);
-            Jump(transform.position);
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, Vector3.up.y * jumpingSpeed);
         }
-    }
-
-    private void Jump(Vector3 position)
-    {
-        rigidBody.velocity = new Vector2(rigidBody.velocity.x, Vector3.up.y * jumpingSpeed);
     }
 
     private void OnMove(bool goesLeft, bool goesRight)
     {
-        if (isMovingLeft != goesLeft || isMovingRight != goesRight)
-        {
-            SendToServer_Movement(MovementType.MOVE, transform.position, goesLeft, goesRight);
-            Move(transform.position, goesLeft, goesRight);
-        }
-    }
-
-    private void Move(Vector3 position, bool goesLeft, bool goesRight)
-    {
         isMovingLeft = goesLeft;
         isMovingRight = goesRight;
-        if (player.PhotonView.isMine && !isMovingLeft && !isMovingRight)
-        {
-            waitForImmobility = true;
-        }
     }
 
     private bool PlayerIsImmobile()
@@ -164,11 +133,4 @@ public class PlayerMovement : MonoBehaviour
     {
         return rigidBody.velocity.y != 0;
     }
-}
-
-public enum MovementType
-{
-    JUMP,
-    MOVE,
-    RUBBERBAND
 }
