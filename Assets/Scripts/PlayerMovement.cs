@@ -17,17 +17,27 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 lastPositionOnNetwork;
     private float lastYSpeedOnNetwork;
+    private float previousLastYSpeedOnNetwork;
     private float currentYSpeed;
+    private bool jumpOnNetwork;
 
-    private float frameCalc = 0;
+    private bool firstFrame;
 
-    private const float TERMINAL_SPEED = -18;
-    private const float ACCELERATION = -9.81f;
+    private bool isMovingVerticallyOnNetwork;
+    private float acceleration;
+
+    private const float TERMINAL_SPEED = -10;
+    private const float ACCELERATION_BASE = -9.8f;
+    private const float GRAVITY = 5f;
 
     private PlayerMovement()
     {
         horizontalSpeed = 7;
         jumpingSpeed = 17;
+
+        firstFrame = true;
+
+        acceleration = ACCELERATION_BASE * GRAVITY;
     }
 
     private void Awake()
@@ -80,27 +90,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void MovePlayerOverNetwork()
+    private void MovePlayerOverNetwork()//still doesn't work correctly
     {
         Vector3 xMove = Vector3.MoveTowards(new Vector2(transform.position.x, 0), new Vector2(lastPositionOnNetwork.x, 0), Time.deltaTime * horizontalSpeed);
-        transform.position = xMove + Vector3.up * (lastPositionOnNetwork.y);
-
-        /*Debug.Log(currentYSpeed + " " + transform.position.y + " " + lastPositionOnNetwork.y);
-        if (currentYSpeed < 0 && transform.position.y < lastPositionOnNetwork.y)
+        if (lastYSpeedOnNetwork == 0)
         {
-            Debug.Log(transform.position.y);
-            currentYSpeed = 0;
-            transform.position = new Vector3(transform.position.x, lastPositionOnNetwork.y);
-            Debug.Log(transform.position.y);
+            transform.position = xMove + Vector3.up * lastPositionOnNetwork.y;
         }
         else
         {
-            currentYSpeed += Time.deltaTime * ACCELERATION;
-            if (currentYSpeed < TERMINAL_SPEED)
-            {
-                currentYSpeed = TERMINAL_SPEED;
-            }
-        }*/
+            transform.position = xMove + Vector3.up * (transform.position.y + lastYSpeedOnNetwork * Time.deltaTime + 0.5f * acceleration * Time.deltaTime * Time.deltaTime); ;
+        }
     }
 
     private void SendToServer_Movement(Vector3 position, float ySpeed)
@@ -112,10 +112,6 @@ public class PlayerMovement : MonoBehaviour
     private void ReceiveFromServer_Movement(Vector3 position, float ySpeed)
     {
         lastPositionOnNetwork = position;
-        if (lastYSpeedOnNetwork == 0 && ySpeed != 0)
-        {
-            currentYSpeed = ySpeed;
-        }
         lastYSpeedOnNetwork = ySpeed;
     }
 
