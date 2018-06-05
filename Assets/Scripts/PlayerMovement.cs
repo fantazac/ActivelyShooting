@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
 
     private const float TERMINAL_SPEED = -10;
     private const float ACCELERATION_BASE = -9.8f;
-    private const float GRAVITY = 5f;
+    private const float GRAVITY = 4f;
 
     private PlayerMovement()
     {

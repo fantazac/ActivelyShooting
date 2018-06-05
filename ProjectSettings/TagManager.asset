@@ -10,6 +10,7 @@ TagManager:
   - Platform
   - Map
   - CameraDimensions
+  - Trigger
   layers:
   - Default
   - TransparentFX
