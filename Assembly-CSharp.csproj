@@ -123,9 +123,16 @@
      <Compile Include="Assets\PUN\Plugins\WebSocket\WebSocket.cs" />
      <Compile Include="Assets\Scripts\AspectUtility.cs" />
      <Compile Include="Assets\Scripts\CameraManager.cs" />
+     <Compile Include="Assets\Scripts\Fighter.cs" />
+     <Compile Include="Assets\Scripts\FighterAbilityManager.cs" />
+     <Compile Include="Assets\Scripts\Gunner.cs" />
+     <Compile Include="Assets\Scripts\GunnerAbilityManager.cs" />
+     <Compile Include="Assets\Scripts\Mage.cs" />
+     <Compile Include="Assets\Scripts\MageAbilityManager.cs" />
      <Compile Include="Assets\Scripts\MainMenuManager.cs" />
      <Compile Include="Assets\Scripts\PlatformManager.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
+     <Compile Include="Assets\Scripts\PlayerAbilityManager.cs" />
      <Compile Include="Assets\Scripts\PlayerGroundHitboxManager.cs" />
      <Compile Include="Assets\Scripts\PlayerInputManager.cs" />
      <Compile Include="Assets\Scripts\PlayerMovement.cs" />
