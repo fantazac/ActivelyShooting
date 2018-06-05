@@ -17,8 +17,12 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 lastPositionOnNetwork;
     private float lastYSpeedOnNetwork;
+    private float currentYSpeed;
+
+    private float frameCalc = 0;
 
     private const float TERMINAL_SPEED = -18;
+    private const float ACCELERATION = -9.81f;
 
     private PlayerMovement()
     {
@@ -38,10 +42,10 @@ public class PlayerMovement : MonoBehaviour
         playerHitbox = GetComponent<BoxCollider2D>();
         rigidBody = GetComponent<Rigidbody2D>();
 
-        /*if (!player.PhotonView.isMine)
+        if (!player.PhotonView.isMine)
         {
             rigidBody.gravityScale = 0;
-        }*/
+        }
     }
 
     private void OnGUI()
@@ -79,9 +83,24 @@ public class PlayerMovement : MonoBehaviour
     private void MovePlayerOverNetwork()
     {
         Vector3 xMove = Vector3.MoveTowards(new Vector2(transform.position.x, 0), new Vector2(lastPositionOnNetwork.x, 0), Time.deltaTime * horizontalSpeed);
-        //Vector2 yMove = Vector2.MoveTowards(new Vector2(0, transform.position.y), new Vector2(0, lastPositionOnNetwork.y), Time.deltaTime * -lastYSpeedOnNetwork);//works but height is not good
-        transform.position += new Vector3(xMove.x - transform.position.x, 0);// + yMove;
-        //rigidBody.velocity = new Vector2(0, lastYSpeedOnNetwork);
+        transform.position = xMove + Vector3.up * (lastPositionOnNetwork.y);
+
+        /*Debug.Log(currentYSpeed + " " + transform.position.y + " " + lastPositionOnNetwork.y);
+        if (currentYSpeed < 0 && transform.position.y < lastPositionOnNetwork.y)
+        {
+            Debug.Log(transform.position.y);
+            currentYSpeed = 0;
+            transform.position = new Vector3(transform.position.x, lastPositionOnNetwork.y);
+            Debug.Log(transform.position.y);
+        }
+        else
+        {
+            currentYSpeed += Time.deltaTime * ACCELERATION;
+            if (currentYSpeed < TERMINAL_SPEED)
+            {
+                currentYSpeed = TERMINAL_SPEED;
+            }
+        }*/
     }
 
     private void SendToServer_Movement(Vector3 position, float ySpeed)
@@ -95,7 +114,7 @@ public class PlayerMovement : MonoBehaviour
         lastPositionOnNetwork = position;
         if (lastYSpeedOnNetwork == 0 && ySpeed != 0)
         {
-            rigidBody.velocity = new Vector2(rigidBody.velocity.x, ySpeed);
+            currentYSpeed = ySpeed;
         }
         lastYSpeedOnNetwork = ySpeed;
     }
@@ -104,7 +123,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!PlayerIsJumping())
         {
-            rigidBody.velocity = new Vector2(rigidBody.velocity.x, Vector3.up.y * jumpingSpeed);
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpingSpeed);
         }
     }
 
