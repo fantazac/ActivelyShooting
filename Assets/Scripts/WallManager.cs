@@ -16,7 +16,7 @@ public class WallManager : MonoBehaviour
 
     private WallManager()
     {
-        wallMovementSpeed = 4;
+        wallMovementSpeed = 6;
     }
 
     private void Awake()

@@ -31,10 +31,10 @@ public class PlayerInputManager : MonoBehaviour
             OnRightClick(Input.mousePosition);
         }
 
-        /*if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.S))
         {
             OnJumpDown();
-        }*/
+        }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {

@@ -124,6 +124,7 @@
      <Compile Include="Assets\Scripts\AspectUtility.cs" />
      <Compile Include="Assets\Scripts\CameraManager.cs" />
      <Compile Include="Assets\Scripts\MainMenuManager.cs" />
+     <Compile Include="Assets\Scripts\PlatformManager.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\PlayerGroundHitboxManager.cs" />
      <Compile Include="Assets\Scripts\PlayerInputManager.cs" />

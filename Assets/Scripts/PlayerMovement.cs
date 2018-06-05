@@ -19,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
     private bool isMovingVerticallyOnNetwork;
     private float acceleration;
 
+    private PlatformManager platform;
+
     private const float TERMINAL_SPEED = -10;
     private const float ACCELERATION_BASE = -9.8f;
     private const float GRAVITY = 4f;
@@ -37,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
         if (player.PlayerInputManager)
         {
             player.PlayerInputManager.OnJump += OnJump;
+            player.PlayerInputManager.OnJumpDown += OnJumpDown;
             player.PlayerInputManager.OnMove += OnMove;
         }
         if (player.PlayerGroundHitboxManager)
@@ -72,6 +75,10 @@ public class PlayerMovement : MonoBehaviour
             if (player.PlayerRigidBody.velocity.y < 0 && !player.PlayerGroundHitbox.enabled)
             {
                 player.PlayerGroundHitbox.enabled = true;
+            }
+            if (PlayerIsMovingVertically())
+            {
+                platform = null;
             }
 
             SendToServer_Movement(transform.position, player.PlayerRigidBody.velocity.y, PlayerIsMovingVertically());
@@ -122,9 +129,22 @@ public class PlayerMovement : MonoBehaviour
         isMovingRight = goesRight;
     }
 
-    private void OnTouchesPlatformOrFloor(float objectYPosition)
+    private void OnJumpDown()
+    {
+        if (platform)
+        {
+            platform.JumpingDown();
+            platform = null;
+        }
+    }
+
+    private void OnTouchesPlatformOrFloor(GameObject platform, float objectYPosition)
     {
         player.PlayerGroundHitbox.enabled = false;
+        if (platform)
+        {
+            this.platform = platform.GetComponent<PlatformManager>();
+        }
         player.PlayerRigidBody.velocity = new Vector2(player.PlayerRigidBody.velocity.x, 0);
         transform.position = new Vector3(transform.position.x, objectYPosition + (transform.localScale.y * 0.5f));
     }
