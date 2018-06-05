@@ -125,6 +125,7 @@
      <Compile Include="Assets\Scripts\CameraManager.cs" />
      <Compile Include="Assets\Scripts\MainMenuManager.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
+     <Compile Include="Assets\Scripts\PlayerGroundHitboxManager.cs" />
      <Compile Include="Assets\Scripts\PlayerInputManager.cs" />
      <Compile Include="Assets\Scripts\PlayerMovement.cs" />
      <Compile Include="Assets\Scripts\StaticObjects.cs" />

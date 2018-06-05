@@ -5,8 +5,6 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private Player player;
-    private BoxCollider2D playerHitbox;
-    private Rigidbody2D rigidBody;
 
     private float horizontalSpeed;
     private float jumpingSpeed;
@@ -17,11 +15,6 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 lastPositionOnNetwork;
     private float lastYSpeedOnNetwork;
-    private float previousLastYSpeedOnNetwork;
-    private float currentYSpeed;
-    private bool jumpOnNetwork;
-
-    private bool firstFrame;
 
     private bool isMovingVerticallyOnNetwork;
     private float acceleration;
@@ -35,8 +28,6 @@ public class PlayerMovement : MonoBehaviour
         horizontalSpeed = 7;
         jumpingSpeed = 17;
 
-        firstFrame = true;
-
         acceleration = ACCELERATION_BASE * GRAVITY;
     }
 
@@ -48,13 +39,9 @@ public class PlayerMovement : MonoBehaviour
             player.PlayerInputManager.OnJump += OnJump;
             player.PlayerInputManager.OnMove += OnMove;
         }
-
-        playerHitbox = GetComponent<BoxCollider2D>();
-        rigidBody = GetComponent<Rigidbody2D>();
-
-        if (!player.PhotonView.isMine)
+        if (player.PlayerGroundHitboxManager)
         {
-            rigidBody.gravityScale = 0;
+            player.PlayerGroundHitboxManager.OnTouchesPlatformOrFloor += OnTouchesPlatformOrFloor;
         }
     }
 
@@ -80,9 +67,14 @@ public class PlayerMovement : MonoBehaviour
             {
                 horizontalMovement += horizontalSpeed;
             }
-            rigidBody.velocity = new Vector2(horizontalMovement, rigidBody.velocity.y < TERMINAL_SPEED ? TERMINAL_SPEED : rigidBody.velocity.y);
+            player.PlayerRigidBody.velocity = new Vector2(horizontalMovement, player.PlayerRigidBody.velocity.y < TERMINAL_SPEED ? TERMINAL_SPEED : player.PlayerRigidBody.velocity.y);
 
-            SendToServer_Movement(transform.position, rigidBody.velocity.y);
+            if (player.PlayerRigidBody.velocity.y < 0 && !player.PlayerGroundHitbox.enabled)
+            {
+                player.PlayerGroundHitbox.enabled = true;
+            }
+
+            SendToServer_Movement(transform.position, player.PlayerRigidBody.velocity.y, PlayerIsMovingVertically());
         }
         else
         {
@@ -90,10 +82,10 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void MovePlayerOverNetwork()//still doesn't work correctly
+    private void MovePlayerOverNetwork()
     {
         Vector3 xMove = Vector3.MoveTowards(new Vector2(transform.position.x, 0), new Vector2(lastPositionOnNetwork.x, 0), Time.deltaTime * horizontalSpeed);
-        if (lastYSpeedOnNetwork == 0)
+        if (lastYSpeedOnNetwork == 0 && !isMovingVerticallyOnNetwork)
         {
             transform.position = xMove + Vector3.MoveTowards(new Vector2(0, transform.position.y), new Vector2(0, lastPositionOnNetwork.y), Time.deltaTime * -TERMINAL_SPEED);
         }
@@ -103,23 +95,24 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void SendToServer_Movement(Vector3 position, float ySpeed)
+    private void SendToServer_Movement(Vector3 position, float ySpeed, bool isMovingVertically)
     {
-        player.PhotonView.RPC("ReceiveFromServer_Movement", PhotonTargets.Others, position, ySpeed);
+        player.PhotonView.RPC("ReceiveFromServer_Movement", PhotonTargets.Others, position, ySpeed, isMovingVertically);
     }
 
     [PunRPC]
-    private void ReceiveFromServer_Movement(Vector3 position, float ySpeed)
+    private void ReceiveFromServer_Movement(Vector3 position, float ySpeed, bool isMovingVertically)
     {
         lastPositionOnNetwork = position;
         lastYSpeedOnNetwork = ySpeed;
+        isMovingVerticallyOnNetwork = isMovingVertically;
     }
 
     private void OnJump()
     {
         if (!PlayerIsJumping())
         {
-            rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpingSpeed);
+            player.PlayerRigidBody.velocity = new Vector2(player.PlayerRigidBody.velocity.x, jumpingSpeed);
         }
     }
 
@@ -129,9 +122,16 @@ public class PlayerMovement : MonoBehaviour
         isMovingRight = goesRight;
     }
 
+    private void OnTouchesPlatformOrFloor(float objectYPosition)
+    {
+        player.PlayerGroundHitbox.enabled = false;
+        player.PlayerRigidBody.velocity = new Vector2(player.PlayerRigidBody.velocity.x, 0);
+        transform.position = new Vector3(transform.position.x, objectYPosition + (transform.localScale.y * 0.5f));
+    }
+
     private bool PlayerIsImmobile()
     {
-        return rigidBody.velocity == Vector2.zero;
+        return player.PlayerRigidBody.velocity == Vector2.zero;
     }
 
     private bool PlayerIsJumping()
@@ -141,11 +141,11 @@ public class PlayerMovement : MonoBehaviour
 
     private bool PlayerIsMovingHorizontally()
     {
-        return rigidBody.velocity.x != 0;
+        return player.PlayerRigidBody.velocity.x != 0;
     }
 
     private bool PlayerIsMovingVertically()
     {
-        return rigidBody.velocity.y != 0;
+        return player.PlayerRigidBody.velocity.y > 0 || player.PlayerGroundHitbox.enabled;
     }
 }

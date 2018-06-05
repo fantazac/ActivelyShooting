@@ -175,7 +175,7 @@ Transform:
   m_Father: {fileID: 1899983875}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &168255676
+--- !u!1001 &103621765
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -226,6 +226,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1567628976262956, guid: 27460c2bb74fd3140900616e0b3a7018, type: 2}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 61882793966366240, guid: 27460c2bb74fd3140900616e0b3a7018,
+        type: 2}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -285,6 +290,10 @@ Prefab:
     - target: {fileID: 4000013652523250, guid: dde221519f605084197d54d427a427db, type: 2}
       propertyPath: m_RootOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000010274616270, guid: dde221519f605084197d54d427a427db, type: 2}
+      propertyPath: m_TagString
+      value: Platform
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dde221519f605084197d54d427a427db, type: 2}
