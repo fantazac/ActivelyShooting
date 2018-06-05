@@ -95,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 xMove = Vector3.MoveTowards(new Vector2(transform.position.x, 0), new Vector2(lastPositionOnNetwork.x, 0), Time.deltaTime * horizontalSpeed);
         if (lastYSpeedOnNetwork == 0)
         {
-            transform.position = xMove + Vector3.up * lastPositionOnNetwork.y;
+            transform.position = xMove + Vector3.MoveTowards(new Vector2(0, transform.position.y), new Vector2(0, lastPositionOnNetwork.y), Time.deltaTime * -TERMINAL_SPEED);
         }
         else
         {
