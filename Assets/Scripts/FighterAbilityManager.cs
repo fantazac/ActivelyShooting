@@ -5,28 +5,38 @@ using UnityEngine;
 
 public class FighterAbilityManager : PlayerAbilityManager
 {
+    private FighterMode selectedMode;
+
+    private FighterAbilityManager()
+    {
+        selectedMode = FighterMode.Swordsman;
+    }
+
+    private void OnGUI()
+    {
+        if (player.PhotonView.isMine)
+        {
+            GUILayout.Label("");//Ping
+            GUILayout.Label("");//Position
+            GUILayout.Label(selectedMode + "");
+        }
+    }
+
     protected override void SwitchWeapon()
     {
-
+        if (selectedMode == FighterMode.Swordsman)
+        {
+            selectedMode = FighterMode.Tank;
+        }
+        else
+        {
+            selectedMode = FighterMode.Swordsman;
+        }
     }
+}
 
-    protected override void UseBasicAttack(Vector3 position, bool isPressed)
-    {
-
-    }
-
-    protected override void UseEAbility()
-    {
-
-    }
-
-    protected override void UseQAbility()
-    {
-
-    }
-
-    protected override void UseSpecialAttack(Vector3 position)
-    {
-
-    }
+public enum FighterMode
+{
+    Swordsman,
+    Tank
 }

@@ -47,11 +47,11 @@ public class MainMenuManager : MonoBehaviour
                 }
                 if (GUILayout.Button("Quit", GUILayout.Height(40)))
                 {
-                    #if UNITY_EDITOR
+#if UNITY_EDITOR
                     UnityEditor.EditorApplication.isPlaying = false;
-                    #else
+#else
                     Application.Quit();
-                    #endif
+#endif
                 }
                 break;
             case MainMenuState.CONNECTING:
@@ -111,7 +111,7 @@ public class MainMenuManager : MonoBehaviour
         GameObject player = PhotonNetwork.Instantiate(characterName, spawnPoint, new Quaternion(), 0);
         player.transform.parent = playerTemplate.transform;
         StaticObjects.Player = player.GetComponent<Player>();
-        StaticObjects.PlayerCamera = playerTemplate.GetComponentInChildren<Camera>();
+        StaticObjects.PlayerCamera = playerCamera.GetComponent<Camera>();
 
         playerCamera.SetActive(true);
         mainMenuCamera.SetActive(false);

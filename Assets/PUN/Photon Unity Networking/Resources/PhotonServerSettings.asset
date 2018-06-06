@@ -38,4 +38,6 @@ MonoBehaviour:
   - RequestForPickupTimes
   - ReceiveFromServer_Movement
   - ReceiveFromServer_UpdateParty
+  - ReceiveFromServer_QAbility
+  - ReceiveFromServer_CurrentHealth
   DisableAutoOpenWizard: 1

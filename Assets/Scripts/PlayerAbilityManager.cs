@@ -7,24 +7,41 @@ public abstract class PlayerAbilityManager : MonoBehaviour
     protected Player player;
 
     protected bool leftClickIsPressed;
+    protected bool rightClickIsPressed;
 
-    protected void Awake()
+    protected Ability[] abilities;
+
+    protected virtual void Awake()
     {
         player = GetComponent<Player>();
 
         if (player.PlayerInputManager)
         {
-            player.PlayerInputManager.OnQPressed += UseQAbility;
-            player.PlayerInputManager.OnEPressed += UseEAbility;
-            player.PlayerInputManager.OnLeftClick += UseBasicAttack;
-            player.PlayerInputManager.OnRightClick += UseSpecialAttack;
+            player.PlayerInputManager.OnAbilityPressed += UseAbility;
             player.PlayerInputManager.OnTabPressed += SwitchWeapon;
         }
     }
 
-    protected abstract void UseQAbility();                                      //Q
-    protected abstract void UseEAbility();                                      //E
-    protected abstract void UseBasicAttack(Vector3 position, bool isPressed);   //LeftClick
-    protected abstract void UseSpecialAttack(Vector3 position);                 //RightClick
-    protected abstract void SwitchWeapon();                                     //Tab?
+    protected abstract void SwitchWeapon();
+
+    protected void UseAbility(int abilityId, Vector3 mousePosition, bool isPressed = false)
+    {
+        Ability ability = abilities[abilityId];
+        if (!ability.IsOnCooldown)
+        {
+            ability.UseAbility(mousePosition, isPressed);
+            SendToServer_Ability(abilityId, mousePosition, isPressed);
+        }
+    }
+
+    protected void SendToServer_Ability(int abilityId, Vector3 mousePosition, bool isPressed)
+    {
+        player.PhotonView.RPC("ReceiveFromServer_Ability", PhotonTargets.Others, abilityId, mousePosition, isPressed);
+    }
+
+    [PunRPC]
+    private void ReceiveFromServer_QAbility(int abilityId, Vector3 mousePosition, bool isPressed)
+    {
+        abilities[abilityId].UseAbility(mousePosition, isPressed);
+    }
 }

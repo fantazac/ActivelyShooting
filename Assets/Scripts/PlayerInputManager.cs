@@ -14,17 +14,8 @@ public class PlayerInputManager : MonoBehaviour
     public delegate void OnJumpDownHandler();
     public event OnJumpDownHandler OnJumpDown;
 
-    public delegate void OnLeftClickHandler(Vector3 mousePosition, bool isPressed);
-    public event OnLeftClickHandler OnLeftClick;
-
-    public delegate void OnRightClickHandler(Vector3 mousePosition);
-    public event OnRightClickHandler OnRightClick;
-
-    public delegate void OnQPressedHandler();
-    public event OnQPressedHandler OnQPressed;
-
-    public delegate void OnEPressedHandler();
-    public event OnEPressedHandler OnEPressed;
+    public delegate void OnAbilityPressedHandler(int abilityId, Vector3 mousePosition, bool isPressed = false);
+    public event OnAbilityPressedHandler OnAbilityPressed;
 
     public delegate void OnTabPressedHandler();
     public event OnTabPressedHandler OnTabPressed;
@@ -32,25 +23,29 @@ public class PlayerInputManager : MonoBehaviour
     private void Update()
     {
         //Abilities + Attacks
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
-            OnLeftClick(Input.mousePosition, true);
+            OnAbilityPressed(2, Input.mousePosition, true);
         }
-        else if (Input.GetMouseButtonUp(0))
+        else
         {
-            OnLeftClick(Input.mousePosition, false);
+            OnAbilityPressed(2, Input.mousePosition, false);
         }
         if (Input.GetMouseButtonDown(1))
         {
-            OnRightClick(Input.mousePosition);
+            OnAbilityPressed(3, Input.mousePosition, true);
+        }
+        else if (Input.GetMouseButtonUp(1))
+        {
+            OnAbilityPressed(3, Input.mousePosition, false);
         }
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            OnQPressed();
+            OnAbilityPressed(0, Input.mousePosition);
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            OnEPressed();
+            OnAbilityPressed(1, Input.mousePosition);
         }
         if (Input.GetKeyDown(KeyCode.Tab))
         {

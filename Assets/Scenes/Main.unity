@@ -1648,6 +1648,11 @@ Prefab:
       propertyPath: m_Name
       value: Platform (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 50000010248954436, guid: dde221519f605084197d54d427a427db,
+        type: 2}
+      propertyPath: m_UseFullKinematicContacts
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dde221519f605084197d54d427a427db, type: 2}
   m_IsPrefabParent: 0

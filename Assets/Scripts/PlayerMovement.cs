@@ -52,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (player.PhotonView.isMine)
         {
-            GUILayout.Label("");
+            GUILayout.Label("");//Ping
             GUILayout.Label(transform.position + "");
         }
     }
