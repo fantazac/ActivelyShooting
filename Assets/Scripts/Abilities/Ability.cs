@@ -22,7 +22,7 @@ public abstract class Ability : MonoBehaviour
         {
             if (player.PhotonView.isMine)
             {
-                PutAbilityOffCooldown();
+                StartCoroutine(PutAbilityOffCooldown());
             }
             UseAbilityEffect(isPressed);
         }
