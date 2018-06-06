@@ -18,7 +18,7 @@ public abstract class PlayerAbilityManager : MonoBehaviour
         if (player.PlayerInputManager)
         {
             player.PlayerInputManager.OnAbilityPressed += UseAbility;
-            player.PlayerInputManager.OnTabPressed += SwitchWeapon;
+            player.PlayerInputManager.OnTabPressed += OnSwitchWeapon;
         }
     }
 
@@ -35,6 +35,12 @@ public abstract class PlayerAbilityManager : MonoBehaviour
         }
     }
 
+    protected void OnSwitchWeapon()
+    {
+        SwitchWeapon();
+        SendToServer_Switch();
+    }
+
     protected void SendToServer_Ability(int abilityId, Vector3 mousePosition, bool isPressed)
     {
         player.PhotonView.RPC("ReceiveFromServer_Ability", PhotonTargets.Others, abilityId, mousePosition, isPressed);
@@ -43,6 +49,17 @@ public abstract class PlayerAbilityManager : MonoBehaviour
     [PunRPC]
     protected void ReceiveFromServer_Ability(int abilityId, Vector3 mousePosition, bool isPressed)
     {
-        abilities[abilityId].UseAbility(mousePosition, isPressed);
+        abilities[abilityId].UseAbilityOnNetwork(mousePosition, isPressed);
+    }
+
+    protected void SendToServer_Switch()
+    {
+        player.PhotonView.RPC("ReceiveFromServer_Switch", PhotonTargets.Others);
+    }
+
+    [PunRPC]
+    protected void ReceiveFromServer_Switch()
+    {
+        SwitchWeapon();
     }
 }

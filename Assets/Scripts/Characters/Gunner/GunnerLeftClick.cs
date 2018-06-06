@@ -11,6 +11,12 @@ public class GunnerLeftClick : Ability
     protected string projectilePrefabPath2;
     protected GameObject projectilePrefab2;
 
+    protected string projectilePrefabPath3;
+    protected GameObject projectilePrefab3;
+
+    protected string projectilePrefabPath4;
+    protected GameObject projectilePrefab4;
+
     private float speed;
     private float range;
 
@@ -26,6 +32,7 @@ public class GunnerLeftClick : Ability
     private float rocketExplosionRadius;
 
     private bool isPressed;
+    private bool isAoE;
 
     private float horizontalSpeedPercentOnLeftClickActive;
 
@@ -50,8 +57,12 @@ public class GunnerLeftClick : Ability
 
         ChangeWeapon((int)GunnerWeapon.Minigun);
 
+        IsHoldDownAbility = true;
+
         projectilePrefabPath1 = "ProjectilePrefabs/GunnerMinigunBasicAttack";
-        projectilePrefabPath2 = "ProjectilePrefabs/GunnerRocketLauncherBasicAttack";
+        projectilePrefabPath2 = "ProjectilePrefabs/GunnerMinigunBasicAttackAoE";
+        projectilePrefabPath3 = "ProjectilePrefabs/GunnerRocketLauncherBasicAttack";
+        projectilePrefabPath4 = "ProjectilePrefabs/GunnerRocketLauncherBasicAttackAoE";
     }
 
     protected override void Awake()
@@ -65,18 +76,29 @@ public class GunnerLeftClick : Ability
     {
         projectilePrefab1 = Resources.Load<GameObject>(projectilePrefabPath1);
         projectilePrefab2 = Resources.Load<GameObject>(projectilePrefabPath2);
+        projectilePrefab3 = Resources.Load<GameObject>(projectilePrefabPath3);
+        projectilePrefab4 = Resources.Load<GameObject>(projectilePrefabPath4);
     }
 
     protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
     {
         this.isPressed = isPressed;
-        lastMousePosition = mousePosition;//todo
+        lastMousePosition = mousePosition;
         player.PlayerMovement.ChangeHorizontalSpeed(isPressed ? horizontalSpeedPercentOnLeftClickActive : 1);
     }
 
     public override void UseAbility(Vector3 mousePosition, bool isPressed)
     {
         UseAbilityEffect(mousePosition, isPressed);
+    }
+
+    public override void UseAbilityOnNetwork(Vector3 mousePosition, bool isPressed)
+    {
+        base.UseAbilityOnNetwork(mousePosition, isPressed);
+        if (isPressed)
+        {
+            ShootProjectile();
+        }
     }
 
     public override void ChangeWeapon(int weapon)
@@ -97,23 +119,32 @@ public class GunnerLeftClick : Ability
         }
     }
 
+    public void SetAoE(bool isAoE)
+    {
+        this.isAoE = isAoE;
+    }
+
     private void Update()
     {
-        if (isPressed && !IsOnCooldown)
+        if (player.PhotonView.isMine && isPressed && !IsOnCooldown)
         {
-            Vector3 diff = lastMousePosition - transform.position;
-            diff.Normalize();
-            float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
-
-            Projectile projectile = Instantiate(selectedWeapon == GunnerWeapon.Minigun ? projectilePrefab1 : projectilePrefab2,
-                transform.position + Vector3.back, Quaternion.Euler(0f, 0f, rot_z)).GetComponent<Projectile>();
-            projectile.transform.position += projectile.transform.right * projectile.transform.localScale.x * 0.55f;
-            projectile.ShootProjectile((int)selectedWeapon, speed, range);
-            projectile.OnProjectileHit += OnProjectileHit;
-            projectile.OnProjectileReachedEnd += OnProjectileReachedEnd;
-
+            ShootProjectile();
             StartCoroutine(PutAbilityOffCooldown());
         }
+    }
+
+    private void ShootProjectile()
+    {
+        Vector3 diff = lastMousePosition - transform.position;
+        diff.Normalize();
+        float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+
+        Projectile projectile = Instantiate(selectedWeapon == GunnerWeapon.Minigun ? (isAoE ? projectilePrefab2 : projectilePrefab1) : (isAoE ? projectilePrefab4 : projectilePrefab3),
+            transform.position + Vector3.back, Quaternion.Euler(0f, 0f, rot_z)).GetComponent<Projectile>();
+        projectile.transform.position += projectile.transform.right * projectile.transform.localScale.x * 0.55f;
+        projectile.ShootProjectile((int)selectedWeapon, speed, range);
+        projectile.OnProjectileHit += OnProjectileHit;
+        projectile.OnProjectileReachedEnd += OnProjectileReachedEnd;
     }
 
     private void OnProjectileHit(Projectile projectile, int weapon, GameObject targetHit)
@@ -135,7 +166,11 @@ public class GunnerLeftClick : Ability
                 targetHit.GetComponent<Health>().Reduce(minigunDamage);
             }
         }
-        Destroy(projectile.gameObject);
+
+        if (projectile is SingleTargetProjectile)
+        {
+            Destroy(projectile.gameObject);
+        }
     }
 
     private void OnProjectileReachedEnd(Projectile projectile)

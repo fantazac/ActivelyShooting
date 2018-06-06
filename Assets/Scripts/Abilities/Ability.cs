@@ -10,15 +10,18 @@ public abstract class Ability : MonoBehaviour
     protected float cooldownRemaining;
 
     public bool IsOnCooldown { get; protected set; }
+    public bool IsHoldDownAbility { get; protected set; }
 
     protected virtual void Awake()
     {
         player = GetComponent<Player>();
     }
 
+    protected virtual void Start() { }
+
     public virtual void UseAbility(Vector3 mousePosition, bool isPressed)
     {
-        if (isPressed)
+        if (!IsHoldDownAbility || isPressed)
         {
             if (player.PhotonView.isMine)
             {
@@ -26,6 +29,11 @@ public abstract class Ability : MonoBehaviour
             }
             UseAbilityEffect(mousePosition, isPressed);
         }
+    }
+
+    public virtual void UseAbilityOnNetwork(Vector3 mousePosition, bool isPressed)
+    {
+        UseAbility(mousePosition, isPressed);
     }
 
     protected abstract void UseAbilityEffect(Vector3 mousePosition, bool isPressed);

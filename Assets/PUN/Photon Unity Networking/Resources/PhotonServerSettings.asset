@@ -41,4 +41,6 @@ MonoBehaviour:
   - ReceiveFromServer_QAbility
   - ReceiveFromServer_CurrentHealth
   - ReceiveFromServer_Ability
+  - ReceiveFromServer_Switch
+  - ReceiveFromServer_GunnerLeftClick
   DisableAutoOpenWizard: 1

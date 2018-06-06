@@ -16,7 +16,7 @@ public class GunnerAbilityManager : PlayerAbilityManager
     {
         base.Awake();
 
-        abilities = new Ability[] { null, null, gameObject.AddComponent<GunnerLeftClick>(), gameObject.AddComponent<GunnerRightClick>() };
+        abilities = new Ability[] { null, gameObject.AddComponent<GunnerE>(), gameObject.AddComponent<GunnerLeftClick>(), gameObject.AddComponent<GunnerRightClick>() };
     }
 
     private void OnGUI()

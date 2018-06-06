@@ -2,15 +2,46 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GunnerE : MonoBehaviour {
+public class GunnerE : Ability
+{
+    private float duration;
+    private float durationRemaining;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    private GunnerLeftClick gunnerLeftClick;
+
+    private GunnerE()
+    {
+        duration = 5;
+
+        cooldown = 20;
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        gunnerLeftClick = GetComponent<GunnerLeftClick>();
+    }
+
+    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
+    {
+        gunnerLeftClick.SetAoE(true);
+        StartCoroutine(EndBuff());
+    }
+
+    private IEnumerator EndBuff()
+    {
+        durationRemaining = duration;
+
+        yield return null;
+
+        while (durationRemaining > 0)
+        {
+            durationRemaining -= Time.deltaTime;
+
+            yield return null;
+        }
+
+        gunnerLeftClick.SetAoE(false);
+    }
 }
