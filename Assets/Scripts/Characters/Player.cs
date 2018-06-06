@@ -6,16 +6,20 @@ public abstract class Player : MonoBehaviour
 {
     [SerializeField]
     private BoxCollider2D playerGroundHitbox;
+    [SerializeField]
+    private BoxCollider2D playerJumpingHitbox;
 
     public PhotonView PhotonView { get; private set; }
 
     public BoxCollider2D PlayerGroundHitbox { get { return playerGroundHitbox; } }
     public BoxCollider2D PlayerHitbox { get; private set; }
+    public BoxCollider2D PlayerJumpingHitbox { get { return playerJumpingHitbox; } }
     public Rigidbody2D PlayerRigidBody { get; private set; }
 
     public PlayerAbilityManager PlayerAbilityManager { get; protected set; }
     public PlayerGroundHitboxManager PlayerGroundHitboxManager { get; private set; }
     public PlayerInputManager PlayerInputManager { get; private set; }
+    public PlayerJumpingHitboxManager PlayerJumpingHitboxManager { get; private set; }
     public PlayerMovement PlayerMovement { get; private set; }
 
     public Player[] Party { get; private set; }
@@ -30,11 +34,13 @@ public abstract class Player : MonoBehaviour
             PlayerGroundHitboxManager = gameObject.AddComponent<PlayerGroundHitboxManager>();
             PlayerHitbox = GetComponent<BoxCollider2D>();
             PlayerInputManager = gameObject.AddComponent<PlayerInputManager>();
+            PlayerJumpingHitboxManager = gameObject.AddComponent<PlayerJumpingHitboxManager>();
         }
         else
         {
             Destroy(PlayerRigidBody);
             Destroy(playerGroundHitbox.gameObject);
+            Destroy(playerJumpingHitbox.gameObject);
             playerGroundHitbox = null;
         }
         PlayerMovement = gameObject.AddComponent<PlayerMovement>();

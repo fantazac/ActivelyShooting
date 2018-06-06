@@ -140,6 +140,7 @@
      <Compile Include="Assets\Scripts\Characters\PlayerAbilityManager.cs" />
      <Compile Include="Assets\Scripts\Characters\PlayerGroundHitboxManager.cs" />
      <Compile Include="Assets\Scripts\Characters\PlayerInputManager.cs" />
+     <Compile Include="Assets\Scripts\Characters\PlayerJumpingHitboxManager.cs" />
      <Compile Include="Assets\Scripts\Characters\PlayerMovement.cs" />
      <Compile Include="Assets\Scripts\Health.cs" />
      <Compile Include="Assets\Scripts\MainMenuManager.cs" />

@@ -172,6 +172,6 @@ public class PlayerMovement : MonoBehaviour
 
     private bool PlayerIsMovingVertically()
     {
-        return player.PlayerRigidBody.velocity.y > 0 || player.PlayerGroundHitbox.enabled;
+        return player.PlayerRigidBody.velocity.y > 0 || player.PlayerGroundHitbox.enabled;//|| (player.PlayerRigidBody.velocity.y == 0 && !player.PlayerJumpingHitboxManager.IsTouchingFloorOrPlatform);
     }
 }
