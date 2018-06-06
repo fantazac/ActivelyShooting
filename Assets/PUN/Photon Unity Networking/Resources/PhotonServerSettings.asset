@@ -40,4 +40,5 @@ MonoBehaviour:
   - ReceiveFromServer_UpdateParty
   - ReceiveFromServer_QAbility
   - ReceiveFromServer_CurrentHealth
+  - ReceiveFromServer_Ability
   DisableAutoOpenWizard: 1

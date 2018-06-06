@@ -34,9 +34,9 @@ public class GunnerRightClick : Ability
         projectilePrefab = Resources.Load<GameObject>(projectilePrefabPath);
     }
 
-    protected override void UseAbilityEffect(bool isPressed)
+    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
     {
-        Vector3 diff = StaticObjects.PlayerCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        Vector3 diff = mousePosition - transform.position;
         diff.Normalize();
         float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
 

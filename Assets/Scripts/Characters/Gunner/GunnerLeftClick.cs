@@ -27,6 +27,10 @@ public class GunnerLeftClick : Ability
 
     private bool isPressed;
 
+    private float horizontalSpeedPercentOnLeftClickActive;
+
+    private Vector3 lastMousePosition;
+
     private GunnerWeapon selectedWeapon;
 
     private GunnerLeftClick()
@@ -41,6 +45,8 @@ public class GunnerLeftClick : Ability
         rocketSpeed = 9;
         rocketRange = 60;
         rocketExplosionRadius = 2.5f;
+
+        horizontalSpeedPercentOnLeftClickActive = 0.5f;
 
         ChangeWeapon((int)GunnerWeapon.Minigun);
 
@@ -61,14 +67,16 @@ public class GunnerLeftClick : Ability
         projectilePrefab2 = Resources.Load<GameObject>(projectilePrefabPath2);
     }
 
-    protected override void UseAbilityEffect(bool isPressed)
+    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
     {
         this.isPressed = isPressed;
+        lastMousePosition = mousePosition;//todo
+        player.PlayerMovement.ChangeHorizontalSpeed(isPressed ? horizontalSpeedPercentOnLeftClickActive : 1);
     }
 
     public override void UseAbility(Vector3 mousePosition, bool isPressed)
     {
-        UseAbilityEffect(isPressed);
+        UseAbilityEffect(mousePosition, isPressed);
     }
 
     public override void ChangeWeapon(int weapon)
@@ -93,7 +101,7 @@ public class GunnerLeftClick : Ability
     {
         if (isPressed && !IsOnCooldown)
         {
-            Vector3 diff = StaticObjects.PlayerCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+            Vector3 diff = lastMousePosition - transform.position;
             diff.Normalize();
             float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
 

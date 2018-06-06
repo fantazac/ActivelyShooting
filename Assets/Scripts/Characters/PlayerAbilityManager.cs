@@ -27,10 +27,11 @@ public abstract class PlayerAbilityManager : MonoBehaviour
     protected void UseAbility(int abilityId, Vector3 mousePosition, bool isPressed = false)
     {
         Ability ability = abilities[abilityId];
-        if (!ability.IsOnCooldown)
+        if (!ability.IsOnCooldown)//Currently, means it will take slow off Gunner when the auto is back up
         {
-            ability.UseAbility(mousePosition, isPressed);
-            SendToServer_Ability(abilityId, mousePosition, isPressed);
+            Vector2 sceneMousePosition = StaticObjects.PlayerCamera.ScreenToWorldPoint(mousePosition);
+            ability.UseAbility(sceneMousePosition, isPressed);
+            SendToServer_Ability(abilityId, sceneMousePosition, isPressed);
         }
     }
 
@@ -40,7 +41,7 @@ public abstract class PlayerAbilityManager : MonoBehaviour
     }
 
     [PunRPC]
-    private void ReceiveFromServer_QAbility(int abilityId, Vector3 mousePosition, bool isPressed)
+    protected void ReceiveFromServer_Ability(int abilityId, Vector3 mousePosition, bool isPressed)
     {
         abilities[abilityId].UseAbility(mousePosition, isPressed);
     }

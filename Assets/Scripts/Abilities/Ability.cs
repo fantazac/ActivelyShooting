@@ -24,11 +24,11 @@ public abstract class Ability : MonoBehaviour
             {
                 StartCoroutine(PutAbilityOffCooldown());
             }
-            UseAbilityEffect(isPressed);
+            UseAbilityEffect(mousePosition, isPressed);
         }
     }
 
-    protected abstract void UseAbilityEffect(bool isPressed);
+    protected abstract void UseAbilityEffect(Vector3 mousePosition, bool isPressed);
 
     public virtual void ChangeWeapon(int weapon) { }
 

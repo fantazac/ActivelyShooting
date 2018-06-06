@@ -24,10 +24,11 @@ public class PlayerMovement : MonoBehaviour
     private const float TERMINAL_SPEED = -10;
     private const float ACCELERATION_BASE = -9.8f;
     private const float GRAVITY = 4f;
+    private const float BASE_HORIZONTAL_SPEED = 7;
 
     private PlayerMovement()
     {
-        horizontalSpeed = 7;
+        horizontalSpeed = BASE_HORIZONTAL_SPEED;
         jumpingSpeed = 17;
 
         acceleration = ACCELERATION_BASE * GRAVITY;
@@ -55,6 +56,11 @@ public class PlayerMovement : MonoBehaviour
             GUILayout.Label("");//Ping
             GUILayout.Label(transform.position + "");
         }
+    }
+
+    public void ChangeHorizontalSpeed(float percent)
+    {
+        horizontalSpeed = BASE_HORIZONTAL_SPEED * percent;
     }
 
     private void Update()

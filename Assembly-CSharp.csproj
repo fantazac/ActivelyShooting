@@ -131,6 +131,7 @@
      <Compile Include="Assets\Scripts\Characters\Fighter\FighterAbilityManager.cs" />
      <Compile Include="Assets\Scripts\Characters\Gunner\Gunner.cs" />
      <Compile Include="Assets\Scripts\Characters\Gunner\GunnerAbilityManager.cs" />
+     <Compile Include="Assets\Scripts\Characters\Gunner\GunnerE.cs" />
      <Compile Include="Assets\Scripts\Characters\Gunner\GunnerLeftClick.cs" />
      <Compile Include="Assets\Scripts\Characters\Gunner\GunnerRightClick.cs" />
      <Compile Include="Assets\Scripts\Characters\Mage\Mage.cs" />
