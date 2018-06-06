@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 4646505147028902}
   - component: {fileID: 61882793966366240}
   - component: {fileID: 114964352222769906}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: PlayerGroundHitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,13 +57,13 @@ GameObject:
   - component: {fileID: 4047790078709668}
   - component: {fileID: 61570102608552524}
   - component: {fileID: 114740744792862408}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: PlayerJumpingHitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1844731322475164
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,6 +21,8 @@ public class PlayerMovement : MonoBehaviour
 
     private PlatformManager platform;
 
+    private bool isTouchingFloorOrPlatform;
+
     private const float TERMINAL_SPEED = -10;
     private const float ACCELERATION_BASE = -9.8f;
     private const float GRAVITY = 4f;
@@ -123,8 +125,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnJump()
     {
-        if (!PlayerIsJumping())
+        if (!PlayerIsMovingVertically())
         {
+            isTouchingFloorOrPlatform = false;
             player.PlayerRigidBody.velocity = new Vector2(player.PlayerRigidBody.velocity.x, jumpingSpeed);
         }
     }
@@ -147,6 +150,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnTouchesPlatformOrFloor(GameObject platform, float objectYPosition)
     {
         player.PlayerGroundHitbox.enabled = false;
+        isTouchingFloorOrPlatform = true;
         if (platform)
         {
             this.platform = platform.GetComponent<PlatformManager>();
@@ -160,11 +164,6 @@ public class PlayerMovement : MonoBehaviour
         return player.PlayerRigidBody.velocity == Vector2.zero;
     }
 
-    private bool PlayerIsJumping()
-    {
-        return PlayerIsMovingVertically();
-    }
-
     private bool PlayerIsMovingHorizontally()
     {
         return player.PlayerRigidBody.velocity.x != 0;
@@ -172,6 +171,6 @@ public class PlayerMovement : MonoBehaviour
 
     private bool PlayerIsMovingVertically()
     {
-        return player.PlayerRigidBody.velocity.y > 0 || player.PlayerGroundHitbox.enabled;//|| (player.PlayerRigidBody.velocity.y == 0 && !player.PlayerJumpingHitboxManager.IsTouchingFloorOrPlatform);
+        return !isTouchingFloorOrPlatform;
     }
 }
