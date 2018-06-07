@@ -84,7 +84,7 @@ public class GunnerLeftClick : Ability
     {
         this.isPressed = isPressed;
         lastMousePosition = mousePosition;
-        player.PlayerMovement.ChangeHorizontalSpeed(isPressed ? horizontalSpeedPercentOnLeftClickActive : 1);
+        player.PlayerMovementManager.ChangeHorizontalSpeed(isPressed ? horizontalSpeedPercentOnLeftClickActive : 1);
     }
 
     public override void UseAbility(Vector3 mousePosition, bool isPressed)

@@ -2,33 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovementManager : MonoBehaviour
 {
-    private Player player;
+    protected Player player;
 
-    private float horizontalSpeed;
-    private float jumpingSpeed;
+    protected float horizontalSpeed;
+    protected float jumpingSpeed;
 
-    private bool isMovingLeft;
-    private bool isMovingRight;
-    private float horizontalMovement;
+    protected bool isMovingLeft;
+    protected bool isMovingRight;
+    protected float horizontalMovement;
 
-    private Vector3 lastPositionOnNetwork;
-    private float lastYSpeedOnNetwork;
+    protected Vector3 lastPositionOnNetwork;
+    protected float lastYSpeedOnNetwork;
 
-    private bool isMovingVerticallyOnNetwork;
-    private float acceleration;
+    protected bool isMovingVerticallyOnNetwork;
+    protected float acceleration;
 
-    private PlatformManager platform;
+    protected PlatformManager platform;
 
-    private bool isTouchingFloorOrPlatform;
+    protected bool isTouchingFloorOrPlatform;
 
-    private const float TERMINAL_SPEED = -10;
-    private const float ACCELERATION_BASE = -9.8f;
-    private const float GRAVITY = 4f;
-    private const float BASE_HORIZONTAL_SPEED = 7;
+    protected const float TERMINAL_SPEED = -10;
+    protected const float ACCELERATION_BASE = -9.8f;
+    protected const float GRAVITY = 4f;
+    protected const float BASE_HORIZONTAL_SPEED = 7;
 
-    private PlayerMovement()
+    protected PlayerMovementManager()
     {
         horizontalSpeed = BASE_HORIZONTAL_SPEED;
         jumpingSpeed = 17;
@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
         acceleration = ACCELERATION_BASE * GRAVITY;
     }
 
-    private void Awake()
+    protected void Awake()
     {
         player = GetComponent<Player>();
         if (player.PlayerInputManager)
@@ -51,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnGUI()
+    protected void OnGUI()
     {
         if (player.PhotonView.isMine)
         {
@@ -65,7 +65,7 @@ public class PlayerMovement : MonoBehaviour
         horizontalSpeed = BASE_HORIZONTAL_SPEED * percent;
     }
 
-    private void Update()
+    protected void Update()
     {
         if (player.PhotonView.isMine)
         {
@@ -82,6 +82,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (player.PlayerRigidBody.velocity.y < 0 && !player.PlayerGroundHitbox.enabled)
             {
+                isTouchingFloorOrPlatform = false;
                 player.PlayerGroundHitbox.enabled = true;
             }
             if (PlayerIsMovingVertically())
@@ -97,7 +98,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void MovePlayerOverNetwork()
+    protected void MovePlayerOverNetwork()
     {
         Vector3 xMove = Vector3.MoveTowards(new Vector2(transform.position.x, 0), new Vector2(lastPositionOnNetwork.x, 0), Time.deltaTime * horizontalSpeed);
         if (lastYSpeedOnNetwork == 0 && !isMovingVerticallyOnNetwork)
@@ -110,20 +111,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void SendToServer_Movement(Vector3 position, float ySpeed, bool isMovingVertically)
+    protected void SendToServer_Movement(Vector3 position, float ySpeed, bool isMovingVertically)
     {
         player.PhotonView.RPC("ReceiveFromServer_Movement", PhotonTargets.Others, position, ySpeed, isMovingVertically);
     }
 
     [PunRPC]
-    private void ReceiveFromServer_Movement(Vector3 position, float ySpeed, bool isMovingVertically)
+    protected void ReceiveFromServer_Movement(Vector3 position, float ySpeed, bool isMovingVertically)
     {
         lastPositionOnNetwork = position;
         lastYSpeedOnNetwork = ySpeed;
         isMovingVerticallyOnNetwork = isMovingVertically;
     }
 
-    private void OnJump()
+    protected virtual void OnJump()
     {
         if (!PlayerIsMovingVertically())
         {
@@ -132,13 +133,13 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnMove(bool goesLeft, bool goesRight)
+    protected void OnMove(bool goesLeft, bool goesRight)
     {
         isMovingLeft = goesLeft;
         isMovingRight = goesRight;
     }
 
-    private void OnJumpDown()
+    protected void OnJumpDown()
     {
         if (platform)
         {
@@ -147,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnTouchesPlatformOrFloor(GameObject platform, float objectYPosition)
+    protected virtual void OnTouchesPlatformOrFloor(GameObject platform, float objectYPosition)
     {
         player.PlayerGroundHitbox.enabled = false;
         isTouchingFloorOrPlatform = true;
@@ -155,21 +156,23 @@ public class PlayerMovement : MonoBehaviour
         {
             this.platform = platform.GetComponent<PlatformManager>();
         }
+        transform.position = new Vector3(transform.position.x, objectYPosition + (transform.localScale.y * 0.5f));
         player.PlayerRigidBody.velocity = new Vector2(player.PlayerRigidBody.velocity.x, 0);
         transform.position = new Vector3(transform.position.x, objectYPosition + (transform.localScale.y * 0.5f));
+        player.PlayerRigidBody.velocity = new Vector2(player.PlayerRigidBody.velocity.x, 0);
     }
 
-    private bool PlayerIsImmobile()
+    protected bool PlayerIsImmobile()
     {
         return player.PlayerRigidBody.velocity == Vector2.zero;
     }
 
-    private bool PlayerIsMovingHorizontally()
+    protected bool PlayerIsMovingHorizontally()
     {
         return player.PlayerRigidBody.velocity.x != 0;
     }
 
-    private bool PlayerIsMovingVertically()
+    protected bool PlayerIsMovingVertically()
     {
         return !isTouchingFloorOrPlatform;
     }

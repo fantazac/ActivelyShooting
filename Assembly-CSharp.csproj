@@ -133,6 +133,7 @@
      <Compile Include="Assets\Scripts\Characters\Gunner\GunnerAbilityManager.cs" />
      <Compile Include="Assets\Scripts\Characters\Gunner\GunnerE.cs" />
      <Compile Include="Assets\Scripts\Characters\Gunner\GunnerLeftClick.cs" />
+     <Compile Include="Assets\Scripts\Characters\Gunner\GunnerMovementManager.cs" />
      <Compile Include="Assets\Scripts\Characters\Gunner\GunnerRightClick.cs" />
      <Compile Include="Assets\Scripts\Characters\Mage\Mage.cs" />
      <Compile Include="Assets\Scripts\Characters\Mage\MageAbilityManager.cs" />
@@ -141,7 +142,7 @@
      <Compile Include="Assets\Scripts\Characters\PlayerGroundHitboxManager.cs" />
      <Compile Include="Assets\Scripts\Characters\PlayerInputManager.cs" />
      <Compile Include="Assets\Scripts\Characters\PlayerJumpingHitboxManager.cs" />
-     <Compile Include="Assets\Scripts\Characters\PlayerMovement.cs" />
+     <Compile Include="Assets\Scripts\Characters\PlayerMovementManager.cs" />
      <Compile Include="Assets\Scripts\Health.cs" />
      <Compile Include="Assets\Scripts\MainMenuManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\PlatformManager.cs" />

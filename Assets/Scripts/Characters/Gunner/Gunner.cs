@@ -9,5 +9,6 @@ public class Gunner : Player
         base.Awake();
 
         PlayerAbilityManager = gameObject.AddComponent<GunnerAbilityManager>();
+        PlayerMovementManager = gameObject.AddComponent<GunnerMovementManager>();
     }
 }
