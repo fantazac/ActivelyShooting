@@ -12,6 +12,13 @@ public class FighterAbilityManager : PlayerAbilityManager
         selectedMode = FighterMode.Swordsman;
     }
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        abilities = new Ability[] { gameObject.AddComponent<FighterQ>(), gameObject.AddComponent<FighterE>(), gameObject.AddComponent<FighterLeftClick>(), gameObject.AddComponent<FighterRightClick>() };
+    }
+
     private void OnGUI()
     {
         if (player.PhotonView.isMine)
@@ -27,10 +34,12 @@ public class FighterAbilityManager : PlayerAbilityManager
         if (selectedMode == FighterMode.Swordsman)
         {
             selectedMode = FighterMode.Tank;
+            abilities[2].ChangeWeapon((int)FighterMode.Tank);
         }
         else
         {
             selectedMode = FighterMode.Swordsman;
+            abilities[2].ChangeWeapon((int)FighterMode.Swordsman);
         }
     }
 }

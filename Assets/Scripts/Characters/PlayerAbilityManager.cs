@@ -28,7 +28,7 @@ public abstract class PlayerAbilityManager : MonoBehaviour
     {
         foreach (Ability ability in abilities)
         {
-            if (!(ability is GunnerQ))
+            if (!(ability is GunnerQ || ability is FighterQ))
             {
                 ability.SetCooldownReduction(cooldownReduction);
             }
