@@ -28,7 +28,7 @@ public abstract class PlayerAbilityManager : MonoBehaviour
     {
         foreach (Ability ability in abilities)
         {
-            if (!(ability is GunnerQ || ability is FighterQ))
+            if (!(ability is FighterQ || ability is GunnerQ || ability is MageQ))
             {
                 ability.SetCooldownReduction(cooldownReduction);
             }
@@ -53,6 +53,19 @@ public abstract class PlayerAbilityManager : MonoBehaviour
             ability.UseAbility(sceneMousePosition, isPressed);
             SendToServer_Ability(abilityId, sceneMousePosition, isPressed);
         }
+    }
+
+    public void UseAbilityWithoutLimitation(int abilityId, Vector3 mousePosition, bool isPressed = false)
+    {
+        Vector2 mousePositionInsideScreen = new Vector2(Mathf.Clamp(mousePosition.x, 0, Screen.width), Mathf.Clamp(mousePosition.y, 0, Screen.height));
+        Vector2 sceneMousePosition = StaticObjects.PlayerCamera.ScreenToWorldPoint(mousePositionInsideScreen);
+        abilities[abilityId].UseAbility(sceneMousePosition, isPressed);
+        SendToServer_Ability(abilityId, sceneMousePosition, isPressed);
+    }
+
+    public void SetAbilityActive(int abilityId, bool active)
+    {
+        abilities[abilityId].SetActive(active);
     }
 
     protected void OnSwitchWeapon()

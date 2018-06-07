@@ -8,11 +8,17 @@ public class MageQ : Ability
     private float duration;
     private float durationRemaining;
 
+    private float damageReduction;
+    private float healPercentOnCast;
+
     private MageQ()
     {
         usesLeft = 1;
 
         duration = 10;
+
+        damageReduction = 0;
+        healPercentOnCast = 100;
 
         baseCooldown = 45;
         cooldown = baseCooldown;
@@ -28,11 +34,16 @@ public class MageQ : Ability
 
     protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
     {
-        player.PlayerAbilityManager.SetDamageAmplificationForAbilities(damageAmplification);
         foreach (Player p in player.Party)
         {
-            p.PlayerAbilityManager.SetCooldownReductionForAbilities(cooldownReduction);
+            //p.Health.Restore(healPercentOnCast, true);
         }
+        //Apply damage reduction to this player in stats
+        player.PlayerMovementManager.SetCanMove(false);
+        player.PlayerAbilityManager.SetAbilityActive(1, false);
+        player.PlayerAbilityManager.SetAbilityActive(2, false);
+        player.PlayerAbilityManager.SetAbilityActive(3, false);
+        player.PlayerAbilityManager.UseAbilityWithoutLimitation(1, new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
         StartCoroutine(EndBuff());
     }
 
@@ -49,10 +60,10 @@ public class MageQ : Ability
             yield return null;
         }
 
-        player.PlayerAbilityManager.SetDamageAmplificationForAbilities(1);
-        foreach (Player p in player.Party)
-        {
-            p.PlayerAbilityManager.SetCooldownReductionForAbilities(1);
-        }
+        player.PlayerAbilityManager.SetAbilityActive(1, true);
+        player.PlayerAbilityManager.SetAbilityActive(2, true);
+        player.PlayerAbilityManager.SetAbilityActive(3, true);
+        player.PlayerMovementManager.SetCanMove(true);
+        //Remove damage reduction to this player in stats
     }
 }

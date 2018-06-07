@@ -15,6 +15,8 @@ public abstract class Ability : MonoBehaviour
 
     protected int usesLeft;
 
+    protected bool active;
+
     public bool HasLimitedUsesPerLevel { get; private set; }
     public bool IsOnCooldown { get; protected set; }
     public bool IsHoldDownAbility { get; protected set; }
@@ -23,6 +25,8 @@ public abstract class Ability : MonoBehaviour
     {
         cooldownReduction = 1;
         damageAmplification = 1;
+
+        active = true;
     }
 
     protected virtual void Awake()
@@ -46,10 +50,31 @@ public abstract class Ability : MonoBehaviour
                 }
                 if (!HasLimitedUsesPerLevel || usesLeft > 0)
                 {
-                    StartCoroutine(PutAbilityOffCooldown());
+                    StartCooldown();
                 }
             }
             UseAbilityEffect(mousePosition, isPressed);
+        }
+    }
+
+    protected void StartCooldown()
+    {
+        if (cooldownRemaining > 0)
+        {
+            cooldownRemaining = cooldown;
+        }
+        else
+        {
+            StartCoroutine(PutAbilityOffCooldown());
+        }
+    }
+
+    public void SetActive(bool active)
+    {
+        this.active = active;
+        if (!active && IsHoldDownAbility)
+        {
+            UseAbilityEffect(Vector2.zero, false);
         }
     }
 
@@ -101,6 +126,6 @@ public abstract class Ability : MonoBehaviour
 
     public bool IsAvailable()
     {
-        return !HasLimitedUsesPerLevel || usesLeft > 0;
+        return active && (!HasLimitedUsesPerLevel || usesLeft > 0);
     }
 }

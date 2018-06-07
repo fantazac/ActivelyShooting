@@ -22,6 +22,7 @@ public class PlayerMovementManager : MonoBehaviour
     protected PlatformManager platform;
 
     protected bool isTouchingFloorOrPlatform;
+    protected bool canMove;
 
     protected const float TERMINAL_SPEED = -10;
     protected const float ACCELERATION_BASE = -9.8f;
@@ -30,6 +31,8 @@ public class PlayerMovementManager : MonoBehaviour
 
     protected PlayerMovementManager()
     {
+        canMove = true;
+
         horizontalSpeed = BASE_HORIZONTAL_SPEED;
         jumpingSpeed = 17;
 
@@ -65,29 +68,49 @@ public class PlayerMovementManager : MonoBehaviour
         horizontalSpeed = BASE_HORIZONTAL_SPEED * percent;
     }
 
+    public void SetCanMove(bool canMove)
+    {
+        this.canMove = canMove;
+        if (player.PhotonView.isMine)
+        {
+            if (canMove)
+            {
+                player.PlayerRigidBody.gravityScale = GRAVITY;
+            }
+            else
+            {
+                player.PlayerRigidBody.gravityScale = 0;
+                player.PlayerRigidBody.velocity = Vector2.zero;
+            }
+        }
+    }
+
     protected void Update()
     {
         if (player.PhotonView.isMine)
         {
-            horizontalMovement = 0;
-            if (isMovingLeft)
+            if (canMove)
             {
-                horizontalMovement -= horizontalSpeed;
-            }
-            if (isMovingRight)
-            {
-                horizontalMovement += horizontalSpeed;
-            }
-            player.PlayerRigidBody.velocity = new Vector2(horizontalMovement, player.PlayerRigidBody.velocity.y < TERMINAL_SPEED ? TERMINAL_SPEED : player.PlayerRigidBody.velocity.y);
+                horizontalMovement = 0;
+                if (isMovingLeft)
+                {
+                    horizontalMovement -= horizontalSpeed;
+                }
+                if (isMovingRight)
+                {
+                    horizontalMovement += horizontalSpeed;
+                }
+                player.PlayerRigidBody.velocity = new Vector2(horizontalMovement, player.PlayerRigidBody.velocity.y < TERMINAL_SPEED ? TERMINAL_SPEED : player.PlayerRigidBody.velocity.y);
 
-            if (player.PlayerRigidBody.velocity.y < 0 && !player.PlayerGroundHitbox.enabled)
-            {
-                isTouchingFloorOrPlatform = false;
-                player.PlayerGroundHitbox.enabled = true;
-            }
-            if (PlayerIsMovingVertically())
-            {
-                platform = null;
+                if (player.PlayerRigidBody.velocity.y < 0 && !player.PlayerGroundHitbox.enabled)
+                {
+                    isTouchingFloorOrPlatform = false;
+                    player.PlayerGroundHitbox.enabled = true;
+                }
+                if (PlayerIsMovingVertically())
+                {
+                    platform = null;
+                }
             }
 
             SendToServer_Movement(transform.position, player.PlayerRigidBody.velocity.y, PlayerIsMovingVertically());
@@ -126,7 +149,7 @@ public class PlayerMovementManager : MonoBehaviour
 
     protected virtual void OnJump()
     {
-        if (!PlayerIsMovingVertically())
+        if (!PlayerIsMovingVertically() && canMove)
         {
             isTouchingFloorOrPlatform = false;
             player.PlayerRigidBody.velocity = new Vector2(player.PlayerRigidBody.velocity.x, jumpingSpeed);
@@ -141,7 +164,7 @@ public class PlayerMovementManager : MonoBehaviour
 
     protected void OnJumpDown()
     {
-        if (platform)
+        if (platform && canMove)
         {
             platform.JumpingDown();
             platform = null;

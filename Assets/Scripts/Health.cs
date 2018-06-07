@@ -20,12 +20,12 @@ public class Health : MonoBehaviour
         }
     }
 
-    public void Restore(float amount)
+    public void Restore(float amount, bool isPercent = false)
     {
-        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        currentHealth = Mathf.Clamp(currentHealth + (isPercent ? currentHealth * amount : amount), 0, maxHealth);
         if (StaticObjects.Player.PhotonView.isMine)
         {
-            SendToServer_CurrentHealth(amount);
+            SendToServer_CurrentHealth(amount, isPercent);
         }
     }
 
@@ -34,15 +34,15 @@ public class Health : MonoBehaviour
         return currentHealth <= 0;
     }
 
-    protected void SendToServer_CurrentHealth(float amount)
+    protected void SendToServer_CurrentHealth(float amount, bool isPercent = false)
     {
-        StaticObjects.Player.PhotonView.RPC("ReceiveFromServer_CurrentHealth", PhotonTargets.Others, amount);
+        StaticObjects.Player.PhotonView.RPC("ReceiveFromServer_CurrentHealth", PhotonTargets.Others, amount, isPercent);
     }
 
     [PunRPC]
-    private void ReceiveFromServer_CurrentHealth(float amount)
+    private void ReceiveFromServer_CurrentHealth(float amount, bool isPercent)
     {
-        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        currentHealth = Mathf.Clamp(currentHealth + (isPercent ? currentHealth * amount : amount), 0, maxHealth);
         if (IsDead() && !gameObject.GetComponent<Player>())
         {
             Destroy(gameObject);

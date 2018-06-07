@@ -4,60 +4,46 @@ using UnityEngine;
 
 public class MageRightClick : Ability
 {
-    protected string projectilePrefabPath;
-    protected GameObject projectilePrefab;
+    private float damageReduction;
 
-    private float speed;
-    private float range;
-    private float damage;
+    private float duration;
+    private float durationRemaining;
 
     private MageRightClick()
     {
-        speed = 13;
-        range = 60;
-        damage = 75;
+        damageReduction = 0.5f;
 
-        baseCooldown = 10;
+        duration = 5;
+
+        baseCooldown = 15;
         cooldown = baseCooldown;
-
-        projectilePrefabPath = "ProjectilePrefabs/GunnerSpecialAttack";
-    }
-
-    protected override void Awake()
-    {
-        base.Awake();
-
-        LoadPrefabs();
-    }
-
-    private void LoadPrefabs()
-    {
-        projectilePrefab = Resources.Load<GameObject>(projectilePrefabPath);
     }
 
     protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
     {
-        Vector3 diff = mousePosition - transform.position;
-        diff.Normalize();
-        float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
-
-        Projectile projectile = Instantiate(projectilePrefab, transform.position + Vector3.back, Quaternion.Euler(0f, 0f, rot_z)).GetComponent<Projectile>();
-        projectile.transform.position += projectile.transform.right * projectile.transform.localScale.x * 0.55f;
-        projectile.ShootProjectile(0, speed, range);
-        projectile.OnProjectileHit += OnProjectileHit;
-        projectile.OnProjectileReachedEnd += OnProjectileReachedEnd;
-    }
-
-    private void OnProjectileHit(Projectile projectile, int weapon, GameObject targetHit)
-    {
-        if (player.PhotonView.isMine && targetHit.tag == "Enemy")
+        foreach (Player p in player.Party)
         {
-            targetHit.GetComponent<Health>().Reduce(damage * damageAmplification);
+            //Apply damage reduction to player in stats
         }
+        StartCoroutine(EndBuff());
     }
 
-    private void OnProjectileReachedEnd(Projectile projectile)
+    private IEnumerator EndBuff()
     {
-        Destroy(projectile.gameObject);
+        durationRemaining = duration;
+
+        yield return null;
+
+        while (durationRemaining > 0)
+        {
+            durationRemaining -= Time.deltaTime;
+
+            yield return null;
+        }
+
+        foreach (Player p in player.Party)
+        {
+            //Remove damage reduction to player in stats
+        }
     }
 }

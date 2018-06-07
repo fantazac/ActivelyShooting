@@ -35,6 +35,19 @@ public class MainMenuManager : MonoBehaviour
         playerParentPrefab = Resources.Load<GameObject>(playerParentPrefabPath);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            mainMenuCamera.SetActive(true);
+            playerCamera.SetActive(false);
+            PhotonNetwork.Destroy(StaticObjects.Player.transform.parent.gameObject);
+            StaticObjects.Player = null;
+            StaticObjects.PlayerCamera = null;
+            state = MainMenuState.CHARACTER_SELECT;
+        }
+    }
+
     private void OnGUI()
     {
         switch (state)
@@ -59,6 +72,10 @@ public class MainMenuManager : MonoBehaviour
                 break;
             case MainMenuState.CHARACTER_SELECT:
                 GUILayout.Label("Ping: " + PhotonNetwork.GetPing().ToString() + " - Players: " + PhotonNetwork.room.PlayerCount);
+                if (GUILayout.Button("Fighter", GUILayout.Height(40)))
+                {
+                    SpawnPlayer("Fighter");
+                }
                 if (GUILayout.Button("Gunner", GUILayout.Height(40)))
                 {
                     SpawnPlayer("Gunner");
@@ -66,10 +83,6 @@ public class MainMenuManager : MonoBehaviour
                 if (GUILayout.Button("Mage", GUILayout.Height(40)))
                 {
                     SpawnPlayer("Mage");
-                }
-                if (GUILayout.Button("Fighter", GUILayout.Height(40)))
-                {
-                    SpawnPlayer("Fighter");
                 }
                 if (GUILayout.Button("Quit", GUILayout.Height(30)))
                 {

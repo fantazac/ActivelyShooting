@@ -166,7 +166,7 @@ public class GunnerLeftClick : Ability
         if (player.PhotonView.isMine && isPressed && !IsOnCooldown)
         {
             ShootProjectile();
-            StartCoroutine(PutAbilityOffCooldown());
+            StartCooldown();
         }
     }
 
