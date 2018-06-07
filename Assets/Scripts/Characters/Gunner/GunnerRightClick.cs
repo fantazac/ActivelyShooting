@@ -17,7 +17,8 @@ public class GunnerRightClick : Ability
         range = 60;
         damage = 75;
 
-        cooldown = 10;
+        baseCooldown = 10;
+        cooldown = baseCooldown;
 
         projectilePrefabPath = "ProjectilePrefabs/GunnerSpecialAttack";
     }
@@ -51,7 +52,7 @@ public class GunnerRightClick : Ability
     {
         if (player.PhotonView.isMine && targetHit.tag == "Enemy")
         {
-            targetHit.GetComponent<Health>().Reduce(damage);
+            targetHit.GetComponent<Health>().Reduce(damage * damageAmplification);
         }
     }
 

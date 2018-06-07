@@ -13,7 +13,8 @@ public class GunnerE : Ability
     {
         duration = 5;
 
-        cooldown = 20;
+        baseCooldown = 20;
+        cooldown = baseCooldown;
     }
 
     protected override void Start()

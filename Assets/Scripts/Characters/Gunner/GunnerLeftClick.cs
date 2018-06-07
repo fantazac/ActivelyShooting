@@ -35,6 +35,7 @@ public class GunnerLeftClick : Ability
     private bool isAoE;
 
     private float horizontalSpeedPercentOnLeftClickActive;
+    private bool cancelHorizontalSlow;
 
     private Vector3 lastMousePosition;
 
@@ -84,7 +85,14 @@ public class GunnerLeftClick : Ability
     {
         if (this.isPressed != isPressed)
         {
-            player.PlayerMovementManager.ChangeHorizontalSpeed(isPressed ? horizontalSpeedPercentOnLeftClickActive : 1);
+            if (cancelHorizontalSlow)
+            {
+                player.PlayerMovementManager.ChangeHorizontalSpeed(1);
+            }
+            else
+            {
+                player.PlayerMovementManager.ChangeHorizontalSpeed(isPressed ? horizontalSpeedPercentOnLeftClickActive : 1);
+            }
         }
         this.isPressed = isPressed;
         lastMousePosition = mousePosition;
@@ -110,14 +118,14 @@ public class GunnerLeftClick : Ability
         {
             selectedWeapon = GunnerWeapon.Minigun;
             speed = minigunSpeed;
-            cooldown = minigunCooldown;
+            cooldown = minigunCooldown * cooldownReduction;
             range = minigunRange;
         }
         else
         {
             selectedWeapon = GunnerWeapon.RocketLauncher;
             speed = rocketSpeed;
-            cooldown = rocketCooldown;
+            cooldown = rocketCooldown * cooldownReduction;
             range = rocketRange;
         }
     }
@@ -125,6 +133,32 @@ public class GunnerLeftClick : Ability
     public void SetAoE(bool isAoE)
     {
         this.isAoE = isAoE;
+    }
+
+    public override void SetCooldownReduction(float cooldownReduction)
+    {
+        this.cooldownReduction = cooldownReduction;
+        if (selectedWeapon == GunnerWeapon.Minigun)
+        {
+            cooldown = minigunCooldown * cooldownReduction;
+        }
+        else
+        {
+            cooldown = rocketCooldown * cooldownReduction;
+        }
+        cancelHorizontalSlow = cooldownReduction < 1;
+        if (cancelHorizontalSlow)
+        {
+            player.PlayerMovementManager.ChangeHorizontalSpeed(1);
+        }
+        else
+        {
+            player.PlayerMovementManager.ChangeHorizontalSpeed(isPressed ? horizontalSpeedPercentOnLeftClickActive : 1);
+        }
+        if (cooldownRemaining > cooldown)
+        {
+            cooldownRemaining = cooldown;
+        }
     }
 
     private void Update()
@@ -158,7 +192,7 @@ public class GunnerLeftClick : Ability
             {
                 if (collider.gameObject.tag == "Enemy")
                 {
-                    collider.GetComponent<Health>().Reduce(rocketDamage);
+                    collider.GetComponent<Health>().Reduce(rocketDamage * damageAmplification);
                 }
             }
         }
@@ -166,7 +200,7 @@ public class GunnerLeftClick : Ability
         {
             if (player.PhotonView.isMine && targetHit.tag == "Enemy")
             {
-                targetHit.GetComponent<Health>().Reduce(minigunDamage);
+                targetHit.GetComponent<Health>().Reduce(minigunDamage * damageAmplification);
             }
         }
 

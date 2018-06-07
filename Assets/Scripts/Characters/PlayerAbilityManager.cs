@@ -24,10 +24,29 @@ public abstract class PlayerAbilityManager : MonoBehaviour
 
     protected abstract void SwitchWeapon();
 
+    public void SetCooldownReductionForAbilities(float cooldownReduction)
+    {
+        foreach (Ability ability in abilities)
+        {
+            if (!(ability is GunnerQ))
+            {
+                ability.SetCooldownReduction(cooldownReduction);
+            }
+        }
+    }
+
+    public void SetDamageAmplificationForAbilities(float damageAmplification)
+    {
+        foreach (Ability ability in abilities)
+        {
+            ability.SetDamageAmplification(damageAmplification);
+        }
+    }
+
     protected void UseAbility(int abilityId, Vector3 mousePosition, bool isPressed = false)
     {
         Ability ability = abilities[abilityId];
-        if (!ability.IsOnCooldown)//Currently, means it will take slow off Gunner when the auto is back up
+        if (!ability.IsOnCooldown && ability.IsAvailable())
         {
             Vector2 sceneMousePosition = StaticObjects.PlayerCamera.ScreenToWorldPoint(mousePosition);
             ability.UseAbility(sceneMousePosition, isPressed);

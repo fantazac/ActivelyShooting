@@ -6,15 +6,30 @@ public abstract class Ability : MonoBehaviour
 {
     protected Player player;
 
+    protected float baseCooldown;
     protected float cooldown;
     protected float cooldownRemaining;
 
+    protected float cooldownReduction;
+    protected float damageAmplification;
+
+    protected int usesLeft;
+
+    public bool HasLimitedUsesPerLevel { get; private set; }
     public bool IsOnCooldown { get; protected set; }
     public bool IsHoldDownAbility { get; protected set; }
+
+    protected Ability()
+    {
+        cooldownReduction = 1;
+        damageAmplification = 1;
+    }
 
     protected virtual void Awake()
     {
         player = GetComponent<Player>();
+
+        HasLimitedUsesPerLevel = usesLeft > 0;
     }
 
     protected virtual void Start() { }
@@ -25,7 +40,14 @@ public abstract class Ability : MonoBehaviour
         {
             if (player.PhotonView.isMine)
             {
-                StartCoroutine(PutAbilityOffCooldown());
+                if (HasLimitedUsesPerLevel)
+                {
+                    usesLeft--;
+                }
+                if (!HasLimitedUsesPerLevel || usesLeft > 0)
+                {
+                    StartCoroutine(PutAbilityOffCooldown());
+                }
             }
             UseAbilityEffect(mousePosition, isPressed);
         }
@@ -60,5 +82,25 @@ public abstract class Ability : MonoBehaviour
 
         //player.AbilityUIManager.SetAbilityOffCooldown(AbilityCategory, ID, UsesResource, IsEnabled, IsBlocked);
         IsOnCooldown = false;
+    }
+
+    public virtual void SetCooldownReduction(float cooldownReduction)
+    {
+        this.cooldownReduction = cooldownReduction;
+        cooldown = baseCooldown * cooldownReduction;
+        if (cooldownRemaining > cooldown)
+        {
+            cooldownRemaining = cooldown;
+        }
+    }
+
+    public void SetDamageAmplification(float damageAmplification)
+    {
+        this.damageAmplification = damageAmplification;
+    }
+
+    public bool IsAvailable()
+    {
+        return !HasLimitedUsesPerLevel || usesLeft > 0;
     }
 }
