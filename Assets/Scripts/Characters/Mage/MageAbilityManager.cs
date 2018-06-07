@@ -12,6 +12,13 @@ public class MageAbilityManager : PlayerAbilityManager
         selectedMagic = MageMagic.Classic;
     }
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        abilities = new Ability[] { gameObject.AddComponent<MageQ>(), gameObject.AddComponent<MageE>(), gameObject.AddComponent<MageLeftClick>(), gameObject.AddComponent<MageRightClick>() };
+    }
+
     private void OnGUI()
     {
         if (player.PhotonView.isMine)
@@ -27,18 +34,22 @@ public class MageAbilityManager : PlayerAbilityManager
         if (selectedMagic == MageMagic.Classic)
         {
             selectedMagic = MageMagic.Fire;
+            abilities[2].ChangeType((int)MageMagic.Fire);
         }
         else if (selectedMagic == MageMagic.Fire)
         {
             selectedMagic = MageMagic.Light;
+            abilities[2].ChangeType((int)MageMagic.Light);
         }
         else if (selectedMagic == MageMagic.Light)
         {
             selectedMagic = MageMagic.Ice;
+            abilities[2].ChangeType((int)MageMagic.Ice);
         }
         else
         {
             selectedMagic = MageMagic.Classic;
+            abilities[2].ChangeType((int)MageMagic.Classic);
         }
     }
 }

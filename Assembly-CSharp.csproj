@@ -142,6 +142,10 @@
      <Compile Include="Assets\Scripts\Characters\Gunner\GunnerRightClick.cs" />
      <Compile Include="Assets\Scripts\Characters\Mage\Mage.cs" />
      <Compile Include="Assets\Scripts\Characters\Mage\MageAbilityManager.cs" />
+     <Compile Include="Assets\Scripts\Characters\Mage\MageE.cs" />
+     <Compile Include="Assets\Scripts\Characters\Mage\MageLeftClick.cs" />
+     <Compile Include="Assets\Scripts\Characters\Mage\MageQ.cs" />
+     <Compile Include="Assets\Scripts\Characters\Mage\MageRightClick.cs" />
      <Compile Include="Assets\Scripts\Characters\Player.cs" />
      <Compile Include="Assets\Scripts\Characters\PlayerAbilityManager.cs" />
      <Compile Include="Assets\Scripts\Characters\PlayerGroundHitboxManager.cs" />

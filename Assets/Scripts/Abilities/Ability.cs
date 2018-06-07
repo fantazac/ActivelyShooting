@@ -60,7 +60,7 @@ public abstract class Ability : MonoBehaviour
 
     protected abstract void UseAbilityEffect(Vector3 mousePosition, bool isPressed);
 
-    public virtual void ChangeWeapon(int weapon) { }
+    public virtual void ChangeType(int type) { }
 
     protected IEnumerator PutAbilityOffCooldown()
     {

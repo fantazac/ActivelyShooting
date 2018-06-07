@@ -34,12 +34,12 @@ public class GunnerAbilityManager : PlayerAbilityManager
         if (selectedWeapon == GunnerWeapon.Minigun)
         {
             selectedWeapon = GunnerWeapon.RocketLauncher;
-            abilities[2].ChangeWeapon((int)GunnerWeapon.RocketLauncher);
+            abilities[2].ChangeType((int)GunnerWeapon.RocketLauncher);
         }
         else
         {
             selectedWeapon = GunnerWeapon.Minigun;
-            abilities[2].ChangeWeapon((int)GunnerWeapon.Minigun);
+            abilities[2].ChangeType((int)GunnerWeapon.Minigun);
         }
     }
 }

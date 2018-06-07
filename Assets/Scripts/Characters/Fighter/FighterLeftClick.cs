@@ -55,7 +55,7 @@ public class FighterLeftClick : Ability
 
         horizontalSpeedPercentOnLeftClickActive = 0.5f;
 
-        ChangeWeapon((int)FighterMode.Swordsman);
+        ChangeType((int)FighterMode.Swordsman);
 
         IsHoldDownAbility = true;
 
@@ -111,7 +111,7 @@ public class FighterLeftClick : Ability
         }
     }
 
-    public override void ChangeWeapon(int mode)
+    public override void ChangeType(int mode)
     {
         if (mode == (int)FighterMode.Swordsman)
         {

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GunnerLeftClick : Ability
+public class MageLeftClick : Ability
 {
     protected string projectilePrefabPath1;
     protected GameObject projectilePrefab1;
@@ -39,9 +39,9 @@ public class GunnerLeftClick : Ability
 
     private Vector3 lastMousePosition;
 
-    private GunnerWeapon selectedWeapon;
+    private MageMagic selectedMagic;
 
-    private GunnerLeftClick()
+    private MageLeftClick()
     {
         minigunCooldown = 0.12f;
         minigunDamage = 15;
@@ -56,7 +56,7 @@ public class GunnerLeftClick : Ability
 
         horizontalSpeedPercentOnLeftClickActive = 0.5f;
 
-        ChangeType((int)GunnerWeapon.Minigun);
+        ChangeType((int)MageMagic.Classic);
 
         IsHoldDownAbility = true;
 
@@ -112,18 +112,32 @@ public class GunnerLeftClick : Ability
         }
     }
 
-    public override void ChangeType(int weapon)
+    public override void ChangeType(int magic)
     {
-        if (weapon == (int)GunnerWeapon.Minigun)
+        if (magic == (int)MageMagic.Classic)
         {
-            selectedWeapon = GunnerWeapon.Minigun;
+            selectedMagic = MageMagic.Classic;
+            speed = minigunSpeed;
+            cooldown = minigunCooldown * cooldownReduction;
+            range = minigunRange;
+        }
+        else if (magic == (int)MageMagic.Fire)
+        {
+            selectedMagic = MageMagic.Fire;
+            speed = minigunSpeed;
+            cooldown = minigunCooldown * cooldownReduction;
+            range = minigunRange;
+        }
+        else if (magic == (int)MageMagic.Light)
+        {
+            selectedMagic = MageMagic.Light;
             speed = minigunSpeed;
             cooldown = minigunCooldown * cooldownReduction;
             range = minigunRange;
         }
         else
         {
-            selectedWeapon = GunnerWeapon.RocketLauncher;
+            selectedMagic = MageMagic.Ice;
             speed = rocketSpeed;
             cooldown = rocketCooldown * cooldownReduction;
             range = rocketRange;
@@ -138,7 +152,15 @@ public class GunnerLeftClick : Ability
     public override void SetCooldownReduction(float cooldownReduction)
     {
         this.cooldownReduction = cooldownReduction;
-        if (selectedWeapon == GunnerWeapon.Minigun)
+        if (selectedMagic == MageMagic.Classic)
+        {
+            cooldown = minigunCooldown * cooldownReduction;
+        }
+        else if (selectedMagic == MageMagic.Fire)
+        {
+            cooldown = minigunCooldown * cooldownReduction;
+        }
+        else if (selectedMagic == MageMagic.Light)
         {
             cooldown = minigunCooldown * cooldownReduction;
         }
@@ -176,12 +198,32 @@ public class GunnerLeftClick : Ability
         diff.Normalize();
         float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
 
-        Projectile projectile = Instantiate(selectedWeapon == GunnerWeapon.Minigun ? (isAoE ? projectilePrefab2 : projectilePrefab1) : (isAoE ? projectilePrefab4 : projectilePrefab3),
+        Projectile projectile = Instantiate(GetProjectilePrefab(),
             transform.position + Vector3.back, Quaternion.Euler(0f, 0f, rot_z)).GetComponent<Projectile>();
         projectile.transform.position += projectile.transform.right * projectile.transform.localScale.x * 0.55f;
-        projectile.ShootProjectile((int)selectedWeapon, speed, range);
+        projectile.ShootProjectile((int)selectedMagic, speed, range);
         projectile.OnProjectileHit += OnProjectileHit;
         projectile.OnProjectileReachedEnd += OnProjectileReachedEnd;
+    }
+
+    private GameObject GetProjectilePrefab()
+    {
+        if (selectedMagic == MageMagic.Classic)
+        {
+            return isAoE ? projectilePrefab2 : projectilePrefab1;
+        }
+        else if (selectedMagic == MageMagic.Fire)
+        {
+            return isAoE ? projectilePrefab2 : projectilePrefab1;
+        }
+        else if (selectedMagic == MageMagic.Light)
+        {
+            return isAoE ? projectilePrefab2 : projectilePrefab1;
+        }
+        else
+        {
+            return isAoE ? projectilePrefab4 : projectilePrefab3;
+        }
     }
 
     private void OnProjectileHit(Projectile projectile, int weapon, GameObject targetHit)

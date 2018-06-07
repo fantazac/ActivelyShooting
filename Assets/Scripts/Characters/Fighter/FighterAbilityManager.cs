@@ -34,12 +34,12 @@ public class FighterAbilityManager : PlayerAbilityManager
         if (selectedMode == FighterMode.Swordsman)
         {
             selectedMode = FighterMode.Tank;
-            abilities[2].ChangeWeapon((int)FighterMode.Tank);
+            abilities[2].ChangeType((int)FighterMode.Tank);
         }
         else
         {
             selectedMode = FighterMode.Swordsman;
-            abilities[2].ChangeWeapon((int)FighterMode.Swordsman);
+            abilities[2].ChangeType((int)FighterMode.Swordsman);
         }
     }
 }
