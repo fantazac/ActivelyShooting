@@ -48,7 +48,8 @@ public abstract class PlayerAbilityManager : MonoBehaviour
         Ability ability = abilities[abilityId];
         if (!ability.IsOnCooldown && ability.IsAvailable())
         {
-            Vector2 sceneMousePosition = StaticObjects.PlayerCamera.ScreenToWorldPoint(mousePosition);
+            Vector2 mousePositionInsideScreen = new Vector2(Mathf.Clamp(mousePosition.x, 0, Screen.width), Mathf.Clamp(mousePosition.y, 0, Screen.height));
+            Vector2 sceneMousePosition = StaticObjects.PlayerCamera.ScreenToWorldPoint(mousePositionInsideScreen);
             ability.UseAbility(sceneMousePosition, isPressed);
             SendToServer_Ability(abilityId, sceneMousePosition, isPressed);
         }
