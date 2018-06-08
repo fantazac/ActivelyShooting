@@ -87,7 +87,7 @@ public abstract class Ability : MonoBehaviour
 
     public virtual void ChangeType(int type) { }
 
-    protected IEnumerator PutAbilityOffCooldown()
+    protected virtual IEnumerator PutAbilityOffCooldown()
     {
         IsOnCooldown = true;
         cooldownRemaining = cooldown;

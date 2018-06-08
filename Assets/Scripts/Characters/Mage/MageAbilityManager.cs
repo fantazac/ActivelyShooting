@@ -38,13 +38,13 @@ public class MageAbilityManager : PlayerAbilityManager
         }
         else if (selectedMagic == MageMagic.Fire)
         {
-            selectedMagic = MageMagic.Light;
-            abilities[2].ChangeType((int)MageMagic.Light);
-        }
-        else if (selectedMagic == MageMagic.Light)
-        {
             selectedMagic = MageMagic.Ice;
             abilities[2].ChangeType((int)MageMagic.Ice);
+        }
+        else if (selectedMagic == MageMagic.Ice)
+        {
+            selectedMagic = MageMagic.Light;
+            abilities[2].ChangeType((int)MageMagic.Light);
         }
         else
         {
@@ -58,6 +58,6 @@ public enum MageMagic
 {
     Classic,
     Fire,
-    Light,
-    Ice
+    Ice,
+    Light
 }

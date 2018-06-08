@@ -20,22 +20,24 @@ public class MageLeftClick : Ability
     private float speed;
     private float range;
 
-    private float minigunCooldown;
-    private float minigunDamage;
-    private float minigunSpeed;
-    private float minigunRange;
-
-    private float rocketCooldown;
-    private float rocketDamage;
-    private float rocketSpeed;
-    private float rocketRange;
-    private float rocketExplosionRadius;
+    private bool canShootInCycle;
+    private bool readyToShoot;
 
     private bool isPressed;
-    private bool isAoE;
+
+    private float classicDamage;
+    private float classicHeal;
+
+    private float fireDamage;
+    private float fireHeal;
+
+    private float iceDamage;
+    private float iceHeal;
+
+    private float lightDamage;
+    private float lightHeal;
 
     private float horizontalSpeedPercentOnLeftClickActive;
-    private bool cancelHorizontalSlow;
 
     private Vector3 lastMousePosition;
 
@@ -43,27 +45,24 @@ public class MageLeftClick : Ability
 
     private MageLeftClick()
     {
-        minigunCooldown = 0.12f;
-        minigunDamage = 15;
-        minigunSpeed = 12;
-        minigunRange = 18;
+        baseCooldown = 1;
+        cooldown = baseCooldown;
 
-        rocketCooldown = 0.8f;
-        rocketDamage = 55;
-        rocketSpeed = 9;
-        rocketRange = 60;
-        rocketExplosionRadius = 2.5f;
+        horizontalSpeedPercentOnLeftClickActive = 0f;
 
-        horizontalSpeedPercentOnLeftClickActive = 0.5f;
+        speed = 14;
+        range = 35;
+
+        //set all damages and heals
 
         ChangeType((int)MageMagic.Classic);
 
         IsHoldDownAbility = true;
 
-        projectilePrefabPath1 = "ProjectilePrefabs/GunnerMinigunBasicAttack";
-        projectilePrefabPath2 = "ProjectilePrefabs/GunnerMinigunBasicAttackAoE";
-        projectilePrefabPath3 = "ProjectilePrefabs/GunnerRocketLauncherBasicAttack";
-        projectilePrefabPath4 = "ProjectilePrefabs/GunnerRocketLauncherBasicAttackAoE";
+        projectilePrefabPath1 = "ProjectilePrefabs/MageClassicBasicAttack";
+        projectilePrefabPath2 = "ProjectilePrefabs/MageFireBasicAttack";
+        projectilePrefabPath3 = "ProjectilePrefabs/MageIceBasicAttack";
+        projectilePrefabPath4 = "ProjectilePrefabs/MageLightBasicAttack";
     }
 
     protected override void Awake()
@@ -85,14 +84,7 @@ public class MageLeftClick : Ability
     {
         if (this.isPressed != isPressed)
         {
-            if (cancelHorizontalSlow)
-            {
-                player.PlayerMovementManager.ChangeHorizontalSpeed(1);
-            }
-            else
-            {
-                player.PlayerMovementManager.ChangeHorizontalSpeed(isPressed ? horizontalSpeedPercentOnLeftClickActive : 1);
-            }
+            player.PlayerMovementManager.ChangeHorizontalSpeed(isPressed ? horizontalSpeedPercentOnLeftClickActive : 1);
         }
         this.isPressed = isPressed;
         lastMousePosition = mousePosition;
@@ -117,79 +109,67 @@ public class MageLeftClick : Ability
         if (magic == (int)MageMagic.Classic)
         {
             selectedMagic = MageMagic.Classic;
-            speed = minigunSpeed;
-            cooldown = minigunCooldown * cooldownReduction;
-            range = minigunRange;
+
         }
         else if (magic == (int)MageMagic.Fire)
         {
             selectedMagic = MageMagic.Fire;
-            speed = minigunSpeed;
-            cooldown = minigunCooldown * cooldownReduction;
-            range = minigunRange;
+
         }
-        else if (magic == (int)MageMagic.Light)
-        {
-            selectedMagic = MageMagic.Light;
-            speed = minigunSpeed;
-            cooldown = minigunCooldown * cooldownReduction;
-            range = minigunRange;
-        }
-        else
+        else if (magic == (int)MageMagic.Ice)
         {
             selectedMagic = MageMagic.Ice;
-            speed = rocketSpeed;
-            cooldown = rocketCooldown * cooldownReduction;
-            range = rocketRange;
-        }
-    }
 
-    public void SetAoE(bool isAoE)
-    {
-        this.isAoE = isAoE;
-    }
-
-    public override void SetCooldownReduction(float cooldownReduction)
-    {
-        this.cooldownReduction = cooldownReduction;
-        if (selectedMagic == MageMagic.Classic)
-        {
-            cooldown = minigunCooldown * cooldownReduction;
-        }
-        else if (selectedMagic == MageMagic.Fire)
-        {
-            cooldown = minigunCooldown * cooldownReduction;
-        }
-        else if (selectedMagic == MageMagic.Light)
-        {
-            cooldown = minigunCooldown * cooldownReduction;
         }
         else
         {
-            cooldown = rocketCooldown * cooldownReduction;
-        }
-        cancelHorizontalSlow = cooldownReduction < 1;
-        if (cancelHorizontalSlow)
-        {
-            player.PlayerMovementManager.ChangeHorizontalSpeed(1);
-        }
-        else
-        {
-            player.PlayerMovementManager.ChangeHorizontalSpeed(isPressed ? horizontalSpeedPercentOnLeftClickActive : 1);
-        }
-        if (cooldownRemaining > cooldown)
-        {
-            cooldownRemaining = cooldown;
+            selectedMagic = MageMagic.Light;
+
         }
     }
 
     private void Update()
     {
-        if (player.PhotonView.isMine && isPressed && !IsOnCooldown)
+        if (player.PhotonView.isMine)
         {
-            ShootProjectile();
-            StartCooldown();
+            if (isPressed && !IsOnCooldown)
+            {
+                StartCooldown();
+            }
+            else if (IsOnCooldown && readyToShoot)
+            {
+                readyToShoot = false;
+                ShootProjectile();
+            }
         }
+    }
+
+    protected override IEnumerator PutAbilityOffCooldown()
+    {
+        IsOnCooldown = true;
+        cooldownRemaining = cooldown;
+        canShootInCycle = true;
+
+        yield return null;
+
+        //player.AbilityUIManager.SetAbilityOnCooldown(AbilityCategory, ID, IsBlocked);
+
+        while (cooldownRemaining > 0)
+        {
+            cooldownRemaining -= Time.deltaTime;
+            if (canShootInCycle && cooldownRemaining <= cooldown * 0.5f)
+            {
+                canShootInCycle = false;
+                readyToShoot = true;
+            }
+
+            //player.AbilityUIManager.UpdateAbilityCooldown(AbilityCategory, ID, cooldownOnStart, cooldownRemaining);
+
+            yield return null;
+        }
+
+        //player.AbilityUIManager.SetAbilityOffCooldown(AbilityCategory, ID, UsesResource, IsEnabled, IsBlocked);
+        IsOnCooldown = false;
     }
 
     private void ShootProjectile()
@@ -210,45 +190,74 @@ public class MageLeftClick : Ability
     {
         if (selectedMagic == MageMagic.Classic)
         {
-            return isAoE ? projectilePrefab2 : projectilePrefab1;
+            return projectilePrefab1;
         }
         else if (selectedMagic == MageMagic.Fire)
         {
-            return isAoE ? projectilePrefab2 : projectilePrefab1;
+            return projectilePrefab2;
         }
-        else if (selectedMagic == MageMagic.Light)
+        else if (selectedMagic == MageMagic.Ice)
         {
-            return isAoE ? projectilePrefab2 : projectilePrefab1;
+            return projectilePrefab3;
         }
         else
         {
-            return isAoE ? projectilePrefab4 : projectilePrefab3;
+            return projectilePrefab4;
         }
     }
 
-    private void OnProjectileHit(Projectile projectile, int weapon, GameObject targetHit)
+    private float GetDamage(int magic)
     {
-        if (weapon == 1)
+        if (magic == (int)MageMagic.Classic)
         {
-            foreach (Collider2D collider in Physics2D.OverlapCircleAll(projectile.transform.position, rocketExplosionRadius))
-            {
-                if (collider.gameObject.tag == "Enemy")
-                {
-                    collider.GetComponent<Health>().Reduce(rocketDamage * damageAmplification);
-                }
-            }
+            return classicDamage;
+        }
+        else if (magic == (int)MageMagic.Fire)
+        {
+            return fireDamage;
+        }
+        else if (magic == (int)MageMagic.Ice)
+        {
+            return iceDamage;
         }
         else
         {
-            if (player.PhotonView.isMine && targetHit.tag == "Enemy")
-            {
-                targetHit.GetComponent<Health>().Reduce(minigunDamage * damageAmplification);
-            }
+            return lightDamage;
         }
+    }
 
-        if (projectile is SingleTargetProjectile)
+    private float GetHeal(int magic)
+    {
+        if (magic == (int)MageMagic.Classic)
         {
-            Destroy(projectile.gameObject);
+            return classicHeal;
+        }
+        else if (magic == (int)MageMagic.Fire)
+        {
+            return fireHeal;
+        }
+        else if (magic == (int)MageMagic.Ice)
+        {
+            return iceHeal;
+        }
+        else
+        {
+            return lightHeal;
+        }
+    }
+
+    private void OnProjectileHit(Projectile projectile, int magic, GameObject targetHit)
+    {
+        if (player.PhotonView.isMine)
+        {
+            if (targetHit.tag == "Player")
+            {
+                targetHit.GetComponent<Health>().Restore(GetHeal(magic));
+            }
+            else if (targetHit.tag == "Enemy")
+            {
+                targetHit.GetComponent<Health>().Reduce(GetDamage(magic) * damageAmplification);
+            }
         }
     }
 
