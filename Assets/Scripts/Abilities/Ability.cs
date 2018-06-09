@@ -124,7 +124,7 @@ public abstract class Ability : MonoBehaviour
         this.damageAmplification = damageAmplification;
     }
 
-    public bool IsAvailable()
+    public virtual bool IsAvailable()
     {
         return active && (!HasLimitedUsesPerLevel || usesLeft > 0);
     }

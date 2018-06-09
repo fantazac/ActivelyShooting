@@ -33,6 +33,8 @@ public class MageLeftClick : Ability
 
     private float iceDamage;
     private float iceHeal;
+    private float iceSlow;
+    private float iceSlowDuration;
 
     private float lightDamage;
     private float lightHeal;
@@ -53,7 +55,19 @@ public class MageLeftClick : Ability
         speed = 14;
         range = 35;
 
-        //set all damages and heals
+        classicDamage = 35;
+        classicHeal = 10;
+
+        fireDamage = 50;
+        fireHeal = 0;
+
+        iceDamage = 35;
+        iceHeal = 0;
+        iceSlow = 40;
+        iceSlowDuration = 2;
+
+        lightDamage = 0;
+        lightHeal = 35;
 
         ChangeType((int)MageMagic.Classic);
 
@@ -80,11 +94,17 @@ public class MageLeftClick : Ability
         projectilePrefab4 = Resources.Load<GameObject>(projectilePrefabPath4);
     }
 
+    public override bool IsAvailable()
+    {
+        return base.IsAvailable() && !player.PlayerMovementManager.PlayerIsMovingVertically();
+    }
+
     protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
     {
         if (this.isPressed != isPressed)
         {
             player.PlayerMovementManager.ChangeHorizontalSpeed(isPressed ? horizontalSpeedPercentOnLeftClickActive : 1);
+            player.PlayerMovementManager.SetCanJump(!isPressed);
         }
         this.isPressed = isPressed;
         lastMousePosition = mousePosition;
@@ -257,6 +277,10 @@ public class MageLeftClick : Ability
             else if (targetHit.tag == "Enemy")
             {
                 targetHit.GetComponent<Health>().Reduce(GetDamage(magic) * damageAmplification);
+                if (magic == (int)MageMagic.Ice)
+                {
+                    //apply slow for 2 seconds
+                }
             }
         }
     }

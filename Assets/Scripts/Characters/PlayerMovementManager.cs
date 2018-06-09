@@ -22,6 +22,7 @@ public class PlayerMovementManager : MonoBehaviour
     protected PlatformManager platform;
 
     protected bool isTouchingFloorOrPlatform;
+    protected bool canJump;
     protected bool canMove;
 
     protected const float TERMINAL_SPEED = -10;
@@ -31,6 +32,7 @@ public class PlayerMovementManager : MonoBehaviour
 
     protected PlayerMovementManager()
     {
+        canJump = true;
         canMove = true;
 
         horizontalSpeed = BASE_HORIZONTAL_SPEED;
@@ -66,6 +68,11 @@ public class PlayerMovementManager : MonoBehaviour
     public void ChangeHorizontalSpeed(float percent)
     {
         horizontalSpeed = BASE_HORIZONTAL_SPEED * percent;
+    }
+
+    public void SetCanJump(bool canJump)
+    {
+        this.canJump = canJump;
     }
 
     public void SetCanMove(bool canMove)
@@ -149,7 +156,7 @@ public class PlayerMovementManager : MonoBehaviour
 
     protected virtual void OnJump()
     {
-        if (!PlayerIsMovingVertically() && canMove)
+        if (!PlayerIsMovingVertically() && canJump && canMove)
         {
             isTouchingFloorOrPlatform = false;
             player.PlayerRigidBody.velocity = new Vector2(player.PlayerRigidBody.velocity.x, jumpingSpeed);
@@ -164,7 +171,7 @@ public class PlayerMovementManager : MonoBehaviour
 
     protected void OnJumpDown()
     {
-        if (platform && canMove)
+        if (platform && canJump && canMove)
         {
             platform.JumpingDown();
             platform = null;
@@ -195,7 +202,7 @@ public class PlayerMovementManager : MonoBehaviour
         return player.PlayerRigidBody.velocity.x != 0;
     }
 
-    protected bool PlayerIsMovingVertically()
+    public bool PlayerIsMovingVertically()
     {
         return !isTouchingFloorOrPlatform;
     }
