@@ -120,8 +120,24 @@ public class MageLeftClick : Ability
         base.UseAbilityOnNetwork(mousePosition, isPressed);
         if (isPressed)
         {
-            ShootProjectile();
+            StartCoroutine(ShootOnNetwork());
         }
+    }
+
+    private IEnumerator ShootOnNetwork()
+    {
+        cooldownRemaining = cooldown;
+
+        yield return null;
+
+        while (cooldownRemaining > cooldown * 0.5f)
+        {
+            cooldownRemaining -= Time.deltaTime;
+
+            yield return null;
+        }
+
+        ShootProjectile();
     }
 
     public override void ChangeType(int magic)
