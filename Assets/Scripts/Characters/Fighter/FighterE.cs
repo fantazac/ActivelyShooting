@@ -26,7 +26,7 @@ public class FighterE : Ability
 
     protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
     {
-        fighterLeftClick.SetAoE(true);
+        //apply buff
         StartCoroutine(EndBuff());
     }
 
@@ -43,6 +43,6 @@ public class FighterE : Ability
             yield return null;
         }
 
-        fighterLeftClick.SetAoE(false);
+        //remove buff
     }
 }

@@ -4,12 +4,22 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
+    [SerializeField]
     private float currentHealth;
+    [SerializeField]
     private float maxHealth;
+
+    public void SetMaxHealth(float maxHealth)
+    {
+        this.maxHealth = maxHealth;
+        currentHealth = maxHealth;
+    }
 
     public void Reduce(float amount)
     {
+        Debug.Log(currentHealth + " " + amount);
         currentHealth = Mathf.Clamp(currentHealth - amount, 0, maxHealth);
+        Debug.Log(currentHealth + " " + amount);
         if (StaticObjects.Player.PhotonView.isMine)
         {
             SendToServer_CurrentHealth(-amount);

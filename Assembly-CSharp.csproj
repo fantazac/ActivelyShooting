@@ -152,6 +152,7 @@
      <Compile Include="Assets\Scripts\Characters\PlayerInputManager.cs" />
      <Compile Include="Assets\Scripts\Characters\PlayerJumpingHitboxManager.cs" />
      <Compile Include="Assets\Scripts\Characters\PlayerMovementManager.cs" />
+     <Compile Include="Assets\Scripts\Enemies\Enemy.cs" />
      <Compile Include="Assets\Scripts\Health.cs" />
      <Compile Include="Assets\Scripts\MainMenuManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\PlatformManager.cs" />

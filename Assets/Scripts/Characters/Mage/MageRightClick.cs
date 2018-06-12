@@ -23,7 +23,7 @@ public class MageRightClick : Ability
     {
         foreach (Player p in player.Party)
         {
-            //Apply damage reduction to player in stats
+            p.SetDamageReduction(damageReduction);
         }
         StartCoroutine(EndBuff());
     }
@@ -43,7 +43,7 @@ public class MageRightClick : Ability
 
         foreach (Player p in player.Party)
         {
-            //Remove damage reduction to player in stats
+            p.SetDamageReduction(-damageReduction);
         }
     }
 }

@@ -17,7 +17,7 @@ public class MageQ : Ability
 
         duration = 10;
 
-        damageReduction = 0;
+        damageReduction = 1;
         healPercentOnCast = 100;
 
         baseCooldown = 45;
@@ -36,9 +36,9 @@ public class MageQ : Ability
     {
         foreach (Player p in player.Party)
         {
-            //p.Health.Restore(healPercentOnCast, true);
+            p.Health.Restore(healPercentOnCast, true);
         }
-        //Apply damage reduction to this player in stats
+        player.SetDamageReduction(damageReduction);
         player.PlayerMovementManager.SetCanMove(false);
         player.PlayerAbilityManager.SetAbilityActive(1, false);
         player.PlayerAbilityManager.SetAbilityActive(2, false);
@@ -64,6 +64,6 @@ public class MageQ : Ability
         player.PlayerAbilityManager.SetAbilityActive(2, true);
         player.PlayerAbilityManager.SetAbilityActive(3, true);
         player.PlayerMovementManager.SetCanMove(true);
-        //Remove damage reduction to this player in stats
+        player.SetDamageReduction(-damageReduction);
     }
 }

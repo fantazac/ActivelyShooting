@@ -11,16 +11,28 @@ public class FighterRightClick : Ability
     private float range;
     private float damage;
 
+    private float damageReduction;
+
+    private float duration;
+    private float durationRemaining;
+
+    private FighterMode selectedMode;
+
     private FighterRightClick()
     {
         speed = 13;
-        range = 60;
-        damage = 75;
+        range = 25;
+        damage = 40;
 
-        baseCooldown = 10;
+        baseCooldown = 8;
         cooldown = baseCooldown;
 
-        projectilePrefabPath = "ProjectilePrefabs/GunnerSpecialAttack";
+        damageReduction = 0.8f;
+        duration = 2;
+
+        ChangeType((int)FighterMode.Swordsman);
+
+        projectilePrefabPath = "ProjectilePrefabs/FighterSpecialAttack";
     }
 
     protected override void Awake()
@@ -35,17 +47,46 @@ public class FighterRightClick : Ability
         projectilePrefab = Resources.Load<GameObject>(projectilePrefabPath);
     }
 
+    public override void ChangeType(int mode)
+    {
+        selectedMode = (FighterMode)mode;
+    }
+
     protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
     {
-        Vector3 diff = mousePosition - transform.position;
-        diff.Normalize();
-        float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+        if (selectedMode == FighterMode.Swordsman)
+        {
+            Vector3 diff = mousePosition - transform.position;
+            diff.Normalize();
+            float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
 
-        Projectile projectile = Instantiate(projectilePrefab, transform.position + Vector3.back, Quaternion.Euler(0f, 0f, rot_z)).GetComponent<Projectile>();
-        projectile.transform.position += projectile.transform.right * projectile.transform.localScale.x * 0.55f;
-        projectile.ShootProjectile(0, speed, range);
-        projectile.OnProjectileHit += OnProjectileHit;
-        projectile.OnProjectileReachedEnd += OnProjectileReachedEnd;
+            Projectile projectile = Instantiate(projectilePrefab, transform.position + Vector3.back, Quaternion.Euler(0f, 0f, rot_z)).GetComponent<Projectile>();
+            projectile.transform.position += projectile.transform.right * projectile.transform.localScale.x * 0.55f;
+            projectile.ShootProjectile(0, speed, range);
+            projectile.OnProjectileHit += OnProjectileHit;
+            projectile.OnProjectileReachedEnd += OnProjectileReachedEnd;
+        }
+        else
+        {
+            player.SetDamageReduction(damageReduction);
+            StartCoroutine(EndBuff());
+        }
+    }
+
+    private IEnumerator EndBuff()
+    {
+        durationRemaining = duration;
+
+        yield return null;
+
+        while (durationRemaining > 0)
+        {
+            durationRemaining -= Time.deltaTime;
+
+            yield return null;
+        }
+
+        player.SetDamageReduction(-damageReduction);
     }
 
     private void OnProjectileHit(Projectile projectile, int weapon, GameObject targetHit)

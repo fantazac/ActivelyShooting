@@ -11,6 +11,7 @@ TagManager:
   - Map
   - CameraDimensions
   - Trigger
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - Players
   - PlayerHitboxes
   - Structures
-  - 
+  - Enemies
   - 
   - 
   - 

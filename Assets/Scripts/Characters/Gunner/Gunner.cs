@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Gunner : Player
 {
+    private Gunner()
+    {
+        maxHealth = 100;
+    }
+
     protected override void Awake()
     {
         base.Awake();

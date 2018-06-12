@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Mage : Player
 {
+    private Mage()
+    {
+        maxHealth = 150;
+    }
+
     protected override void Awake()
     {
         base.Awake();
