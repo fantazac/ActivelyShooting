@@ -296,11 +296,11 @@ public class MageLeftClick : Ability
             else if (targetHit.tag == "Enemy")
             {
                 targetHit.GetComponent<Health>().Reduce(GetDamage(magic) * damageAmplification);
-                if (magic == (int)MageMagic.Ice)
-                {
-                    targetHit.GetComponent<EnemyMovementManager>().SetSlow(this, iceSlowDuration, iceSlowPercent);
-                }
             }
+        }
+        if (targetHit.tag == "Enemy" && magic == (int)MageMagic.Ice)
+        {
+            targetHit.GetComponent<EnemyMovementManager>().SetSlow(this, iceSlowDuration, iceSlowPercent);
         }
     }
 

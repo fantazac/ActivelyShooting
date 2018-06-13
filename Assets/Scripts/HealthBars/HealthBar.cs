@@ -35,17 +35,19 @@ public class HealthBar : MonoBehaviour
         {
             if (StaticObjects.Player == entity)
             {
-                healthImage.color = Color.green;
+                healthImage.color = new Color(62f / 255f, 1, 72f / 255f);
             }
             else
             {
-                healthImage.color = Color.blue;
+                healthImage.color = new Color(65f / 255f, 190f / 255f, 1);
             }
         }
         else
         {
-            healthImage.color = Color.red;
+            healthImage.color = new Color(1, 71f / 255f, 71f / 255f);
         }
+
+        OnCurrentHealthChanged();
     }
 
     private void OnDestroy()

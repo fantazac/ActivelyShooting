@@ -114,10 +114,7 @@ public class MainMenuManager : MonoBehaviour
         //Debug.Log(PhotonNetwork.player.ID);//This increments everytime someone joins, doesn't go down if someone leaves
         if (PhotonNetwork.playerList.Length > 1)
         {
-            foreach (Entity entity in FindObjectsOfType<Entity>())
-            {
-                entity.SendToServer_ConnectionInfoRequest();
-            }
+            StartCoroutine(LoadEntities());
         }
         state = MainMenuState.CHARACTER_SELECT;
     }
@@ -134,6 +131,16 @@ public class MainMenuManager : MonoBehaviour
 
         playerCamera.SetActive(true);
         mainMenuCamera.SetActive(false);
+    }
+
+    private IEnumerator LoadEntities()
+    {
+        yield return null;
+
+        foreach (Entity entity in FindObjectsOfType<Entity>())
+        {
+            entity.SendToServer_ConnectionInfoRequest();
+        }
     }
 }
 

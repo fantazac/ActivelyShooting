@@ -21,6 +21,11 @@ public abstract class Entity : MonoBehaviour
 
         PhotonView = GetComponent<PhotonView>();
         EntityRigidBody = GetComponent<Rigidbody2D>();
+
+        if (StaticObjects.Player && StaticObjects.Player != this)
+        {
+            StaticObjects.Player.transform.parent.GetComponentInChildren<HealthBarManager>().SetupHealthBarForEntity(this);
+        }
     }
 
     public float GetDamageReduction()
@@ -65,12 +70,13 @@ public abstract class Entity : MonoBehaviour
     }
 
     [PunRPC]
-    protected void ReceiveFromServer_ConnectionInfo(Vector3 position)
+    protected void ReceiveFromServer_ConnectionInfo(Vector3 position, float currentHealth)
     {
         if (sentConnectionInfoRequest)
         {
             sentConnectionInfoRequest = false;
             transform.position = position;
+            Health.SetCurrentHealthOnLoad(currentHealth);
         }
     }
 
@@ -79,7 +85,7 @@ public abstract class Entity : MonoBehaviour
     {
         if (PhotonView.isMine || this is Enemy)
         {
-            PhotonView.RPC("ReceiveFromServer_ConnectionInfo", PhotonTargets.Others, transform.position);
+            PhotonView.RPC("ReceiveFromServer_ConnectionInfo", PhotonTargets.Others, transform.position, Health.GetCurrentHealth());
         }
     }
 

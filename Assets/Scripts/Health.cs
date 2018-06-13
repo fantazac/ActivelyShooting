@@ -49,7 +49,7 @@ public class Health : MonoBehaviour
     private void ReduceHealth(float amount)
     {
         currentHealth = Mathf.Clamp(currentHealth - amount, 0, maxHealth);
-        if(OnHealthChanged != null)
+        if (OnHealthChanged != null)
         {
             OnHealthChanged();
         }
@@ -89,5 +89,10 @@ public class Health : MonoBehaviour
     public bool IsDead()
     {
         return currentHealth <= 0;
+    }
+
+    public void SetCurrentHealthOnLoad(float currentHealth)
+    {
+        this.currentHealth = currentHealth;
     }
 }

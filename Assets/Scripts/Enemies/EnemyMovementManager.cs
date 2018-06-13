@@ -29,9 +29,12 @@ public class EnemyMovementManager : MonoBehaviour
 
     private void Update()
     {
-        if (canMove && enemy.EntityRigidBody.velocity.x != movementSpeed * (1 - mageLeftClickIceSlowPercent))
+        if (canMove)
         {
-            enemy.EntityRigidBody.velocity = new Vector2(movementSpeed * (1 - mageLeftClickIceSlowPercent), enemy.EntityRigidBody.velocity.y);
+            if (enemy.EntityRigidBody.velocity.x != (movementSpeed * (1 - mageLeftClickIceSlowPercent)))
+            {
+                enemy.EntityRigidBody.velocity = new Vector2(movementSpeed * (1 - mageLeftClickIceSlowPercent), enemy.EntityRigidBody.velocity.y);
+            }
         }
         else if (enemy.EntityRigidBody.velocity.x != 0)
         {
