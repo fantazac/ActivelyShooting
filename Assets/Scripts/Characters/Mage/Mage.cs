@@ -15,5 +15,10 @@ public class Mage : Player
 
         PlayerAbilityManager = gameObject.AddComponent<MageAbilityManager>();
         PlayerMovementManager = gameObject.AddComponent<PlayerMovementManager>();
+
+        if (PhotonView.isMine)
+        {
+            PhotonNetwork.Instantiate("Enemy", Vector2.right, Quaternion.identity, 0);
+        }
     }
 }

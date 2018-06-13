@@ -16,7 +16,6 @@ public abstract class Entity : MonoBehaviour
     protected virtual void Awake()
     {
         Health = gameObject.AddComponent<Health>();
-        Debug.Log(maxHealth);
         Health.SetMaxHealth(maxHealth);
 
         PhotonView = GetComponent<PhotonView>();

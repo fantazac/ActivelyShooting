@@ -33,7 +33,7 @@ public class MageLeftClick : Ability
 
     private float iceDamage;
     private float iceHeal;
-    private float iceSlow;
+    private float iceSlowPercent;
     private float iceSlowDuration;
 
     private float lightDamage;
@@ -63,7 +63,7 @@ public class MageLeftClick : Ability
 
         iceDamage = 35;
         iceHeal = 0;
-        iceSlow = 40;
+        iceSlowPercent = 0.4f;
         iceSlowDuration = 2;
 
         lightDamage = 0;
@@ -101,7 +101,7 @@ public class MageLeftClick : Ability
 
     protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed, bool forceAbility = false)
     {
-        if (this.isPressed != isPressed)
+        if (this.isPressed != isPressed && !IsOnCooldown)
         {
             player.PlayerMovementManager.ChangeHorizontalSpeed(isPressed ? horizontalSpeedPercentOnLeftClickActive : 1);
             player.PlayerMovementManager.SetCanJump(!isPressed);
@@ -176,6 +176,9 @@ public class MageLeftClick : Ability
             {
                 readyToShoot = false;
                 ShootProjectile();
+                isPressed = false;
+                player.PlayerMovementManager.ChangeHorizontalSpeed(isPressed ? horizontalSpeedPercentOnLeftClickActive : 1);
+                player.PlayerMovementManager.SetCanJump(!isPressed);
             }
         }
     }
@@ -295,7 +298,7 @@ public class MageLeftClick : Ability
                 targetHit.GetComponent<Health>().Reduce(GetDamage(magic) * damageAmplification);
                 if (magic == (int)MageMagic.Ice)
                 {
-                    //apply slow for 2 seconds
+                    targetHit.GetComponent<EnemyMovementManager>().SetSlow(this, iceSlowDuration, iceSlowPercent);
                 }
             }
         }
