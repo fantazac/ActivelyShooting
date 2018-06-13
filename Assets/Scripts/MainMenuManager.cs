@@ -39,7 +39,7 @@ public class MainMenuManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if(state == MainMenuState.IN_GAME)
+            if (state == MainMenuState.IN_GAME)
             {
                 mainMenuCamera.SetActive(true);
                 playerCamera.SetActive(false);
@@ -114,7 +114,10 @@ public class MainMenuManager : MonoBehaviour
         //Debug.Log(PhotonNetwork.player.ID);//This increments everytime someone joins, doesn't go down if someone leaves
         if (PhotonNetwork.playerList.Length > 1)
         {
-            //Load players position and character
+            foreach (Entity entity in FindObjectsOfType<Entity>())
+            {
+                entity.SendToServer_ConnectionInfoRequest();
+            }
         }
         state = MainMenuState.CHARACTER_SELECT;
     }

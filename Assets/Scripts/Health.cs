@@ -11,6 +11,9 @@ public class Health : MonoBehaviour
 
     private Entity entity;
 
+    public delegate void OnHealthChangedHandler();
+    public event OnHealthChangedHandler OnHealthChanged;
+
     private void Awake()
     {
         entity = GetComponent<Entity>();
@@ -20,6 +23,16 @@ public class Health : MonoBehaviour
     {
         this.maxHealth = maxHealth;
         currentHealth = maxHealth;
+    }
+
+    public float GetMaxHealth()
+    {
+        return maxHealth;
+    }
+
+    public float GetCurrentHealth()
+    {
+        return currentHealth;
     }
 
     public void Reduce(float amount)
@@ -36,6 +49,10 @@ public class Health : MonoBehaviour
     private void ReduceHealth(float amount)
     {
         currentHealth = Mathf.Clamp(currentHealth - amount, 0, maxHealth);
+        if(OnHealthChanged != null)
+        {
+            OnHealthChanged();
+        }
         if (IsDead() && entity is Enemy)
         {
             if (entity.PhotonView.isMine)
@@ -63,6 +80,10 @@ public class Health : MonoBehaviour
     private void RestoreHealth(float amount, bool isPercent)
     {
         currentHealth = Mathf.Clamp(currentHealth + (isPercent ? currentHealth * amount : amount), 0, maxHealth);
+        if (OnHealthChanged != null)
+        {
+            OnHealthChanged();
+        }
     }
 
     public bool IsDead()

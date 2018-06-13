@@ -7,12 +7,12 @@ public abstract class Entity : MonoBehaviour
     protected float damageReduction;
     protected float maxHealth;
 
-    public int ID { get; protected set; }
-
     public Health Health { get; private set; }
 
     public PhotonView PhotonView { get; private set; }
     public Rigidbody2D EntityRigidBody { get; private set; }
+
+    private bool sentConnectionInfoRequest;
 
     protected virtual void Awake()
     {
@@ -54,5 +54,38 @@ public abstract class Entity : MonoBehaviour
         {
             Health.RestoreFromServer(amount, isPercent);
         }
+    }
+
+    private void OnDestroy()
+    {
+        if (StaticObjects.Player)
+        {
+            StaticObjects.Player.transform.parent.GetComponentInChildren<HealthBarManager>().RemoveHealthBarOfDeletedEntity(this);
+        }
+    }
+
+    [PunRPC]
+    protected void ReceiveFromServer_ConnectionInfo(Vector3 position)
+    {
+        if (sentConnectionInfoRequest)
+        {
+            sentConnectionInfoRequest = false;
+            transform.position = position;
+        }
+    }
+
+    [PunRPC]
+    protected void ReceiveFromServer_ConnectionInfoRequest()
+    {
+        if (PhotonView.isMine || this is Enemy)
+        {
+            PhotonView.RPC("ReceiveFromServer_ConnectionInfo", PhotonTargets.Others, transform.position);
+        }
+    }
+
+    public void SendToServer_ConnectionInfoRequest()
+    {
+        sentConnectionInfoRequest = true;
+        PhotonView.RPC("ReceiveFromServer_ConnectionInfoRequest", PhotonTargets.Others);
     }
 }

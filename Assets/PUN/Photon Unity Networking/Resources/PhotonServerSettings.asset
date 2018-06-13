@@ -45,4 +45,6 @@ MonoBehaviour:
   - ReceiveFromServer_GunnerLeftClick
   - ReceiveFromServer_FighterDash
   - ReceiveFromServer_ChangeHealth
+  - ReceiveFromServer_ConnectionInfo
+  - ReceiveFromServer_ConnectionInfoRequest
   DisableAutoOpenWizard: 1

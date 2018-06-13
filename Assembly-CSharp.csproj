@@ -158,6 +158,8 @@
      <Compile Include="Assets\Scripts\Enemies\EnemyMovementManager.cs" />
      <Compile Include="Assets\Scripts\Entity.cs" />
      <Compile Include="Assets\Scripts\Health.cs" />
+     <Compile Include="Assets\Scripts\HealthBars\HealthBar.cs" />
+     <Compile Include="Assets\Scripts\HealthBars\HealthBarManager.cs" />
      <Compile Include="Assets\Scripts\MainMenuManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\PlatformManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\TriggerGroupManager.cs" />
