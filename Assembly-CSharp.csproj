@@ -154,6 +154,7 @@
      <Compile Include="Assets\Scripts\Characters\PlayerJumpingHitboxManager.cs" />
      <Compile Include="Assets\Scripts\Characters\PlayerMovementManager.cs" />
      <Compile Include="Assets\Scripts\Enemies\Enemy.cs" />
+     <Compile Include="Assets\Scripts\Enemies\EnemyDamageHitboxManager.cs" />
      <Compile Include="Assets\Scripts\Entity.cs" />
      <Compile Include="Assets\Scripts\Health.cs" />
      <Compile Include="Assets\Scripts\MainMenuManager.cs" />

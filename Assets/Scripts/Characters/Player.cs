@@ -9,6 +9,11 @@ public abstract class Player : Entity
     [SerializeField]
     private BoxCollider2D playerJumpingHitbox;
 
+    private float gracePeriodDuration;
+    private float gracePeriodDurationRemaining;
+
+    public bool IsInGracePeriod { get; private set; }
+
     public BoxCollider2D PlayerGroundHitbox { get { return playerGroundHitbox; } }
     public BoxCollider2D PlayerHitbox { get; private set; }
     public BoxCollider2D PlayerJumpingHitbox { get { return playerJumpingHitbox; } }
@@ -23,6 +28,11 @@ public abstract class Player : Entity
     public Player[] Party { get; private set; }
 
     public bool IsInChargeOfSpawningEnemies { get; set; }//todo
+
+    protected Player()
+    {
+        gracePeriodDuration = 1.5f;
+    }
 
     protected override void Awake()
     {
@@ -69,5 +79,26 @@ public abstract class Player : Entity
     protected void UpdateParty()
     {
         Party = FindObjectsOfType<Player>();
+    }
+
+    public override void ChangeHealthOnServer(bool reduce, float amount, bool isPercent = false)
+    {
+        base.ChangeHealthOnServer(reduce, amount, isPercent);
+        IsInGracePeriod = true;
+        StartCoroutine(GracePeriod());
+    }
+
+    private IEnumerator GracePeriod()
+    {
+        gracePeriodDurationRemaining = gracePeriodDuration;
+
+        while (gracePeriodDurationRemaining > 0)
+        {
+            gracePeriodDurationRemaining -= Time.deltaTime;
+
+            yield return null;
+        }
+
+        IsInGracePeriod = false;
     }
 }

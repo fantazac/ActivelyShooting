@@ -16,6 +16,7 @@ public abstract class Entity : MonoBehaviour
     protected virtual void Awake()
     {
         Health = gameObject.AddComponent<Health>();
+        Debug.Log(maxHealth);
         Health.SetMaxHealth(maxHealth);
 
         PhotonView = GetComponent<PhotonView>();
@@ -31,7 +32,7 @@ public abstract class Entity : MonoBehaviour
         damageReduction += amount;
     }
 
-    public void ChangeHealthOnServer(bool reduce, float amount, bool isPercent = false)
+    public virtual void ChangeHealthOnServer(bool reduce, float amount, bool isPercent = false)
     {
         SendToServer_ChangeHealth(reduce, amount, isPercent);
     }
