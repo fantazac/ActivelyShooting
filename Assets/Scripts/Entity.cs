@@ -12,6 +12,7 @@ public abstract class Entity : MonoBehaviour
     public Health Health { get; private set; }
 
     public PhotonView PhotonView { get; private set; }
+    public Rigidbody2D EntityRigidBody { get; private set; }
 
     protected virtual void Awake()
     {
@@ -19,6 +20,7 @@ public abstract class Entity : MonoBehaviour
         Health.SetMaxHealth(maxHealth);
 
         PhotonView = GetComponent<PhotonView>();
+        EntityRigidBody = GetComponent<Rigidbody2D>();
     }
 
     public float GetDamageReduction()

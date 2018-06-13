@@ -29,6 +29,25 @@ public class FighterAbilityManager : PlayerAbilityManager
         }
     }
 
+    protected override void UseAbility(int abilityId, Vector3 mousePosition, bool isPressed = false)
+    {
+        if(abilityId != 1)
+        {
+            base.UseAbility(abilityId, mousePosition, isPressed);
+        }
+        else
+        {
+            Ability ability = abilities[abilityId];
+            if (!ability.IsOnCooldown && ability.IsAvailable())
+            {
+                Vector2 middleOfScreen = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+                Vector2 middleOfScenePosition = StaticObjects.PlayerCamera.ScreenToWorldPoint(middleOfScreen);
+                ability.UseAbility(middleOfScenePosition, isPressed);
+                SendToServer_Ability(abilityId, middleOfScenePosition, isPressed);
+            }
+        }
+    }
+
     protected override void SwitchWeapon()
     {
         if (selectedMode == FighterMode.Swordsman)

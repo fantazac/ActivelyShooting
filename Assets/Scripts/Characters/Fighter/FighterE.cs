@@ -4,45 +4,21 @@ using UnityEngine;
 
 public class FighterE : Ability
 {
-    private float duration;
-    private float durationRemaining;
-
-    private FighterLeftClick fighterLeftClick;
+    private float stunDuration;
 
     private FighterE()
     {
-        duration = 5;
+        stunDuration = 5;
 
-        baseCooldown = 20;
+        baseCooldown = 25;
         cooldown = baseCooldown;
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-
-        fighterLeftClick = GetComponent<FighterLeftClick>();
     }
 
     protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed, bool forceAbility = false)
     {
-        //apply buff
-        StartCoroutine(EndBuff());
-    }
-
-    private IEnumerator EndBuff()
-    {
-        durationRemaining = duration;
-
-        yield return null;
-
-        while (durationRemaining > 0)
+        foreach (Collider2D collider in Physics2D.OverlapBoxAll(mousePosition, new Vector2(Screen.width, Screen.height), 0, LayerMask.GetMask("Enemies")))
         {
-            durationRemaining -= Time.deltaTime;
-
-            yield return null;
+            collider.GetComponent<EnemyMovementManager>().SetStun(this, stunDuration);
         }
-
-        //remove buff
     }
 }

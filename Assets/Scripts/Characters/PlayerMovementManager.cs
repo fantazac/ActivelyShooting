@@ -82,12 +82,12 @@ public class PlayerMovementManager : MonoBehaviour
         {
             if (canMove)
             {
-                player.PlayerRigidBody.gravityScale = GRAVITY;
+                player.EntityRigidBody.gravityScale = GRAVITY;
             }
             else
             {
-                player.PlayerRigidBody.gravityScale = 0;
-                player.PlayerRigidBody.velocity = Vector2.zero;
+                player.EntityRigidBody.gravityScale = 0;
+                player.EntityRigidBody.velocity = Vector2.zero;
             }
         }
     }
@@ -107,9 +107,9 @@ public class PlayerMovementManager : MonoBehaviour
                 {
                     horizontalMovement += horizontalSpeed;
                 }
-                player.PlayerRigidBody.velocity = new Vector2(horizontalMovement, player.PlayerRigidBody.velocity.y < TERMINAL_SPEED ? TERMINAL_SPEED : player.PlayerRigidBody.velocity.y);
+                player.EntityRigidBody.velocity = new Vector2(horizontalMovement, player.EntityRigidBody.velocity.y < TERMINAL_SPEED ? TERMINAL_SPEED : player.EntityRigidBody.velocity.y);
 
-                if (player.PlayerRigidBody.velocity.y < 0 && !player.PlayerGroundHitbox.enabled)
+                if (player.EntityRigidBody.velocity.y < 0 && !player.PlayerGroundHitbox.enabled)
                 {
                     isTouchingFloorOrPlatform = false;
                     player.PlayerGroundHitbox.enabled = true;
@@ -120,7 +120,7 @@ public class PlayerMovementManager : MonoBehaviour
                 }
             }
 
-            SendToServer_Movement(transform.position, player.PlayerRigidBody.velocity.y, PlayerIsMovingVertically());
+            SendToServer_Movement(transform.position, player.EntityRigidBody.velocity.y, PlayerIsMovingVertically());
         }
         else
         {
@@ -159,7 +159,7 @@ public class PlayerMovementManager : MonoBehaviour
         if (!PlayerIsMovingVertically() && canJump && canMove)
         {
             isTouchingFloorOrPlatform = false;
-            player.PlayerRigidBody.velocity = new Vector2(player.PlayerRigidBody.velocity.x, jumpingSpeed);
+            player.EntityRigidBody.velocity = new Vector2(player.EntityRigidBody.velocity.x, jumpingSpeed);
         }
     }
 
@@ -187,19 +187,19 @@ public class PlayerMovementManager : MonoBehaviour
             this.platform = platform.GetComponent<PlatformManager>();
         }
         transform.position = new Vector3(transform.position.x, objectYPosition + (transform.localScale.y * 0.5f));
-        player.PlayerRigidBody.velocity = new Vector2(player.PlayerRigidBody.velocity.x, 0);
+        player.EntityRigidBody.velocity = new Vector2(player.EntityRigidBody.velocity.x, 0);
         transform.position = new Vector3(transform.position.x, objectYPosition + (transform.localScale.y * 0.5f));
-        player.PlayerRigidBody.velocity = new Vector2(player.PlayerRigidBody.velocity.x, 0);
+        player.EntityRigidBody.velocity = new Vector2(player.EntityRigidBody.velocity.x, 0);
     }
 
     protected bool PlayerIsImmobile()
     {
-        return player.PlayerRigidBody.velocity == Vector2.zero;
+        return player.EntityRigidBody.velocity == Vector2.zero;
     }
 
     protected bool PlayerIsMovingHorizontally()
     {
-        return player.PlayerRigidBody.velocity.x != 0;
+        return player.EntityRigidBody.velocity.x != 0;
     }
 
     public bool PlayerIsMovingVertically()

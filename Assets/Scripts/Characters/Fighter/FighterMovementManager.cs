@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class FighterMovementManager : PlayerMovementManager
 {
-    private FighterQ fighterQ;
-
     private bool fighterQIsActive;
 
     private float dashSpeed;
@@ -13,13 +11,6 @@ public class FighterMovementManager : PlayerMovementManager
     private FighterMovementManager()
     {
         dashSpeed = 150;
-    }
-
-    protected override void Awake()
-    {
-        base.Awake();
-
-        fighterQ = GetComponent<FighterQ>();
     }
 
     public void SetFighterQIsActive(bool active)

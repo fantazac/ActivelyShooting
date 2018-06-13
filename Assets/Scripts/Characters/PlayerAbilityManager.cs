@@ -43,7 +43,7 @@ public abstract class PlayerAbilityManager : MonoBehaviour
         }
     }
 
-    protected void UseAbility(int abilityId, Vector3 mousePosition, bool isPressed = false)
+    protected virtual void UseAbility(int abilityId, Vector3 mousePosition, bool isPressed = false)
     {
         Ability ability = abilities[abilityId];
         if (!ability.IsOnCooldown && ability.IsAvailable())

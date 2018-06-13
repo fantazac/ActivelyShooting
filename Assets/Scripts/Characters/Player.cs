@@ -17,7 +17,6 @@ public abstract class Player : Entity
     public BoxCollider2D PlayerGroundHitbox { get { return playerGroundHitbox; } }
     public BoxCollider2D PlayerHitbox { get; private set; }
     public BoxCollider2D PlayerJumpingHitbox { get { return playerJumpingHitbox; } }
-    public Rigidbody2D PlayerRigidBody { get; private set; }
 
     public PlayerAbilityManager PlayerAbilityManager { get; protected set; }
     public PlayerGroundHitboxManager PlayerGroundHitboxManager { get; private set; }
@@ -38,8 +37,6 @@ public abstract class Player : Entity
     {
         base.Awake();
 
-        PlayerRigidBody = GetComponent<Rigidbody2D>();
-
         if (PhotonView.isMine)
         {
             PlayerGroundHitboxManager = gameObject.AddComponent<PlayerGroundHitboxManager>();
@@ -49,7 +46,7 @@ public abstract class Player : Entity
         }
         else
         {
-            Destroy(PlayerRigidBody);
+            Destroy(EntityRigidBody);
             Destroy(playerGroundHitbox.gameObject);
             Destroy(playerJumpingHitbox.gameObject);
             playerGroundHitbox = null;

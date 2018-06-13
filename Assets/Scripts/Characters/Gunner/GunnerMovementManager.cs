@@ -16,13 +16,13 @@ public class GunnerMovementManager : PlayerMovementManager
         if (!PlayerIsMovingVertically())
         {
             isTouchingFloorOrPlatform = false;
-            player.PlayerRigidBody.velocity = new Vector2(player.PlayerRigidBody.velocity.x, jumpingSpeed);
+            player.EntityRigidBody.velocity = new Vector2(player.EntityRigidBody.velocity.x, jumpingSpeed);
         }
         else if (doubleJumpAvailable)
         {
             doubleJumpAvailable = false;
             player.PlayerGroundHitbox.enabled = false;
-            player.PlayerRigidBody.velocity = new Vector2(player.PlayerRigidBody.velocity.x, jumpingSpeed);
+            player.EntityRigidBody.velocity = new Vector2(player.EntityRigidBody.velocity.x, jumpingSpeed);
         }
     }
 
