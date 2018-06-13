@@ -26,7 +26,7 @@ public class GunnerQ : Ability
         damageAmplification = 1.5f;
     }
 
-    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
+    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed, bool forceAbility = false)
     {
         player.PlayerAbilityManager.SetDamageAmplificationForAbilities(damageAmplification);
         foreach (Player p in player.Party)

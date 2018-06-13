@@ -32,7 +32,7 @@ public class MageQ : Ability
         damageAmplification = 1.5f;
     }
 
-    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
+    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed, bool forceAbility = false)
     {
         foreach (Player p in player.Party)
         {

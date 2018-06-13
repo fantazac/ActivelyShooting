@@ -14,5 +14,6 @@ public class Mage : Player
         base.Awake();
 
         PlayerAbilityManager = gameObject.AddComponent<MageAbilityManager>();
+        PlayerMovementManager = gameObject.AddComponent<PlayerMovementManager>();
     }
 }

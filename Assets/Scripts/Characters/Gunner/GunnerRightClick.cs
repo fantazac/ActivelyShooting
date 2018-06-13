@@ -35,7 +35,7 @@ public class GunnerRightClick : Ability
         projectilePrefab = Resources.Load<GameObject>(projectilePrefabPath);
     }
 
-    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
+    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed, bool forceAbility = false)
     {
         Vector3 diff = mousePosition - transform.position;
         diff.Normalize();

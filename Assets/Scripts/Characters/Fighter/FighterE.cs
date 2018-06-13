@@ -24,7 +24,7 @@ public class FighterE : Ability
         fighterLeftClick = GetComponent<FighterLeftClick>();
     }
 
-    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
+    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed, bool forceAbility = false)
     {
         //apply buff
         StartCoroutine(EndBuff());

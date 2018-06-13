@@ -14,5 +14,6 @@ public class Fighter : Player
         base.Awake();
 
         PlayerAbilityManager = gameObject.AddComponent<FighterAbilityManager>();
+        PlayerMovementManager = gameObject.AddComponent<FighterMovementManager>();
     }
 }

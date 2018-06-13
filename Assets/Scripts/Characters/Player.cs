@@ -50,10 +50,6 @@ public abstract class Player : MonoBehaviour
             Destroy(playerJumpingHitbox.gameObject);
             playerGroundHitbox = null;
         }
-        if (!(this is Gunner))
-        {
-            PlayerMovementManager = gameObject.AddComponent<PlayerMovementManager>();
-        }
 
         SendToServer_UpdateParty();
         UpdateParty();

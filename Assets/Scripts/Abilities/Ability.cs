@@ -38,11 +38,11 @@ public abstract class Ability : MonoBehaviour
 
     protected virtual void Start() { }
 
-    public virtual void UseAbility(Vector3 mousePosition, bool isPressed)
+    public virtual void UseAbility(Vector3 mousePosition, bool isPressed, bool putOnCooldown = true)
     {
         if (!IsHoldDownAbility || isPressed)
         {
-            if (player.PhotonView.isMine)
+            if (player.PhotonView.isMine && putOnCooldown)
             {
                 if (HasLimitedUsesPerLevel)
                 {
@@ -53,7 +53,7 @@ public abstract class Ability : MonoBehaviour
                     StartCooldown();
                 }
             }
-            UseAbilityEffect(mousePosition, isPressed);
+            UseAbilityEffect(mousePosition, isPressed, !putOnCooldown);
         }
     }
 
@@ -78,12 +78,12 @@ public abstract class Ability : MonoBehaviour
         }
     }
 
-    public virtual void UseAbilityOnNetwork(Vector3 mousePosition, bool isPressed)
+    public virtual void UseAbilityOnNetwork(Vector3 mousePosition, bool isPressed, bool putOnCooldown)
     {
-        UseAbility(mousePosition, isPressed);
+        UseAbility(mousePosition, isPressed, putOnCooldown);
     }
 
-    protected abstract void UseAbilityEffect(Vector3 mousePosition, bool isPressed);
+    protected abstract void UseAbilityEffect(Vector3 mousePosition, bool isPressed, bool forceAbility = false);
 
     public virtual void ChangeType(int type) { }
 

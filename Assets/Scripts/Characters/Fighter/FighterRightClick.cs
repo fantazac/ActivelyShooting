@@ -52,9 +52,9 @@ public class FighterRightClick : Ability
         selectedMode = (FighterMode)mode;
     }
 
-    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
+    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed, bool forceAbility = false)
     {
-        if (selectedMode == FighterMode.Swordsman)
+        if (selectedMode == FighterMode.Swordsman || forceAbility)
         {
             Vector3 diff = mousePosition - transform.position;
             diff.Normalize();

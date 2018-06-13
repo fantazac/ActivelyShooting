@@ -59,8 +59,8 @@ public abstract class PlayerAbilityManager : MonoBehaviour
     {
         Vector2 mousePositionInsideScreen = new Vector2(Mathf.Clamp(mousePosition.x, 0, Screen.width), Mathf.Clamp(mousePosition.y, 0, Screen.height));
         Vector2 sceneMousePosition = StaticObjects.PlayerCamera.ScreenToWorldPoint(mousePositionInsideScreen);
-        abilities[abilityId].UseAbility(sceneMousePosition, isPressed);
-        SendToServer_Ability(abilityId, sceneMousePosition, isPressed);
+        abilities[abilityId].UseAbility(sceneMousePosition, isPressed, false);
+        SendToServer_Ability(abilityId, sceneMousePosition, isPressed, false);
     }
 
     public void SetAbilityActive(int abilityId, bool active)
@@ -74,15 +74,15 @@ public abstract class PlayerAbilityManager : MonoBehaviour
         SendToServer_Switch();
     }
 
-    protected void SendToServer_Ability(int abilityId, Vector3 mousePosition, bool isPressed)
+    protected void SendToServer_Ability(int abilityId, Vector3 mousePosition, bool isPressed, bool putOnCooldown = true)
     {
-        player.PhotonView.RPC("ReceiveFromServer_Ability", PhotonTargets.Others, abilityId, mousePosition, isPressed);
+        player.PhotonView.RPC("ReceiveFromServer_Ability", PhotonTargets.Others, abilityId, mousePosition, isPressed, putOnCooldown);
     }
 
     [PunRPC]
-    protected void ReceiveFromServer_Ability(int abilityId, Vector3 mousePosition, bool isPressed)
+    protected void ReceiveFromServer_Ability(int abilityId, Vector3 mousePosition, bool isPressed, bool putOnCooldown)
     {
-        abilities[abilityId].UseAbilityOnNetwork(mousePosition, isPressed);
+        abilities[abilityId].UseAbilityOnNetwork(mousePosition, isPressed, putOnCooldown);
     }
 
     protected void SendToServer_Switch()

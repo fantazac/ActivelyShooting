@@ -81,7 +81,7 @@ public class GunnerLeftClick : Ability
         projectilePrefab4 = Resources.Load<GameObject>(projectilePrefabPath4);
     }
 
-    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
+    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed, bool forceAbility = false)
     {
         if (this.isPressed != isPressed)
         {
@@ -98,14 +98,14 @@ public class GunnerLeftClick : Ability
         lastMousePosition = mousePosition;
     }
 
-    public override void UseAbility(Vector3 mousePosition, bool isPressed)
+    public override void UseAbility(Vector3 mousePosition, bool isPressed, bool forceAbility = false)
     {
-        UseAbilityEffect(mousePosition, isPressed);
+        UseAbilityEffect(mousePosition, isPressed, forceAbility);
     }
 
-    public override void UseAbilityOnNetwork(Vector3 mousePosition, bool isPressed)
+    public override void UseAbilityOnNetwork(Vector3 mousePosition, bool isPressed, bool forceAbility)
     {
-        base.UseAbilityOnNetwork(mousePosition, isPressed);
+        base.UseAbilityOnNetwork(mousePosition, isPressed, forceAbility);
         if (isPressed)
         {
             ShootProjectile();

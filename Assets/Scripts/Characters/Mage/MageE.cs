@@ -10,7 +10,7 @@ public class MageE : Ability
         cooldown = baseCooldown;
     }
 
-    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
+    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed, bool forceAbility = false)
     {
         RaycastHit2D[] raycasts = Physics2D.RaycastAll(mousePosition, Vector2.zero, Mathf.Infinity, LayerMask.GetMask("Structures"));
         Vector3 newPosition = mousePosition;

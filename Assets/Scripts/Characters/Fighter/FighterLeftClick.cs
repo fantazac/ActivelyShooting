@@ -22,6 +22,8 @@ public class FighterLeftClick : Ability
 
     private float horizontalSpeedPercentOnLeftClickActive;
 
+    private bool fighterQIsActive;
+
     private Vector3 lastMousePosition;
     private bool attackRightSide;
 
@@ -42,9 +44,9 @@ public class FighterLeftClick : Ability
         IsHoldDownAbility = true;
     }
 
-    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
+    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed, bool forceAbility = false)
     {
-        if (this.isPressed != isPressed)
+        if (this.isPressed != isPressed && !fighterQIsActive)
         {
             player.PlayerMovementManager.ChangeHorizontalSpeed(isPressed ? horizontalSpeedPercentOnLeftClickActive : 1);
         }
@@ -52,14 +54,14 @@ public class FighterLeftClick : Ability
         lastMousePosition = mousePosition;
     }
 
-    public override void UseAbility(Vector3 mousePosition, bool isPressed)
+    public override void UseAbility(Vector3 mousePosition, bool isPressed, bool forceAbility = false)
     {
         UseAbilityEffect(mousePosition, isPressed);
     }
 
-    public override void UseAbilityOnNetwork(Vector3 mousePosition, bool isPressed)
+    public override void UseAbilityOnNetwork(Vector3 mousePosition, bool isPressed, bool forceAbility)
     {
-        base.UseAbilityOnNetwork(mousePosition, isPressed);
+        base.UseAbilityOnNetwork(mousePosition, isPressed, forceAbility);
         /*if (isPressed)
         {
             StartCoroutine(AttackOnNetwork());
@@ -83,6 +85,17 @@ public class FighterLeftClick : Ability
         Attack();
     }
 
+    public void SetFighterQIsActive(bool active)
+    {
+        fighterQIsActive = active;
+        if (active)
+        {
+            cooldownRemaining = 0;
+        }
+        cooldown = (active || selectedMode == FighterMode.Swordsman ? swordsmanCooldown : tankCooldown) * cooldownReduction;
+        player.PlayerMovementManager.ChangeHorizontalSpeed(isPressed && !active ? horizontalSpeedPercentOnLeftClickActive : 1);
+    }
+
     public override void ChangeType(int mode)
     {
         if (mode == (int)FighterMode.Swordsman)
@@ -94,7 +107,7 @@ public class FighterLeftClick : Ability
         else
         {
             selectedMode = FighterMode.Tank;
-            cooldown = tankCooldown * cooldownReduction;
+            cooldown = (fighterQIsActive ? swordsmanCooldown : tankCooldown) * cooldownReduction;
             damage = tankDamage;
         }
     }
@@ -123,6 +136,10 @@ public class FighterLeftClick : Ability
             if (isPressed && !IsOnCooldown)
             {
                 StartCooldown();
+                if (fighterQIsActive)
+                {
+                    Attack();
+                }
             }
             else if (IsOnCooldown && readyToAttack)
             {
@@ -146,7 +163,7 @@ public class FighterLeftClick : Ability
         while (cooldownRemaining > 0)
         {
             cooldownRemaining -= Time.deltaTime;
-            if (canAttackInCycle && cooldownRemaining <= cooldown * 0.5f)
+            if (!fighterQIsActive && canAttackInCycle && cooldownRemaining <= cooldown * 0.5f)
             {
                 canAttackInCycle = false;
                 readyToAttack = true;
@@ -163,10 +180,17 @@ public class FighterLeftClick : Ability
 
     private void Attack()
     {
-        foreach (Collider2D collider in Physics2D.OverlapBoxAll(new Vector2(transform.position.x + (attackRightSide ? 0.65f : -0.65f), transform.position.y + 0.35f),
-            new Vector2(1.65f, 1.3f), 0, LayerMask.GetMask("Enemies")))
+        if (!fighterQIsActive)
         {
-            collider.GetComponent<Health>().Reduce(damage * damageAmplification);
+            foreach (Collider2D collider in Physics2D.OverlapBoxAll(new Vector2(transform.position.x + (attackRightSide ? 0.65f : -0.65f), transform.position.y + 0.35f),
+            new Vector2(1.65f, 1.3f), 0, LayerMask.GetMask("Enemies")))
+            {
+                collider.GetComponent<Health>().Reduce(damage * damageAmplification);
+            }
+        }
+        else
+        {
+            player.PlayerAbilityManager.UseAbilityWithoutLimitation(3, Input.mousePosition);
         }
     }
 }

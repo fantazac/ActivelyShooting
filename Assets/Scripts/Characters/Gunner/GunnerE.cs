@@ -24,7 +24,7 @@ public class GunnerE : Ability
         gunnerLeftClick = GetComponent<GunnerLeftClick>();
     }
 
-    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
+    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed, bool forceAbility = false)
     {
         gunnerLeftClick.SetAoE(true);
         StartCoroutine(EndBuff());

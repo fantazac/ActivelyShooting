@@ -7,11 +7,18 @@ public class FighterQ : Ability
     private float duration;
     private float durationRemaining;
 
+    private float damageReduction;
+
+    private FighterLeftClick fighterLeftClick;
+    private FighterMovementManager fighterMovementManager;
+
     private FighterQ()
     {
         usesLeft = 1;
 
         duration = 10;
+
+        damageReduction = 0.8f;
 
         baseCooldown = 45;
         cooldown = baseCooldown;
@@ -25,13 +32,18 @@ public class FighterQ : Ability
         damageAmplification = 1.5f;
     }
 
-    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed)
+    protected override void Start()
     {
-        player.PlayerAbilityManager.SetDamageAmplificationForAbilities(damageAmplification);
-        foreach (Player p in player.Party)
-        {
-            p.PlayerAbilityManager.SetCooldownReductionForAbilities(cooldownReduction);
-        }
+        fighterLeftClick = GetComponent<FighterLeftClick>();
+        fighterMovementManager = GetComponent<FighterMovementManager>();
+    }
+
+    protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed, bool forceAbility = false)
+    {
+        player.PlayerAbilityManager.SetAbilityActive(3, false);
+        fighterLeftClick.SetFighterQIsActive(true);
+        fighterMovementManager.SetFighterQIsActive(true);
+        player.SetDamageReduction(damageReduction);
         StartCoroutine(EndBuff());
     }
 
@@ -48,10 +60,9 @@ public class FighterQ : Ability
             yield return null;
         }
 
-        player.PlayerAbilityManager.SetDamageAmplificationForAbilities(1);
-        foreach (Player p in player.Party)
-        {
-            p.PlayerAbilityManager.SetCooldownReductionForAbilities(1);
-        }
+        player.PlayerAbilityManager.SetAbilityActive(3, true);
+        fighterLeftClick.SetFighterQIsActive(false);
+        fighterMovementManager.SetFighterQIsActive(false);
+        player.SetDamageReduction(-damageReduction);
     }
 }

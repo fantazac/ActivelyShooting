@@ -41,7 +41,7 @@ public class PlayerMovementManager : MonoBehaviour
         acceleration = ACCELERATION_BASE * GRAVITY;
     }
 
-    protected void Awake()
+    protected virtual void Awake()
     {
         player = GetComponent<Player>();
         if (player.PlayerInputManager)
