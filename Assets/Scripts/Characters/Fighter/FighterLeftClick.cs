@@ -7,10 +7,10 @@ public class FighterLeftClick : Ability
 {
     private float speed;
     private float range;
-    private float damage;
 
     private bool canAttackInCycle;
     private bool readyToAttack;
+    private FighterMode nextAttackMode;
 
     private bool isPressed;
 
@@ -102,13 +102,11 @@ public class FighterLeftClick : Ability
         {
             selectedMode = FighterMode.Swordsman;
             cooldown = swordsmanCooldown * cooldownReduction;
-            damage = swordsmanDamage;
         }
         else
         {
             selectedMode = FighterMode.Tank;
             cooldown = (fighterQIsActive ? swordsmanCooldown : tankCooldown) * cooldownReduction;
-            damage = tankDamage;
         }
     }
 
@@ -136,6 +134,7 @@ public class FighterLeftClick : Ability
             if (isPressed && !IsOnCooldown)
             {
                 StartCooldown();
+                nextAttackMode = selectedMode;
                 if (fighterQIsActive)
                 {
                     Attack();
@@ -182,6 +181,7 @@ public class FighterLeftClick : Ability
     {
         if (!fighterQIsActive)
         {
+            float damage = nextAttackMode == FighterMode.Swordsman ? swordsmanDamage : tankDamage;
             foreach (Collider2D collider in Physics2D.OverlapBoxAll(new Vector2(transform.position.x + (attackRightSide ? 0.65f : -0.65f), transform.position.y + 0.35f),
             new Vector2(1.65f, 1.3f), 0, LayerMask.GetMask("Enemies")))
             {

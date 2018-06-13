@@ -9,6 +9,13 @@ public class Health : MonoBehaviour
     [SerializeField]
     private float maxHealth;
 
+    private Entity entity;
+
+    private void Awake()
+    {
+        entity = GetComponent<Entity>();
+    }
+
     public void SetMaxHealth(float maxHealth)
     {
         this.maxHealth = maxHealth;
@@ -17,37 +24,49 @@ public class Health : MonoBehaviour
 
     public void Reduce(float amount)
     {
+        ReduceHealth(amount);
+        entity.ChangeHealthOnServer(true, amount);
+    }
+
+    public void ReduceFromServer(float amount)
+    {
+        ReduceHealth(amount);
+    }
+
+    private void ReduceHealth(float amount)
+    {
         currentHealth = Mathf.Clamp(currentHealth - amount, 0, maxHealth);
-        SendToServer_CurrentHealth(-amount);
-        if (IsDead() && !gameObject.GetComponent<Player>())
+        if (IsDead() && entity is Enemy)
         {
-            Destroy(gameObject);
+            if (entity.PhotonView.isMine)
+            {
+                PhotonNetwork.Destroy(gameObject);
+            }
+            else
+            {
+                entity.gameObject.SetActive(false);
+            }
         }
     }
 
     public void Restore(float amount, bool isPercent = false)
     {
+        RestoreHealth(amount, isPercent);
+        entity.ChangeHealthOnServer(false, amount, isPercent);
+    }
+
+    public void RestoreFromServer(float amount, bool isPercent = false)
+    {
+        RestoreHealth(amount, isPercent);
+    }
+
+    private void RestoreHealth(float amount, bool isPercent)
+    {
         currentHealth = Mathf.Clamp(currentHealth + (isPercent ? currentHealth * amount : amount), 0, maxHealth);
-        SendToServer_CurrentHealth(amount, isPercent);
     }
 
     public bool IsDead()
     {
         return currentHealth <= 0;
-    }
-
-    private void SendToServer_CurrentHealth(float amount, bool isPercent = false)
-    {
-        StaticObjects.Player.PhotonView.RPC("ReceiveFromServer_CurrentHealth", PhotonTargets.Others, amount, isPercent);
-    }
-
-    [PunRPC]
-    private void ReceiveFromServer_CurrentHealth(float amount, bool isPercent)//not working online
-    {
-        currentHealth = Mathf.Clamp(currentHealth + (isPercent ? currentHealth * amount : amount), 0, maxHealth);
-        if (IsDead() && !gameObject.GetComponent<Player>())
-        {
-            Destroy(gameObject);
-        }
     }
 }

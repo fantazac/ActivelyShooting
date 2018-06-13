@@ -52,7 +52,7 @@ public class GunnerLeftClick : Ability
         rocketDamage = 55;
         rocketSpeed = 9;
         rocketRange = 60;
-        rocketExplosionRadius = 2.5f;
+        rocketExplosionRadius = 2;
 
         horizontalSpeedPercentOnLeftClickActive = 0.5f;
 
@@ -186,9 +186,9 @@ public class GunnerLeftClick : Ability
 
     private void OnProjectileHit(Projectile projectile, int weapon, GameObject targetHit)
     {
-        if (weapon == 1)
+        if (weapon == (int)GunnerWeapon.RocketLauncher)
         {
-            foreach (Collider2D collider in Physics2D.OverlapCircleAll(projectile.transform.position, rocketExplosionRadius))
+            foreach (Collider2D collider in Physics2D.OverlapCircleAll(targetHit.transform.position, rocketExplosionRadius))
             {
                 if (collider.gameObject.tag == "Enemy")
                 {

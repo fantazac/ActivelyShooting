@@ -2,24 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Player : MonoBehaviour
+public abstract class Player : Entity
 {
     [SerializeField]
     private BoxCollider2D playerGroundHitbox;
     [SerializeField]
     private BoxCollider2D playerJumpingHitbox;
 
-    protected float damageReduction;
-    protected float maxHealth;
-
-    public PhotonView PhotonView { get; private set; }
-
     public BoxCollider2D PlayerGroundHitbox { get { return playerGroundHitbox; } }
     public BoxCollider2D PlayerHitbox { get; private set; }
     public BoxCollider2D PlayerJumpingHitbox { get { return playerJumpingHitbox; } }
     public Rigidbody2D PlayerRigidBody { get; private set; }
-
-    public Health Health { get; private set; }
 
     public PlayerAbilityManager PlayerAbilityManager { get; protected set; }
     public PlayerGroundHitboxManager PlayerGroundHitboxManager { get; private set; }
@@ -29,12 +22,13 @@ public abstract class Player : MonoBehaviour
 
     public Player[] Party { get; private set; }
 
-    protected virtual void Awake()
+    public bool IsInChargeOfSpawningEnemies { get; set; }//todo
+
+    protected override void Awake()
     {
-        PhotonView = GetComponent<PhotonView>();
+        base.Awake();
+
         PlayerRigidBody = GetComponent<Rigidbody2D>();
-        Health = gameObject.AddComponent<Health>();
-        Health.SetMaxHealth(maxHealth);
 
         if (PhotonView.isMine)
         {
@@ -51,7 +45,10 @@ public abstract class Player : MonoBehaviour
             playerGroundHitbox = null;
         }
 
-        SendToServer_UpdateParty();
+        if (PhotonView.isMine)
+        {
+            SendToServer_UpdateParty();
+        }
         UpdateParty();
     }
 
@@ -72,15 +69,5 @@ public abstract class Player : MonoBehaviour
     protected void UpdateParty()
     {
         Party = FindObjectsOfType<Player>();
-    }
-
-    public float GetDamageReduction()
-    {
-        return 1 - Mathf.Clamp(damageReduction, 0, 1);
-    }
-
-    public void SetDamageReduction(float amount)
-    {
-        damageReduction += amount;
     }
 }

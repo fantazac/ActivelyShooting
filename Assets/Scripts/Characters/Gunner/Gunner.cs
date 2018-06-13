@@ -15,5 +15,11 @@ public class Gunner : Player
 
         PlayerAbilityManager = gameObject.AddComponent<GunnerAbilityManager>();
         PlayerMovementManager = gameObject.AddComponent<GunnerMovementManager>();
+
+        if (PhotonView.isMine)
+        {
+            PhotonNetwork.Instantiate("Enemy", Vector2.right, Quaternion.identity, 0);
+            PhotonNetwork.Instantiate("Enemy", Vector2.left, Quaternion.identity, 0);
+        }
     }
 }

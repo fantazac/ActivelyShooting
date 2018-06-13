@@ -39,12 +39,15 @@ public class MainMenuManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            mainMenuCamera.SetActive(true);
-            playerCamera.SetActive(false);
-            PhotonNetwork.Destroy(StaticObjects.Player.transform.parent.gameObject);
-            StaticObjects.Player = null;
-            StaticObjects.PlayerCamera = null;
-            state = MainMenuState.CHARACTER_SELECT;
+            if(state == MainMenuState.IN_GAME)
+            {
+                mainMenuCamera.SetActive(true);
+                playerCamera.SetActive(false);
+                PhotonNetwork.Destroy(StaticObjects.Player.transform.parent.gameObject);
+                StaticObjects.Player = null;
+                StaticObjects.PlayerCamera = null;
+                state = MainMenuState.CHARACTER_SELECT;
+            }
         }
     }
 
@@ -121,7 +124,7 @@ public class MainMenuManager : MonoBehaviour
         state = MainMenuState.IN_GAME;
 
         GameObject playerTemplate = Instantiate(playerParentPrefab);
-        GameObject player = PhotonNetwork.Instantiate(characterName, spawnPoint, new Quaternion(), 0);
+        GameObject player = PhotonNetwork.Instantiate(characterName, spawnPoint, Quaternion.identity, 0);
         player.transform.parent = playerTemplate.transform;
         StaticObjects.Player = player.GetComponent<Player>();
         StaticObjects.PlayerCamera = playerCamera.GetComponent<Camera>();
