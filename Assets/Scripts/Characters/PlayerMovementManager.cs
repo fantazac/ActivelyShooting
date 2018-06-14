@@ -19,11 +19,14 @@ public class PlayerMovementManager : MonoBehaviour
     protected bool isMovingVerticallyOnNetwork;
     protected float acceleration;
 
-    protected PlatformManager platform;
+    protected GameObject flyingPlatform;
 
-    protected bool isTouchingFloorOrPlatform;
+    protected bool isTouchingFlyingPlatformOrGround;
     protected bool canJump;
     protected bool canMove;
+
+    protected float jumpDownDuration;
+    protected WaitForSeconds jumpDownDelay;
 
     protected const float TERMINAL_SPEED = -10;
     protected const float ACCELERATION_BASE = -9.8f;
@@ -39,6 +42,9 @@ public class PlayerMovementManager : MonoBehaviour
         jumpingSpeed = 17;
 
         acceleration = ACCELERATION_BASE * GRAVITY;
+
+        jumpDownDuration = 0.3f;
+        jumpDownDelay = new WaitForSeconds(jumpDownDuration);
     }
 
     protected virtual void Awake()
@@ -52,7 +58,7 @@ public class PlayerMovementManager : MonoBehaviour
         }
         if (player.PlayerGroundHitboxManager)
         {
-            player.PlayerGroundHitboxManager.OnTouchesPlatformOrFloor += OnTouchesPlatformOrFloor;
+            player.PlayerGroundHitboxManager.OnTouchesFlyingPlatformOrGround += OnTouchesFlyingPlatformOrGround;
         }
     }
 
@@ -111,12 +117,12 @@ public class PlayerMovementManager : MonoBehaviour
 
                 if (player.EntityRigidBody.velocity.y < 0 && !player.PlayerGroundHitbox.enabled)
                 {
-                    isTouchingFloorOrPlatform = false;
+                    isTouchingFlyingPlatformOrGround = false;
                     player.PlayerGroundHitbox.enabled = true;
                 }
                 if (PlayerIsMovingVertically())
                 {
-                    platform = null;
+                    flyingPlatform = null;
                 }
             }
 
@@ -158,7 +164,7 @@ public class PlayerMovementManager : MonoBehaviour
     {
         if (!PlayerIsMovingVertically() && canJump && canMove)
         {
-            isTouchingFloorOrPlatform = false;
+            isTouchingFlyingPlatformOrGround = false;
             player.EntityRigidBody.velocity = new Vector2(player.EntityRigidBody.velocity.x, jumpingSpeed);
         }
     }
@@ -171,25 +177,37 @@ public class PlayerMovementManager : MonoBehaviour
 
     protected void OnJumpDown()
     {
-        if (platform && canJump && canMove)
+        if (flyingPlatform && canJump && canMove)
         {
-            platform.JumpingDown();
-            platform = null;
+            flyingPlatform = null;
+            player.PlayerHitbox.isTrigger = true;
+            StartCoroutine(EnablePlayerHitbox());
         }
     }
 
-    protected virtual void OnTouchesPlatformOrFloor(GameObject platform, float objectYPosition)
+    protected IEnumerator EnablePlayerHitbox()
     {
-        player.PlayerGroundHitbox.enabled = false;
-        isTouchingFloorOrPlatform = true;
-        if (platform)
+        yield return jumpDownDelay;
+
+        //hitbox.enabled = true;
+        player.PlayerHitbox.isTrigger = false;
+    }
+
+    protected virtual void OnTouchesFlyingPlatformOrGround(GameObject flyingPlatform, float objectYPosition)
+    {
+        if (!player.PlayerHitbox.isTrigger)
         {
-            this.platform = platform.GetComponent<PlatformManager>();
+            player.PlayerGroundHitbox.enabled = false;
+            isTouchingFlyingPlatformOrGround = true;
+            if (flyingPlatform)
+            {
+                this.flyingPlatform = flyingPlatform;
+            }
+            transform.position = new Vector3(transform.position.x, objectYPosition + (transform.localScale.y * 0.5f));
+            player.EntityRigidBody.velocity = new Vector2(player.EntityRigidBody.velocity.x, 0);
+            transform.position = new Vector3(transform.position.x, objectYPosition + (transform.localScale.y * 0.5f));
+            player.EntityRigidBody.velocity = new Vector2(player.EntityRigidBody.velocity.x, 0);
         }
-        transform.position = new Vector3(transform.position.x, objectYPosition + (transform.localScale.y * 0.5f));
-        player.EntityRigidBody.velocity = new Vector2(player.EntityRigidBody.velocity.x, 0);
-        transform.position = new Vector3(transform.position.x, objectYPosition + (transform.localScale.y * 0.5f));
-        player.EntityRigidBody.velocity = new Vector2(player.EntityRigidBody.velocity.x, 0);
     }
 
     protected bool PlayerIsImmobile()
@@ -204,6 +222,6 @@ public class PlayerMovementManager : MonoBehaviour
 
     public bool PlayerIsMovingVertically()
     {
-        return !isTouchingFloorOrPlatform;
+        return !isTouchingFlyingPlatformOrGround;
     }
 }

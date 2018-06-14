@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class PlayerGroundHitboxManager : MonoBehaviour
 {
-    public delegate void OnTouchesPlatformOrFloorHandler(GameObject platform, float objectYPosition);
-    public event OnTouchesPlatformOrFloorHandler OnTouchesPlatformOrFloor;
+    public delegate void OnTouchesFlyingPlatformOrGroundHandler(GameObject platform, float objectYPosition);
+    public event OnTouchesFlyingPlatformOrGroundHandler OnTouchesFlyingPlatformOrGround;
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (OnTouchesPlatformOrFloor != null && (collider.gameObject.tag == "Platform" || collider.gameObject.tag == "Floor"))
+        if (OnTouchesFlyingPlatformOrGround != null &&
+            (collider.gameObject.tag == "FlyingPlatform" || collider.gameObject.tag == "MapFloor" || collider.gameObject.tag == "Wall" || collider.gameObject.tag == "Platform"))
         {
-            OnTouchesPlatformOrFloor(collider.gameObject.tag == "Platform" ? collider.gameObject : null, collider.transform.position.y + (collider.transform.localScale.y * 0.5f));
+            OnTouchesFlyingPlatformOrGround(collider.gameObject.tag == "FlyingPlatform" ? collider.gameObject : null, collider.transform.position.y + (collider.transform.localScale.y * 0.5f));
         }
     }
 }

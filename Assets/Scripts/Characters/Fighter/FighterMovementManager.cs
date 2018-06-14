@@ -20,8 +20,9 @@ public class FighterMovementManager : PlayerMovementManager
 
     protected override void OnJump()
     {
-        if (fighterQIsActive)//currently, fighter can go through structures if the mouse is on the other side, todo fix
+        if (fighterQIsActive)
         {
+            player.PlayerHitbox.isTrigger = false;
             Vector3 mousePositionInsideScreen = new Vector2(Mathf.Clamp(Input.mousePosition.x, 0, Screen.width), Mathf.Clamp(Input.mousePosition.y, 0, Screen.height));
             Vector2 sceneMousePosition = StaticObjects.PlayerCamera.ScreenToWorldPoint(mousePositionInsideScreen);
             RaycastHit2D[] raycasts = Physics2D.RaycastAll(sceneMousePosition, Vector2.zero, Mathf.Infinity, LayerMask.GetMask("Structures"));
@@ -60,7 +61,33 @@ public class FighterMovementManager : PlayerMovementManager
                     }
                 }
             }
-
+            RaycastHit2D[] raycasts2 = Physics2D.RaycastAll(transform.position, newPosition - transform.position, Vector2.Distance(transform.position, newPosition) + 1, LayerMask.GetMask("Structures"));
+            foreach (RaycastHit2D raycast in raycasts2)
+            {
+                Collider2D collider = raycast.collider;
+                if (collider.gameObject.tag == "Wall")
+                {
+                    if (transform.position.x > collider.gameObject.transform.position.x)
+                    {
+                        newPosition = new Vector2(collider.gameObject.transform.position.x + (collider.gameObject.transform.localScale.x + transform.localScale.x) * 0.5f, newPosition.y);
+                    }
+                    else
+                    {
+                        newPosition = new Vector2(collider.gameObject.transform.position.x - (collider.gameObject.transform.localScale.x + transform.localScale.x) * 0.5f, newPosition.y);
+                    }
+                }
+                else if (collider.gameObject.tag == "Platform")
+                {
+                    if (transform.position.y > collider.gameObject.transform.position.y)
+                    {
+                        newPosition = new Vector2(newPosition.x, collider.gameObject.transform.position.y + (collider.gameObject.transform.localScale.y + transform.localScale.y) * 0.5f);
+                    }
+                    else
+                    {
+                        newPosition = new Vector2(newPosition.x, collider.gameObject.transform.position.y - (collider.gameObject.transform.localScale.y + transform.localScale.y) * 0.5f);
+                    }
+                }
+            }
             StartCoroutine(DashToNewPosition(newPosition));
             SendToServer_FighterDash(newPosition, false);
         }

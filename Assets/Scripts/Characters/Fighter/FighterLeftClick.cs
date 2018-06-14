@@ -31,10 +31,10 @@ public class FighterLeftClick : Ability
 
     private FighterLeftClick()
     {
-        swordsmanCooldown = 0.5f;
+        swordsmanCooldown = 0.4f;
         swordsmanDamage = 25;
 
-        tankCooldown = 1f;
+        tankCooldown = 0.8f;
         tankDamage = 40;
 
         horizontalSpeedPercentOnLeftClickActive = 0.5f;
@@ -57,15 +57,6 @@ public class FighterLeftClick : Ability
     public override void UseAbility(Vector3 mousePosition, bool isPressed, bool forceAbility = false)
     {
         UseAbilityEffect(mousePosition, isPressed);
-    }
-
-    public override void UseAbilityOnNetwork(Vector3 mousePosition, bool isPressed, bool forceAbility)
-    {
-        base.UseAbilityOnNetwork(mousePosition, isPressed, forceAbility);
-        /*if (isPressed)
-        {
-            StartCoroutine(AttackOnNetwork());
-        }*/
     }
 
     private IEnumerator AttackOnNetwork()

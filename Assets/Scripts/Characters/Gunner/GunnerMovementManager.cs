@@ -15,7 +15,7 @@ public class GunnerMovementManager : PlayerMovementManager
     {
         if (!PlayerIsMovingVertically())
         {
-            isTouchingFloorOrPlatform = false;
+            isTouchingFlyingPlatformOrGround = false;
             player.EntityRigidBody.velocity = new Vector2(player.EntityRigidBody.velocity.x, jumpingSpeed);
         }
         else if (doubleJumpAvailable)
@@ -26,9 +26,9 @@ public class GunnerMovementManager : PlayerMovementManager
         }
     }
 
-    protected override void OnTouchesPlatformOrFloor(GameObject platform, float objectYPosition)
+    protected override void OnTouchesFlyingPlatformOrGround(GameObject platform, float objectYPosition)
     {
-        base.OnTouchesPlatformOrFloor(platform, objectYPosition);
+        base.OnTouchesFlyingPlatformOrGround(platform, objectYPosition);
 
         doubleJumpAvailable = true;
     }

@@ -10,8 +10,8 @@ public class SingleTargetProjectile : Projectile
     {
         if (!alreadyHitATarget)
         {
-            if (collider.gameObject.tag == "Platform" || collider.gameObject.tag == "Wall" || collider.gameObject.tag == "Ceiling" || collider.gameObject.tag == "Floor" ||
-                collider.gameObject.tag == "Enemy")
+            if (collider.gameObject.tag == "Platform" || collider.gameObject.tag == "Wall" || collider.gameObject.tag == "MapCeiling" || collider.gameObject.tag == "MapFloor" ||
+                collider.gameObject.tag == "FlyingPlatform" || collider.gameObject.tag == "MapWall" || collider.gameObject.tag == "Enemy")
             {
                 ProjectileHit(collider.gameObject);
                 alreadyHitATarget = true;

@@ -161,7 +161,6 @@
      <Compile Include="Assets\Scripts\HealthBars\HealthBar.cs" />
      <Compile Include="Assets\Scripts\HealthBars\HealthBarManager.cs" />
      <Compile Include="Assets\Scripts\MainMenuManager.cs" />
-     <Compile Include="Assets\Scripts\MapManagers\PlatformManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\TriggerGroupManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\TriggerManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\WallManager.cs" />
