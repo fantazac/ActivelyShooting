@@ -4,14 +4,16 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Floor
   - Wall
-  - Ceiling
   - Platform
   - Map
   - CameraDimensions
   - Trigger
   - Enemy
+  - MapWall
+  - MapCeiling
+  - MapFloor
+  - FlyingPlatform
   layers:
   - Default
   - TransparentFX

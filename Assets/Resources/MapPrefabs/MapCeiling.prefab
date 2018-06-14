@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 212605377896236254}
   m_Layer: 10
   m_Name: MapCeiling
-  m_TagString: Ceiling
+  m_TagString: MapCeiling
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

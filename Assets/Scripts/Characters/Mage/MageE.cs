@@ -17,15 +17,15 @@ public class MageE : Ability
         foreach (RaycastHit2D raycast in raycasts)
         {
             Collider2D collider = raycast.collider;
-            if (collider.gameObject.tag == "Platform" || collider.gameObject.tag == "Floor")
+            if (collider.gameObject.tag == "FlyingPlatform" || collider.gameObject.tag == "MapFloor")
             {
                 newPosition = new Vector2(newPosition.x, collider.gameObject.transform.position.y + (collider.gameObject.transform.localScale.y + transform.localScale.y) * 0.5f);
             }
-            else if (collider.gameObject.tag == "Ceiling")
+            else if (collider.gameObject.tag == "MapCeiling")
             {
                 newPosition = new Vector2(newPosition.x, collider.gameObject.transform.position.y - (collider.gameObject.transform.localScale.y + transform.localScale.y) * 0.5f);
             }
-            else if (collider.gameObject.tag == "Wall")
+            else if (collider.gameObject.tag == "MapWall")
             {
                 if (transform.position.x > collider.gameObject.transform.position.x)
                 {
@@ -34,6 +34,28 @@ public class MageE : Ability
                 else
                 {
                     newPosition = new Vector2(collider.gameObject.transform.position.x - (collider.gameObject.transform.localScale.x + transform.localScale.x) * 0.5f, newPosition.y);
+                }
+            }
+            else if (collider.gameObject.tag == "Platform")
+            {
+                if (newPosition.y < collider.gameObject.transform.position.y)
+                {
+                    newPosition = new Vector2(newPosition.x, collider.gameObject.transform.position.y - (collider.gameObject.transform.localScale.y + transform.localScale.y) * 0.5f);
+                }
+                else
+                {
+                    newPosition = new Vector2(newPosition.x, collider.gameObject.transform.position.y + (collider.gameObject.transform.localScale.y + transform.localScale.y) * 0.5f);
+                }
+            }
+            else if (collider.gameObject.tag == "Wall")
+            {
+                if (newPosition.x < collider.gameObject.transform.position.x)
+                {
+                    newPosition = new Vector2(collider.gameObject.transform.position.x - (collider.gameObject.transform.localScale.x + transform.localScale.x) * 0.5f, newPosition.y);
+                }
+                else
+                {
+                    newPosition = new Vector2(collider.gameObject.transform.position.x + (collider.gameObject.transform.localScale.x + transform.localScale.x) * 0.5f, newPosition.y);
                 }
             }
         }
