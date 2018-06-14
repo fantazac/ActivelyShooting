@@ -6,8 +6,6 @@ public abstract class Player : Entity
 {
     [SerializeField]
     private BoxCollider2D playerGroundHitbox;
-    [SerializeField]
-    private BoxCollider2D playerJumpingHitbox;
 
     private float gracePeriodDuration;
     private float gracePeriodDurationRemaining;
@@ -16,12 +14,10 @@ public abstract class Player : Entity
 
     public BoxCollider2D PlayerGroundHitbox { get { return playerGroundHitbox; } }
     public BoxCollider2D PlayerHitbox { get; private set; }
-    public BoxCollider2D PlayerJumpingHitbox { get { return playerJumpingHitbox; } }
 
     public PlayerAbilityManager PlayerAbilityManager { get; protected set; }
     public PlayerGroundHitboxManager PlayerGroundHitboxManager { get; private set; }
     public PlayerInputManager PlayerInputManager { get; private set; }
-    public PlayerJumpingHitboxManager PlayerJumpingHitboxManager { get; private set; }
     public PlayerMovementManager PlayerMovementManager { get; protected set; }
 
     public Player[] Party { get; private set; }
@@ -40,13 +36,11 @@ public abstract class Player : Entity
             PlayerGroundHitboxManager = gameObject.AddComponent<PlayerGroundHitboxManager>();
             PlayerHitbox = GetComponent<BoxCollider2D>();
             PlayerInputManager = gameObject.AddComponent<PlayerInputManager>();
-            PlayerJumpingHitboxManager = gameObject.AddComponent<PlayerJumpingHitboxManager>();
         }
         else
         {
             Destroy(EntityRigidBody);
             Destroy(playerGroundHitbox.gameObject);
-            Destroy(playerJumpingHitbox.gameObject);
             playerGroundHitbox = null;
         }
 
