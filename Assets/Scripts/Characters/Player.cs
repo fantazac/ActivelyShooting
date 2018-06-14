@@ -26,8 +26,6 @@ public abstract class Player : Entity
 
     public Player[] Party { get; private set; }
 
-    public bool IsInChargeOfSpawningEnemies { get; set; }//todo
-
     protected Player()
     {
         gracePeriodDuration = 1.5f;

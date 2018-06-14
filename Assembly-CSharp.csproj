@@ -165,6 +165,8 @@
      <Compile Include="Assets\Scripts\MapManagers\EnemyGoRightTriggerManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\EnemyJumpTriggerManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\EnemyStopMovementTriggerManager.cs" />
+     <Compile Include="Assets\Scripts\MapManagers\SpawnEnemiesTriggerManager.cs" />
+     <Compile Include="Assets\Scripts\MapManagers\SpawnerManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\TriggerGroupManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\TriggerManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\WallManager.cs" />

@@ -29,7 +29,6 @@ public class EnemyMovementManager : MonoBehaviour
         jumpingSpeed = 17;
 
         canMove = true;
-        goRight = true;
     }
 
     private void Awake()
