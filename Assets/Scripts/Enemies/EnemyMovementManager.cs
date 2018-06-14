@@ -13,13 +13,23 @@ public class EnemyMovementManager : MonoBehaviour
     private bool affectedByFighterEStun;
     private float fighterEStunDurationRemaining;
 
-    private float movementSpeed;
+    private float jumpingSpeed;
     private bool canMove;
+
+    private bool goLeft;
+    private bool goRight;
+
+    private bool jumpPostStun;
+
+    private const float TERMINAL_SPEED = -10;
+    private const float BASE_HORIZONTAL_SPEED = 2;
 
     private EnemyMovementManager()
     {
-        movementSpeed = 1;
+        jumpingSpeed = 17;
+
         canMove = true;
+        goRight = true;
     }
 
     private void Awake()
@@ -31,15 +41,63 @@ public class EnemyMovementManager : MonoBehaviour
     {
         if (canMove)
         {
-            if (enemy.EntityRigidBody.velocity.x != (movementSpeed * (1 - mageLeftClickIceSlowPercent)))
+            if (goRight && enemy.EntityRigidBody.velocity.x != (BASE_HORIZONTAL_SPEED * (1 - mageLeftClickIceSlowPercent)))
             {
-                enemy.EntityRigidBody.velocity = new Vector2(movementSpeed * (1 - mageLeftClickIceSlowPercent), enemy.EntityRigidBody.velocity.y);
+                enemy.EntityRigidBody.velocity = new Vector2(BASE_HORIZONTAL_SPEED * (1 - mageLeftClickIceSlowPercent), enemy.EntityRigidBody.velocity.y);
+            }
+            else if (goLeft && enemy.EntityRigidBody.velocity.x != -BASE_HORIZONTAL_SPEED * (1 - mageLeftClickIceSlowPercent))
+            {
+                enemy.EntityRigidBody.velocity = new Vector2(-BASE_HORIZONTAL_SPEED * (1 - mageLeftClickIceSlowPercent), enemy.EntityRigidBody.velocity.y);
             }
         }
         else if (enemy.EntityRigidBody.velocity.x != 0)
         {
             enemy.EntityRigidBody.velocity = new Vector2(0, enemy.EntityRigidBody.velocity.y);
         }
+
+        if (enemy.EntityRigidBody.velocity.y < TERMINAL_SPEED)
+        {
+            enemy.EntityRigidBody.velocity = new Vector2(enemy.EntityRigidBody.velocity.x, TERMINAL_SPEED);
+        }
+    }
+
+    public void GoLeftFromTrigger()
+    {
+        goRight = false;
+        goLeft = true;
+    }
+
+    public void GoRightFromTrigger()
+    {
+        goRight = true;
+        goLeft = false;
+    }
+
+    public void JumpFromTrigger()
+    {
+        if (!EnemyIsGoingUp())
+        {
+            if (affectedByFighterEStun)
+            {
+                jumpPostStun = true;
+            }
+            else
+            {
+                enemy.EntityRigidBody.velocity = new Vector2(enemy.EntityRigidBody.velocity.x, jumpingSpeed);
+            }
+        }
+    }
+
+    public void StopMovementFromTrigger()
+    {
+        goRight = false;
+        goLeft = false;
+        enemy.EntityRigidBody.velocity = new Vector2(0, enemy.EntityRigidBody.velocity.y);
+    }
+
+    private bool EnemyIsGoingUp()
+    {
+        return enemy.EntityRigidBody.velocity.y > 0;
     }
 
     public void SetSlow(Ability sourceAbility, float slowDuration, float slowPercent)
@@ -94,5 +152,10 @@ public class EnemyMovementManager : MonoBehaviour
 
         canMove = true;
         affectedByFighterEStun = false;
+        if (jumpPostStun)
+        {
+            jumpPostStun = false;
+            JumpFromTrigger();
+        }
     }
 }

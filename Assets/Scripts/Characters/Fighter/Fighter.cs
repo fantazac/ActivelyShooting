@@ -18,7 +18,8 @@ public class Fighter : Player
 
         if (PhotonView.isMine)
         {
-            PhotonNetwork.Instantiate("Enemy", new Vector2(-20, 0), Quaternion.identity, 0);
+            PhotonNetwork.Instantiate("Enemy", new Vector2(-15, 0), Quaternion.identity, 0);
+            PhotonNetwork.Instantiate("Enemy", new Vector2(20, 0), Quaternion.identity, 0);
         }
     }
 }
