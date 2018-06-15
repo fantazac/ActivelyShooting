@@ -18,6 +18,8 @@ public class SpawnerManager : MonoBehaviour
     private bool goRight;
     [SerializeField]
     private bool jumpOnSpawn;
+    [SerializeField]
+    private Vector2 towerPosition;
 
     private WaitForSeconds delayBeforeFirstEnemySpawn;
     private WaitForSeconds delayBetweenEnemySpawns;
@@ -26,6 +28,11 @@ public class SpawnerManager : MonoBehaviour
     {
         delayBeforeFirstEnemySpawn = new WaitForSeconds(timeBeforeFirstEnemySpawn);
         delayBetweenEnemySpawns = new WaitForSeconds(timeBetweenEnemySpawns);
+    }
+
+    public bool[] GetEnemyMovementConfig()
+    {
+        return new bool[] { goLeft, goRight, jumpOnSpawn };
     }
 
     public void StartSpawning()
@@ -41,6 +48,7 @@ public class SpawnerManager : MonoBehaviour
         for (int i = 0; i < numberOfEnemiesToSpawn; i++)
         {
             EnemyMovementManager emm = PhotonNetwork.Instantiate("Enemy", transform.position, Quaternion.identity, 0).GetComponent<EnemyMovementManager>();
+            //this works only locally, online the enemies dont move
             if (goLeft)
             {
                 emm.GoLeftFromTrigger();

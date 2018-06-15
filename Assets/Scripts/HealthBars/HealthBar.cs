@@ -31,7 +31,7 @@ public class HealthBar : MonoBehaviour
         maxHealth = entity.Health.GetMaxHealth();
         entity.Health.OnHealthChanged += OnCurrentHealthChanged;
 
-        if (entity is Player)
+        if (entity is Player || entity is Tower)
         {
             if (StaticObjects.Player == entity)
             {

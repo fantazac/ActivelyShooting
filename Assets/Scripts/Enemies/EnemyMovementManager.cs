@@ -22,7 +22,7 @@ public class EnemyMovementManager : MonoBehaviour
     private bool jumpPostStun;
 
     private const float TERMINAL_SPEED = -10;
-    private const float BASE_HORIZONTAL_SPEED = 2;
+    private const float BASE_HORIZONTAL_SPEED = 1.5f;
 
     private EnemyMovementManager()
     {
@@ -34,6 +34,19 @@ public class EnemyMovementManager : MonoBehaviour
     private void Awake()
     {
         enemy = GetComponent<Enemy>();
+
+        /*if (goLeft)
+        {
+            GoLeftFromTrigger();
+        }
+        else if (goRight)
+        {
+            GoRightFromTrigger();
+        }
+        if (jumpOnSpawn)
+        {
+            JumpFromTrigger();
+        }*/
     }
 
     private void Update()

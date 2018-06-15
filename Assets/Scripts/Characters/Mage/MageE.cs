@@ -12,7 +12,10 @@ public class MageE : Ability
 
     protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed, bool forceAbility = false)
     {
-        player.PlayerHitbox.isTrigger = false;
+        if (player.PlayerHitbox)
+        {
+            player.PlayerHitbox.isTrigger = false;
+        }
         RaycastHit2D[] raycasts = Physics2D.RaycastAll(mousePosition, Vector2.zero, Mathf.Infinity, LayerMask.GetMask("Structures"));
         Vector3 newPosition = mousePosition;
         foreach (RaycastHit2D raycast in raycasts)

@@ -16,7 +16,7 @@ public class FighterE : Ability
 
     protected override void UseAbilityEffect(Vector3 mousePosition, bool isPressed, bool forceAbility = false)
     {
-        foreach (Collider2D collider in Physics2D.OverlapBoxAll(mousePosition, new Vector2(26, 46), 0, LayerMask.GetMask("Enemies")))
+        foreach (Collider2D collider in Physics2D.OverlapBoxAll(mousePosition, new Vector2(46, 26), 0, LayerMask.GetMask("Enemies")))
         {
             collider.GetComponent<EnemyMovementManager>().SetStun(this, stunDuration);
         }

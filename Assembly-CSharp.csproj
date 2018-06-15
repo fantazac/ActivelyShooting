@@ -170,6 +170,7 @@
      <Compile Include="Assets\Scripts\MapManagers\TriggerManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\WallManager.cs" />
      <Compile Include="Assets\Scripts\StaticObjects.cs" />
+     <Compile Include="Assets\Scripts\Towers\Tower.cs" />
      <None Include="Assets\PUN\Photon Unity Networking\link.xml" />
      <None Include="Assets\PUN\Plugins\Photon3Unity3D.xml" />
      <None Include="Assets\PUN\Plugins\release_history.txt" />
