@@ -34,19 +34,6 @@ public class EnemyMovementManager : MonoBehaviour
     private void Awake()
     {
         enemy = GetComponent<Enemy>();
-
-        /*if (goLeft)
-        {
-            GoLeftFromTrigger();
-        }
-        else if (goRight)
-        {
-            GoRightFromTrigger();
-        }
-        if (jumpOnSpawn)
-        {
-            JumpFromTrigger();
-        }*/
     }
 
     private void Update()

@@ -23,7 +23,7 @@ public class CameraManager : MonoBehaviour
     [SerializeField]
     private int _currentArea = 0;
     [SerializeField]
-    private List<GameObject> listAreaNodes = new List<GameObject>();
+    private List<GameObject> listAreaNodes;
 
     public delegate void OnAreaChangedHandler(int roomId);
     public event OnAreaChangedHandler OnAreaChanged;
@@ -43,6 +43,20 @@ public class CameraManager : MonoBehaviour
         if (listAreaNodes.Count == 0)
         {
             Debug.LogWarning(gameObject.name.ToString() + " (CameraManager): No Area boundaries are assigned. The camera will move freely to the set targets");
+        }
+    }
+
+    private void OnEnable()
+    {
+        UpdateCameraDimensions();
+    }
+
+    public void UpdateCameraDimensions()
+    {
+        listAreaNodes = new List<GameObject>();
+        foreach (GameObject cameraDimension in GameObject.FindGameObjectsWithTag("CameraDimensions"))
+        {
+            listAreaNodes.Add(cameraDimension);
         }
     }
 

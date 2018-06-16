@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class Enemy : Entity
 {
+    [SerializeField]
+    private bool goLeftOnSpawn;
+    [SerializeField]
+    private bool goRightOnSpawn;
+    [SerializeField]
+    private bool jumpOnSpawn;
+
     public EnemyMovementManager EnemyMovementManager { get; protected set; }
 
     private Enemy()
@@ -16,5 +23,23 @@ public class Enemy : Entity
         base.Awake();
 
         EnemyMovementManager = gameObject.AddComponent<EnemyMovementManager>();
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        if (goLeftOnSpawn)
+        {
+            EnemyMovementManager.GoLeftFromTrigger();
+        }
+        else if (goRightOnSpawn)
+        {
+            EnemyMovementManager.GoRightFromTrigger();
+        }
+        if (jumpOnSpawn)
+        {
+            EnemyMovementManager.JumpFromTrigger();
+        }
     }
 }

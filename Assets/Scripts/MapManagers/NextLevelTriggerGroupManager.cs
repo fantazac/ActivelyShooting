@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerGroupManager : MonoBehaviour
+public class NextLevelTriggerGroupManager : MonoBehaviour
 {
     private TriggerManager[] triggers;
 
@@ -27,12 +27,15 @@ public class TriggerGroupManager : MonoBehaviour
     {
         if(triggersPressedCount == triggersCount)
         {
-            OnPressedTriggers();
+            if (OnPressedTriggers != null)
+            {
+                OnPressedTriggers();
+            }
             gameObject.SetActive(false);
         }
     }
 
-    private void OnPressedTrigger(bool isPressed)
+    private void OnPressedTrigger(TriggerManager trigger, bool isPressed, GameObject player)
     {
         triggersPressedCount += isPressed ? 1 : -1;
     }

@@ -8,6 +8,10 @@ public class MainMenuManager : MonoBehaviour
     private GameObject mainMenuCamera;
     [SerializeField]
     private GameObject playerCamera;
+    [SerializeField]
+    private GameObject mapHubPrefab;
+
+    private GameObject hub;
 
     private string playerParentPrefabPath;
     private GameObject playerParentPrefab;
@@ -90,6 +94,7 @@ public class MainMenuManager : MonoBehaviour
                 if (GUILayout.Button("Quit", GUILayout.Height(30)))
                 {
                     PhotonNetwork.Disconnect();
+                    Destroy(hub);
                     state = MainMenuState.MAIN;
                 }
                 break;
@@ -101,6 +106,7 @@ public class MainMenuManager : MonoBehaviour
 
     private void OnJoinedLobby()
     {
+        hub = Instantiate(mapHubPrefab, Vector2.zero, Quaternion.identity);
         PhotonNetwork.JoinRandomRoom();
     }
 
@@ -111,7 +117,6 @@ public class MainMenuManager : MonoBehaviour
 
     private void OnJoinedRoom()
     {
-        //Debug.Log(PhotonNetwork.player.ID);//This increments everytime someone joins, doesn't go down if someone leaves
         if (PhotonNetwork.playerList.Length > 1)
         {
             StartCoroutine(LoadEntities());

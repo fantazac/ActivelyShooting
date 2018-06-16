@@ -127,6 +127,7 @@
      <Compile Include="Assets\Scripts\Abilities\Projectiles\SingleTargetProjectile.cs" />
      <Compile Include="Assets\Scripts\Camera\AspectUtility.cs" />
      <Compile Include="Assets\Scripts\Camera\CameraManager.cs" />
+     <Compile Include="Assets\Scripts\CameraDimensionsManager.cs" />
      <Compile Include="Assets\Scripts\Characters\Fighter\Fighter.cs" />
      <Compile Include="Assets\Scripts\Characters\Fighter\FighterAbilityManager.cs" />
      <Compile Include="Assets\Scripts\Characters\Fighter\FighterE.cs" />
@@ -164,9 +165,10 @@
      <Compile Include="Assets\Scripts\MapManagers\EnemyGoRightTriggerManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\EnemyJumpTriggerManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\EnemyStopMovementTriggerManager.cs" />
+     <Compile Include="Assets\Scripts\MapManagers\NextLevelTriggerGroupManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\SpawnEnemiesTriggerManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\SpawnerManager.cs" />
-     <Compile Include="Assets\Scripts\MapManagers\TriggerGroupManager.cs" />
+     <Compile Include="Assets\Scripts\MapManagers\SpawnMapTriggerGroupManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\TriggerManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\WallManager.cs" />
      <Compile Include="Assets\Scripts\StaticObjects.cs" />

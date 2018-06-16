@@ -8,7 +8,7 @@ public class TriggerManager : MonoBehaviour
 
     private int pressedCount;
 
-    public delegate void OnPressedTriggerHandler(bool isPressed);
+    public delegate void OnPressedTriggerHandler(TriggerManager trigger, bool isPressed, GameObject player);
     public event OnPressedTriggerHandler OnPressedTrigger;
 
     private void Awake()
@@ -22,7 +22,7 @@ public class TriggerManager : MonoBehaviour
         {
             if(++pressedCount == 1)
             {
-                OnPressedTrigger(true);
+                OnPressedTrigger(this, true, collider.gameObject);
             }
         }
     }
@@ -33,7 +33,7 @@ public class TriggerManager : MonoBehaviour
         {
             if(--pressedCount == 0)
             {
-                OnPressedTrigger(false);
+                OnPressedTrigger(this, false, collider.gameObject);
             }
         }
     }

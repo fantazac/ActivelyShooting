@@ -28,6 +28,8 @@ public abstract class Entity : MonoBehaviour
         }
     }
 
+    protected virtual void Start() { }
+
     public float GetDamageReduction()
     {
         return 1 - Mathf.Clamp(damageReduction, 0, 1);

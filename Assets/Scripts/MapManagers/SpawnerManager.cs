@@ -13,11 +13,11 @@ public class SpawnerManager : MonoBehaviour
     [SerializeField]
     private float timeBetweenEnemySpawns;
     [SerializeField]
-    private bool goLeft;
+    private bool enemiesGoLeftOnSpawn;
     [SerializeField]
-    private bool goRight;
+    private bool enemiesGoRightOnSpawn;
     [SerializeField]
-    private bool jumpOnSpawn;
+    private bool enemiesJumpOnSpawn;
     [SerializeField]
     private Vector2 towerPosition;
 
@@ -28,11 +28,6 @@ public class SpawnerManager : MonoBehaviour
     {
         delayBeforeFirstEnemySpawn = new WaitForSeconds(timeBeforeFirstEnemySpawn);
         delayBetweenEnemySpawns = new WaitForSeconds(timeBetweenEnemySpawns);
-    }
-
-    public bool[] GetEnemyMovementConfig()
-    {
-        return new bool[] { goLeft, goRight, jumpOnSpawn };
     }
 
     public void StartSpawning()
@@ -47,20 +42,31 @@ public class SpawnerManager : MonoBehaviour
 
         for (int i = 0; i < numberOfEnemiesToSpawn; i++)
         {
-            EnemyMovementManager emm = PhotonNetwork.Instantiate("Enemy", transform.position, Quaternion.identity, 0).GetComponent<EnemyMovementManager>();
-            //this works only locally, online the enemies dont move
-            if (goLeft)
+            string enemyType = "Enemy";
+            if (enemiesJumpOnSpawn)
             {
-                emm.GoLeftFromTrigger();
+                if (enemiesGoLeftOnSpawn)
+                {
+                    enemyType = "Enemy_JumpLeft";
+                }
+                else if (enemiesGoRightOnSpawn)
+                {
+                    enemyType = "Enemy_JumpRight";
+                }
+                else
+                {
+                    enemyType = "Enemy_Jump";
+                }
             }
-            else if (goRight)
+            else if (enemiesGoLeftOnSpawn)
             {
-                emm.GoRightFromTrigger();
+                enemyType = "Enemy_Left";
             }
-            if (jumpOnSpawn)
+            else if (enemiesGoRightOnSpawn)
             {
-                emm.JumpFromTrigger();
+                enemyType = "Enemy_Right";
             }
+            PhotonNetwork.Instantiate(enemyType, transform.position, Quaternion.identity, 0);
 
             yield return delayBetweenEnemySpawns;
         }
