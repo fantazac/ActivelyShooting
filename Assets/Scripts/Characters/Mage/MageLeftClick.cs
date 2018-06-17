@@ -138,6 +138,9 @@ public class MageLeftClick : Ability
         }
 
         ShootProjectile();
+        isPressed = false;
+        player.PlayerMovementManager.ChangeHorizontalSpeed(isPressed ? horizontalSpeedPercentOnLeftClickActive : 1);
+        player.PlayerMovementManager.SetCanJump(!isPressed);
     }
 
     public override void ChangeType(int magic)

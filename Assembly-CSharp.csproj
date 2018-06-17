@@ -161,6 +161,8 @@
      <Compile Include="Assets\Scripts\HealthBars\HealthBar.cs" />
      <Compile Include="Assets\Scripts\HealthBars\HealthBarManager.cs" />
      <Compile Include="Assets\Scripts\MainMenuManager.cs" />
+     <Compile Include="Assets\Scripts\MapManagers\CloseWallManager.cs" />
+     <Compile Include="Assets\Scripts\MapManagers\CloseWallOnPlayersInNextRoomManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\EnemyGoLeftTriggerManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\EnemyGoRightTriggerManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\EnemyJumpTriggerManager.cs" />

@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class NextLevelTriggerGroupManager : MonoBehaviour
 {
+    [SerializeField]
+    private WallManager wallManager;
+
     private TriggerManager[] triggers;
 
     private int triggersPressedCount;
     private int triggersCount;
-
-    public delegate void OnPressedTriggersHandler();
-    public event OnPressedTriggersHandler OnPressedTriggers;
 
     private void Awake()
     {
@@ -23,20 +23,13 @@ public class NextLevelTriggerGroupManager : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if(triggersPressedCount == triggersCount)
-        {
-            if (OnPressedTriggers != null)
-            {
-                OnPressedTriggers();
-            }
-            gameObject.SetActive(false);
-        }
-    }
-
     private void OnPressedTrigger(TriggerManager trigger, bool isPressed, GameObject player)
     {
         triggersPressedCount += isPressed ? 1 : -1;
+        if (triggersPressedCount == triggersCount)
+        {
+            wallManager.OpenWall();
+            gameObject.SetActive(false);
+        }
     }
 }

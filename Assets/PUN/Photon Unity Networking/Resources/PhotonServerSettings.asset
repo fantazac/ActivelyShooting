@@ -47,4 +47,5 @@ MonoBehaviour:
   - ReceiveFromServer_ChangeHealth
   - ReceiveFromServer_ConnectionInfo
   - ReceiveFromServer_ConnectionInfoRequest
+  - ReceiveFromServer_CloseWall
   DisableAutoOpenWizard: 1

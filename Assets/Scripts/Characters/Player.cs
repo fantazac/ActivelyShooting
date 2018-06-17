@@ -22,6 +22,8 @@ public abstract class Player : Entity
 
     public Player[] Party { get; private set; }
 
+    public bool SpawnedMap { get; set; }
+
     protected Player()
     {
         gracePeriodDuration = 1.5f;

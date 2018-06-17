@@ -16,9 +16,6 @@ public class SpawnMapTriggerGroupManager : MonoBehaviour
 
     private List<GameObject> maps;
 
-    public delegate void OnPressedTriggersHandler();
-    public event OnPressedTriggersHandler OnPressedTriggers;
-
     private SpawnMapTriggerGroupManager()
     {
         maps = new List<GameObject>();
@@ -39,10 +36,6 @@ public class SpawnMapTriggerGroupManager : MonoBehaviour
     {
         if (triggersPressedCount == triggersCount)
         {
-            if (OnPressedTriggers != null)
-            {
-                OnPressedTriggers();
-            }
             if (maps.Count > 0)
             {
                 foreach (GameObject map in maps)
@@ -55,6 +48,7 @@ public class SpawnMapTriggerGroupManager : MonoBehaviour
             gameObject.SetActive(false);
             if (StaticObjects.Player == playerToSpawnMap.GetComponent<Player>())
             {
+                StaticObjects.Player.SpawnedMap = true;
                 for (int i = 1; i <= 10; i++)
                 {
                     maps.Add(PhotonNetwork.Instantiate("Map_Defense_1_1", new Vector2(i * 46, 0), Quaternion.identity, 0));

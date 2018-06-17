@@ -21,21 +21,28 @@ public class WallManager : MonoBehaviour
 
     private void Awake()
     {
-        triggerGroup.OnPressedTriggers += OnPressedTriggers;
-
         targetPosition = new Vector2(transform.position.x + wallXMovementOnTrigger, transform.position.y + wallYMovementOnTrigger);
     }
 
-    private void OnPressedTriggers()
+    public void OpenWall()
     {
         StartCoroutine(MoveWall());
+    }
+
+    public void StopWallOpening()
+    {
+        if (transform.position != targetPosition)
+        {
+            StopAllCoroutines();
+            transform.position = targetPosition;
+        }
     }
 
     private IEnumerator MoveWall()
     {
         while (transform.position != targetPosition)
         {
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, wallMovementSpeed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, targetPosition, wallMovementSpeed * Time.deltaTime);
 
             yield return null;
         }
