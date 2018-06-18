@@ -188,10 +188,10 @@ public class GunnerLeftClick : Ability
     {
         if (player.PhotonView.isMine)
         {
-            if (weapon == (int)GunnerWeapon.RocketLauncher)
+            if (weapon == (int)GunnerWeapon.RocketLauncher)//this honestly might be too busted if enemies are stacked and e is active
             {
-                //todo: if the platform is big, this doesn't work since it hits the center of the platform instead of, for example, the edge
-                foreach (Collider2D collider in Physics2D.OverlapCircleAll(targetHit.transform.position, rocketExplosionRadius))
+                Vector2 hitPosition = new Vector2(projectile.transform.position.x + projectile.transform.right.x, targetHit.transform.position.y);
+                foreach (Collider2D collider in Physics2D.OverlapCircleAll(hitPosition, rocketExplosionRadius))
                 {
                     if (collider.gameObject.tag == "Enemy")
                     {
@@ -206,7 +206,7 @@ public class GunnerLeftClick : Ability
                     targetHit.GetComponent<Health>().Reduce(minigunDamage * damageAmplification);
                 }
             }
-        }  
+        }
 
         if (projectile is SingleTargetProjectile)
         {
