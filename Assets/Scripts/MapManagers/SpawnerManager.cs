@@ -30,43 +30,46 @@ public class SpawnerManager : MonoBehaviour
         delayBetweenEnemySpawns = new WaitForSeconds(timeBetweenEnemySpawns);
     }
 
-    public void StartSpawning()
+    public void StartSpawning(bool spawn)
     {
         frontOfSpawner.SetActive(true);
-        StartCoroutine(SpawnEnemies());
+        StartCoroutine(SpawnEnemies(spawn));
     }
 
-    private IEnumerator SpawnEnemies()
+    private IEnumerator SpawnEnemies(bool spawn)
     {
         yield return delayBeforeFirstEnemySpawn;
 
         for (int i = 0; i < numberOfEnemiesToSpawn; i++)
         {
-            string enemyType = "Enemy";
-            if (enemiesJumpOnSpawn)
+            if (spawn)
             {
-                if (enemiesGoLeftOnSpawn)
+                string enemyType = "Enemy";
+                if (enemiesJumpOnSpawn)
                 {
-                    enemyType = "Enemy_JumpLeft";
+                    if (enemiesGoLeftOnSpawn)
+                    {
+                        enemyType = "Enemy_JumpLeft";
+                    }
+                    else if (enemiesGoRightOnSpawn)
+                    {
+                        enemyType = "Enemy_JumpRight";
+                    }
+                    else
+                    {
+                        enemyType = "Enemy_Jump";
+                    }
+                }
+                else if (enemiesGoLeftOnSpawn)
+                {
+                    enemyType = "Enemy_Left";
                 }
                 else if (enemiesGoRightOnSpawn)
                 {
-                    enemyType = "Enemy_JumpRight";
+                    enemyType = "Enemy_Right";
                 }
-                else
-                {
-                    enemyType = "Enemy_Jump";
-                }
+                PhotonNetwork.Instantiate(enemyType, transform.position, Quaternion.identity, 0);
             }
-            else if (enemiesGoLeftOnSpawn)
-            {
-                enemyType = "Enemy_Left";
-            }
-            else if (enemiesGoRightOnSpawn)
-            {
-                enemyType = "Enemy_Right";
-            }
-            PhotonNetwork.Instantiate(enemyType, transform.position, Quaternion.identity, 0);
 
             yield return delayBetweenEnemySpawns;
         }

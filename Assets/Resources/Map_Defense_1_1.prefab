@@ -277,7 +277,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1225564138794726
 GameObject:
   m_ObjectHideFlags: 1
@@ -875,7 +875,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1928203722545380
 GameObject:
   m_ObjectHideFlags: 1
@@ -3389,6 +3389,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnerManager: {fileID: 114109415870715892}
+  tower: {fileID: 1210663348853224}
 --- !u!114 &114323230153225136
 MonoBehaviour:
   m_ObjectHideFlags: 1
