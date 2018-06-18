@@ -8,11 +8,14 @@ public abstract class Entity : MonoBehaviour
     protected float maxHealth;
 
     public Health Health { get; private set; }
+    public HealthBar HealthBar { get; set; }
 
     public PhotonView PhotonView { get; private set; }
     public Rigidbody2D EntityRigidBody { get; private set; }
 
     private bool sentConnectionInfoRequest;
+
+    public int ID { get; set; }
 
     protected virtual void Awake()
     {
@@ -24,7 +27,7 @@ public abstract class Entity : MonoBehaviour
 
         if (StaticObjects.Player && StaticObjects.Player != this)
         {
-            StaticObjects.Player.transform.parent.GetComponentInChildren<HealthBarManager>().SetupHealthBarForEntity(this);
+            HealthBar = StaticObjects.Player.transform.parent.GetComponentInChildren<HealthBarManager>().SetupHealthBarForEntity(this);
         }
     }
 

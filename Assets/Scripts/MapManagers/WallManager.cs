@@ -5,8 +5,6 @@ using UnityEngine;
 public class WallManager : MonoBehaviour
 {
     [SerializeField]
-    private NextLevelTriggerGroupManager triggerGroup;
-    [SerializeField]
     private float wallXMovementOnTrigger;
     [SerializeField]
     private float wallYMovementOnTrigger;

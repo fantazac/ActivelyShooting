@@ -18,11 +18,13 @@ public abstract class Player : Entity
     public PlayerAbilityManager PlayerAbilityManager { get; protected set; }
     public PlayerGroundHitboxManager PlayerGroundHitboxManager { get; private set; }
     public PlayerInputManager PlayerInputManager { get; private set; }
+    public PlayerLevelInfoTransmitter PlayerLevelInfoTransmitter { get; private set; }
     public PlayerMovementManager PlayerMovementManager { get; protected set; }
 
     public Player[] Party { get; private set; }
 
-    public bool SpawnedMap { get; set; }
+    public delegate void OnPartyUpdatedHandler();
+    public event OnPartyUpdatedHandler OnPartyUpdated;
 
     protected Player()
     {
@@ -45,6 +47,8 @@ public abstract class Player : Entity
             Destroy(playerGroundHitbox.gameObject);
             playerGroundHitbox = null;
         }
+
+        PlayerLevelInfoTransmitter = gameObject.AddComponent<PlayerLevelInfoTransmitter>();
 
         if (PhotonView.isMine)
         {
@@ -70,6 +74,14 @@ public abstract class Player : Entity
     protected void UpdateParty()
     {
         Party = FindObjectsOfType<Player>();
+        foreach (Player p in Party)
+        {
+            p.PlayerLevelInfoTransmitter.ResetEvents();
+        }
+        if(OnPartyUpdated != null)
+        {
+            OnPartyUpdated();
+        }
     }
 
     public override void ChangeHealthOnServer(bool reduce, float amount, bool isPercent = false)

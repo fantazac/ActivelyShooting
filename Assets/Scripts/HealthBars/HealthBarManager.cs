@@ -20,11 +20,11 @@ public class HealthBarManager : MonoBehaviour
     {
         foreach (Entity entity in FindObjectsOfType<Entity>())
         {
-            SetupHealthBarForEntity(entity);
+            entity.HealthBar = SetupHealthBarForEntity(entity);
         }
     }
 
-    public void SetupHealthBarForEntity(Entity entity)
+    public HealthBar SetupHealthBarForEntity(Entity entity)
     {
         if (!entities.Contains(entity))
         {
@@ -34,7 +34,9 @@ public class HealthBarManager : MonoBehaviour
             healthBar.SetupHealthBar(entity);
             healthBar.transform.SetParent(transform, false);
             healthBars.Add(healthBar);
+            return healthBar;
         }
+        return null;
     }
 
     public void RemoveHealthBarOfDeletedEntity(Entity entity)

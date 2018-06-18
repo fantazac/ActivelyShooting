@@ -107,9 +107,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4576923032656088}
-  - component: {fileID: 114221653318725780}
+  - component: {fileID: 114196629426957268}
   m_Layer: 0
-  m_Name: SpawnMapTriggerGroup
+  m_Name: SpawnLevelsTriggerGroup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -190,8 +190,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4499484216993222}
+  - component: {fileID: 114006374692157276}
   m_Layer: 0
-  m_Name: Map_Hub
+  m_Name: Hub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -328,7 +329,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4412303838974580}
-  - component: {fileID: 114096909619797774}
+  - component: {fileID: 114769135156062710}
   m_Layer: 0
   m_Name: NextLevelTriggerGroup
   m_TagString: Untagged
@@ -1016,18 +1017,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &114096909619797774
+--- !u!114 &114006374692157276
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1937147025409162}
+  m_GameObject: {fileID: 1542800347550240}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70eae5ce5fa754c4e99ae04fe7654b05, type: 3}
+  m_Script: {fileID: 11500000, guid: 8bb687f4e8bcdf94fbff630b2e148116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wallManager: {fileID: 114212054052605348}
+  nextLevelTriggerGroupManager: {fileID: 114769135156062710}
+  spawnLevelsTriggerGroupManager: {fileID: 114196629426957268}
+  nextLevelWallManager: {fileID: 114212054052605348}
 --- !u!114 &114114851912276578
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1037,6 +1040,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d00053e0c9599844499c8e47b49820c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114196629426957268
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1426628791943826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ad15e44caa9c9d4089dc5624de1a942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114212054052605348
@@ -1050,21 +1064,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e4943d43b6b32e43834f2fd7c51023e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerGroup: {fileID: 114096909619797774}
   wallXMovementOnTrigger: 0
   wallYMovementOnTrigger: 5
---- !u!114 &114221653318725780
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1426628791943826}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c2d1d8951576de41a5546d06dec46d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nextLevelTriggerGroup: {fileID: 1937147025409162}
 --- !u!114 &114281114281420596
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1133,6 +1134,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d00053e0c9599844499c8e47b49820c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114769135156062710
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1937147025409162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ad15e44caa9c9d4089dc5624de1a942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114847949121128478

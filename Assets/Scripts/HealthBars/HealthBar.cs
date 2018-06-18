@@ -29,7 +29,6 @@ public class HealthBar : MonoBehaviour
         this.entity = entity;
 
         maxHealth = entity.Health.GetMaxHealth();
-        entity.Health.OnHealthChanged += OnCurrentHealthChanged;
 
         if (entity is Player || entity is Tower)
         {
@@ -47,12 +46,7 @@ public class HealthBar : MonoBehaviour
             healthImage.color = new Color(1, 71f / 255f, 71f / 255f);
         }
 
-        OnCurrentHealthChanged();
-    }
-
-    private void OnDestroy()
-    {
-        entity.Health.OnHealthChanged -= OnCurrentHealthChanged;
+        UpdateHealthBar();
     }
 
     public Entity GetEntity()
@@ -76,7 +70,7 @@ public class HealthBar : MonoBehaviour
         }
     }
 
-    private void OnCurrentHealthChanged()
+    public void UpdateHealthBar()
     {
         healthImage.fillAmount = entity.Health.GetCurrentHealth() / maxHealth;
     }

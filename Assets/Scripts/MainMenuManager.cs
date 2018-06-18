@@ -7,7 +7,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField]
     private GameObject mainMenuCamera;
     [SerializeField]
-    private GameObject mapHubPrefab;
+    private GameObject hubPrefab;
 
     private GameObject hub;
 
@@ -103,7 +103,7 @@ public class MainMenuManager : MonoBehaviour
 
     private void OnJoinedLobby()
     {
-        hub = Instantiate(mapHubPrefab, Vector2.zero, Quaternion.identity);
+        hub = Instantiate(hubPrefab, Vector2.zero, Quaternion.identity);
         PhotonNetwork.JoinRandomRoom();
     }
 

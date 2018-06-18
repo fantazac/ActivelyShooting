@@ -18,62 +18,108 @@ public class SpawnerManager : MonoBehaviour
     private bool enemiesGoRightOnSpawn;
     [SerializeField]
     private bool enemiesJumpOnSpawn;
-    [SerializeField]
-    private Vector2 towerPosition;
 
     private WaitForSeconds delayBeforeFirstEnemySpawn;
     private WaitForSeconds delayBetweenEnemySpawns;
+
+    private GameObject enemyPrefab;
+    private GameObject enemyJumpPrefab;
+    private GameObject enemyJumpLeftPrefab;
+    private GameObject enemyJumpRightPrefab;
+    private GameObject enemyLeftPrefab;
+    private GameObject enemyRightPrefab;
+
+    private string enemyPrefabPath;
+    private string enemyJumpPrefabPath;
+    private string enemyJumpLeftPrefabPath;
+    private string enemyJumpRightPrefabPath;
+    private string enemyLeftPrefabPath;
+    private string enemyRightPrefabPath;
+
+    public delegate void OnEnemySpawnedHandler(Enemy enemy);
+    public event OnEnemySpawnedHandler OnEnemySpawned;
+
+    public delegate void OnAllEnemiesSpawnedHandler(SpawnerManager spawnerManager);
+    public event OnAllEnemiesSpawnedHandler OnAllEnemiesSpawned;
+
+    private SpawnerManager()
+    {
+        enemyPrefabPath = "EnemyPrefabs/Enemy";
+        enemyJumpPrefabPath = "EnemyPrefabs/Enemy_Jump";
+        enemyJumpLeftPrefabPath = "EnemyPrefabs/Enemy_JumpLeft";
+        enemyJumpRightPrefabPath = "EnemyPrefabs/Enemy_JumpRight";
+        enemyLeftPrefabPath = "EnemyPrefabs/Enemy_Left";
+        enemyRightPrefabPath = "EnemyPrefabs/Enemy_Right";
+    }
 
     private void Awake()
     {
         delayBeforeFirstEnemySpawn = new WaitForSeconds(timeBeforeFirstEnemySpawn);
         delayBetweenEnemySpawns = new WaitForSeconds(timeBetweenEnemySpawns);
+
+        LoadPrefabs();
     }
 
-    public void StartSpawning(bool spawn)
+    private void LoadPrefabs()
+    {
+        enemyPrefab = Resources.Load<GameObject>(enemyPrefabPath);
+        enemyJumpPrefab = Resources.Load<GameObject>(enemyJumpPrefabPath);
+        enemyJumpLeftPrefab = Resources.Load<GameObject>(enemyJumpLeftPrefabPath);
+        enemyJumpRightPrefab = Resources.Load<GameObject>(enemyJumpRightPrefabPath);
+        enemyLeftPrefab = Resources.Load<GameObject>(enemyLeftPrefabPath);
+        enemyRightPrefab = Resources.Load<GameObject>(enemyRightPrefabPath);
+    }
+
+    public void StartSpawning(int spawnerId)
+    {
+        StartCoroutine(SpawnEnemies(spawnerId));
+    }
+
+    private IEnumerator SpawnEnemies(int spawnerId)
     {
         frontOfSpawner.SetActive(true);
-        StartCoroutine(SpawnEnemies(spawn));
-    }
+        int firstId = spawnerId * 100;
 
-    private IEnumerator SpawnEnemies(bool spawn)
-    {
         yield return delayBeforeFirstEnemySpawn;
 
-        for (int i = 0; i < numberOfEnemiesToSpawn; i++)
+        for (int i = firstId; i < firstId + numberOfEnemiesToSpawn; i++)
         {
-            if (spawn)
+            GameObject enemyType;
+            if (enemiesJumpOnSpawn)
             {
-                string enemyType = "Enemy";
-                if (enemiesJumpOnSpawn)
+                if (enemiesGoLeftOnSpawn)
                 {
-                    if (enemiesGoLeftOnSpawn)
-                    {
-                        enemyType = "Enemy_JumpLeft";
-                    }
-                    else if (enemiesGoRightOnSpawn)
-                    {
-                        enemyType = "Enemy_JumpRight";
-                    }
-                    else
-                    {
-                        enemyType = "Enemy_Jump";
-                    }
-                }
-                else if (enemiesGoLeftOnSpawn)
-                {
-                    enemyType = "Enemy_Left";
+                    enemyType = enemyJumpLeftPrefab;
                 }
                 else if (enemiesGoRightOnSpawn)
                 {
-                    enemyType = "Enemy_Right";
+                    enemyType = enemyJumpRightPrefab;
                 }
-                PhotonNetwork.Instantiate(enemyType, transform.position, Quaternion.identity, 0);
+                else
+                {
+                    enemyType = enemyJumpPrefab;
+                }
             }
+            else if (enemiesGoLeftOnSpawn)
+            {
+                enemyType = enemyLeftPrefab;
+            }
+            else if (enemiesGoRightOnSpawn)
+            {
+                enemyType = enemyRightPrefab;
+            }
+            else
+            {
+                enemyType = enemyPrefab;
+            }
+            Enemy enemy = Instantiate(enemyType, transform.position, Quaternion.identity).GetComponent<Enemy>();
+            enemy.ID = i;
+            OnEnemySpawned(enemy);
 
             yield return delayBetweenEnemySpawns;
         }
 
+        OnAllEnemiesSpawned(this);
         frontOfSpawner.SetActive(false);
     }
 }

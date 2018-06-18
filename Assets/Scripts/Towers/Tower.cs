@@ -9,21 +9,8 @@ public class Tower : Entity
         maxHealth = 1000;
     }
 
-    protected override void Start()
+    private void OnEnable()
     {
-        base.Start();
-
-        if (StaticObjects.Player && StaticObjects.Player.SpawnedMap)
-        {
-            Health.OnHealthChanged += OnHealthChanged;
-        }
-    }
-
-    private void OnHealthChanged()
-    {
-        if (Health.IsDead())
-        {
-            //game over on network
-        }
+        
     }
 }

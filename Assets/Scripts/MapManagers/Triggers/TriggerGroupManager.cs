@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NextLevelTriggerGroupManager : MonoBehaviour
+public class TriggerGroupManager : MonoBehaviour
 {
-    [SerializeField]
-    private WallManager wallManager;
-
     private TriggerManager[] triggers;
 
     private int triggersPressedCount;
     private int triggersCount;
+
+    public delegate void OnTriggerGroupPressedHandler();
+    public event OnTriggerGroupPressedHandler OnTriggerGroupPressed;
 
     private void Awake()
     {
@@ -23,13 +23,12 @@ public class NextLevelTriggerGroupManager : MonoBehaviour
         }
     }
 
-    private void OnPressedTrigger(TriggerManager trigger, bool isPressed, GameObject player)
+    private void OnPressedTrigger(bool isPressed)
     {
         triggersPressedCount += isPressed ? 1 : -1;
         if (triggersPressedCount == triggersCount)
         {
-            wallManager.OpenWall();
-            gameObject.SetActive(false);
+            OnTriggerGroupPressed();
         }
     }
 }

@@ -48,4 +48,6 @@ MonoBehaviour:
   - ReceiveFromServer_ConnectionInfo
   - ReceiveFromServer_ConnectionInfoRequest
   - ReceiveFromServer_CloseWall
+  - ReceiveFromServer_ChangeEnemyHealth
+  - ReceiveFromServer_ChangeTowerHealth
   DisableAutoOpenWizard: 1
