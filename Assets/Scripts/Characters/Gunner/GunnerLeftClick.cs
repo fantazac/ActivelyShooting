@@ -186,23 +186,27 @@ public class GunnerLeftClick : Ability
 
     private void OnProjectileHit(Projectile projectile, int weapon, GameObject targetHit)
     {
-        if (weapon == (int)GunnerWeapon.RocketLauncher)
+        if (player.PhotonView.isMine)
         {
-            foreach (Collider2D collider in Physics2D.OverlapCircleAll(targetHit.transform.position, rocketExplosionRadius))
+            if (weapon == (int)GunnerWeapon.RocketLauncher)
             {
-                if (collider.gameObject.tag == "Enemy")
+                //todo: if the platform is big, this doesn't work since it hits the center of the platform instead of, for example, the edge
+                foreach (Collider2D collider in Physics2D.OverlapCircleAll(targetHit.transform.position, rocketExplosionRadius))
                 {
-                    collider.GetComponent<Health>().Reduce(rocketDamage * damageAmplification);
+                    if (collider.gameObject.tag == "Enemy")
+                    {
+                        collider.GetComponent<Health>().Reduce(rocketDamage * damageAmplification);
+                    }
                 }
             }
-        }
-        else
-        {
-            if (player.PhotonView.isMine && targetHit.tag == "Enemy")
+            else
             {
-                targetHit.GetComponent<Health>().Reduce(minigunDamage * damageAmplification);
+                if (player.PhotonView.isMine && targetHit.tag == "Enemy")
+                {
+                    targetHit.GetComponent<Health>().Reduce(minigunDamage * damageAmplification);
+                }
             }
-        }
+        }  
 
         if (projectile is SingleTargetProjectile)
         {
