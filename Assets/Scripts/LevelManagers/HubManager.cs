@@ -18,9 +18,11 @@ public class HubManager : MonoBehaviour
 
     private GameObject defense_1_1_Prefab;
     private GameObject defense_1_2_Prefab;
+    private GameObject defense_1_3_Prefab;
 
     private string defense_1_1_PrefabPath;
     private string defense_1_2_PrefabPath;
+    private string defense_1_3_PrefabPath;
 
     private HubManager()
     {
@@ -29,6 +31,7 @@ public class HubManager : MonoBehaviour
 
         defense_1_1_PrefabPath = "LevelPrefabs/Defense/Level_Defense_1_1";
         defense_1_2_PrefabPath = "LevelPrefabs/Defense/Level_Defense_1_2";
+        defense_1_3_PrefabPath = "LevelPrefabs/Defense/Level_Defense_1_3";
     }
 
     private void Awake()
@@ -43,9 +46,11 @@ public class HubManager : MonoBehaviour
     {
         defense_1_1_Prefab = Resources.Load<GameObject>(defense_1_1_PrefabPath);
         defense_1_2_Prefab = Resources.Load<GameObject>(defense_1_2_PrefabPath);
+        defense_1_3_Prefab = Resources.Load<GameObject>(defense_1_3_PrefabPath);
 
         availableMaps.Add(defense_1_1_Prefab);
         availableMaps.Add(defense_1_2_Prefab);
+        availableMaps.Add(defense_1_3_Prefab);
     }
 
     private void OnNextLevelTriggerGroupPressed()

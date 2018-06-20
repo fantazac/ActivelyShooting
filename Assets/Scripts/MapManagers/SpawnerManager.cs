@@ -18,6 +18,8 @@ public class SpawnerManager : MonoBehaviour
     private bool enemiesGoRightOnSpawn;
     [SerializeField]
     private bool enemiesJumpOnSpawn;
+    [SerializeField]
+    private bool enemiesAlternateGoingLeftAndRightOnSpawn;
 
     private WaitForSeconds delayBeforeFirstEnemySpawn;
     private WaitForSeconds delayBetweenEnemySpawns;
@@ -113,6 +115,10 @@ public class SpawnerManager : MonoBehaviour
 
         for (int i = firstId; i < firstId + numberOfEnemiesToSpawn; i++)
         {
+            if (enemiesAlternateGoingLeftAndRightOnSpawn)
+            {
+                enemyType = i % 2 == 0 ? enemyLeftPrefab : enemyRightPrefab;
+            }
             Enemy enemy = Instantiate(enemyType, transform.position, Quaternion.identity).GetComponent<Enemy>();
             enemy.ID = i;
             OnEnemySpawned(enemy);
