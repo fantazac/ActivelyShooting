@@ -4,15 +4,25 @@ using UnityEngine;
 
 public class PlayerGroundHitboxManager : MonoBehaviour
 {
+    private Player player;
+
     public delegate void OnTouchesFlyingPlatformOrGroundHandler(GameObject platform, float objectYPosition);
     public event OnTouchesFlyingPlatformOrGroundHandler OnTouchesFlyingPlatformOrGround;
 
+    private void Start()
+    {
+        player = StaticObjects.Player;
+    }
+
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (OnTouchesFlyingPlatformOrGround != null &&
-            (collider.gameObject.tag == "FlyingPlatform" || collider.gameObject.tag == "MapFloor" || collider.gameObject.tag == "Wall" || collider.gameObject.tag == "Platform"))
+        if (OnTouchesFlyingPlatformOrGround != null)
         {
-            OnTouchesFlyingPlatformOrGround(collider.gameObject.tag == "FlyingPlatform" ? collider.gameObject : null, collider.transform.position.y + (collider.transform.localScale.y * 0.5f));
+            if (collider.gameObject.tag == "FlyingPlatform" || collider.gameObject.tag == "MapFloor" ||
+                ((collider.gameObject.tag == "Wall" || collider.gameObject.tag == "Platform") && transform.position.y >= collider.transform.position.y + (collider.transform.localScale.y * 0.5f) - 0.1f))
+            {
+                OnTouchesFlyingPlatformOrGround(collider.gameObject.tag == "FlyingPlatform" ? collider.gameObject : null, collider.transform.position.y + (collider.transform.localScale.y * 0.5f));
+            }
         }
     }
 }

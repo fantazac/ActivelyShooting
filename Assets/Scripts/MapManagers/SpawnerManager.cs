@@ -82,36 +82,37 @@ public class SpawnerManager : MonoBehaviour
 
         yield return delayBeforeFirstEnemySpawn;
 
-        for (int i = firstId; i < firstId + numberOfEnemiesToSpawn; i++)
+        GameObject enemyType;
+        if (enemiesJumpOnSpawn)
         {
-            GameObject enemyType;
-            if (enemiesJumpOnSpawn)
+            if (enemiesGoLeftOnSpawn)
             {
-                if (enemiesGoLeftOnSpawn)
-                {
-                    enemyType = enemyJumpLeftPrefab;
-                }
-                else if (enemiesGoRightOnSpawn)
-                {
-                    enemyType = enemyJumpRightPrefab;
-                }
-                else
-                {
-                    enemyType = enemyJumpPrefab;
-                }
-            }
-            else if (enemiesGoLeftOnSpawn)
-            {
-                enemyType = enemyLeftPrefab;
+                enemyType = enemyJumpLeftPrefab;
             }
             else if (enemiesGoRightOnSpawn)
             {
-                enemyType = enemyRightPrefab;
+                enemyType = enemyJumpRightPrefab;
             }
             else
             {
-                enemyType = enemyPrefab;
+                enemyType = enemyJumpPrefab;
             }
+        }
+        else if (enemiesGoLeftOnSpawn)
+        {
+            enemyType = enemyLeftPrefab;
+        }
+        else if (enemiesGoRightOnSpawn)
+        {
+            enemyType = enemyRightPrefab;
+        }
+        else
+        {
+            enemyType = enemyPrefab;
+        }
+
+        for (int i = firstId; i < firstId + numberOfEnemiesToSpawn; i++)
+        {
             Enemy enemy = Instantiate(enemyType, transform.position, Quaternion.identity).GetComponent<Enemy>();
             enemy.ID = i;
             OnEnemySpawned(enemy);

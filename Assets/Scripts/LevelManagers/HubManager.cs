@@ -14,15 +14,21 @@ public class HubManager : MonoBehaviour
 
     private List<GameObject> maps;
 
+    private List<GameObject> availableMaps;
+
     private GameObject defense_1_1_Prefab;
+    private GameObject defense_1_2_Prefab;
 
     private string defense_1_1_PrefabPath;
+    private string defense_1_2_PrefabPath;
 
     private HubManager()
     {
         maps = new List<GameObject>();
+        availableMaps = new List<GameObject>();
 
-        defense_1_1_PrefabPath = "LevelPrefabs/Level_Defense_1_1";
+        defense_1_1_PrefabPath = "LevelPrefabs/Defense/Level_Defense_1_1";
+        defense_1_2_PrefabPath = "LevelPrefabs/Defense/Level_Defense_1_2";
     }
 
     private void Awake()
@@ -36,6 +42,10 @@ public class HubManager : MonoBehaviour
     private void LoadPrefabs()
     {
         defense_1_1_Prefab = Resources.Load<GameObject>(defense_1_1_PrefabPath);
+        defense_1_2_Prefab = Resources.Load<GameObject>(defense_1_2_PrefabPath);
+
+        availableMaps.Add(defense_1_1_Prefab);
+        availableMaps.Add(defense_1_2_Prefab);
     }
 
     private void OnNextLevelTriggerGroupPressed()
@@ -58,7 +68,12 @@ public class HubManager : MonoBehaviour
         }
         for (int i = 1; i <= 10; i++)
         {
-            maps.Add(Instantiate(defense_1_1_Prefab, new Vector2(i * 46, 0), Quaternion.identity));
+            maps.Add(Instantiate(GetAvailableMap(), new Vector2(i * 46, 0), Quaternion.identity));
         }
+    }
+
+    private GameObject GetAvailableMap()
+    {
+        return availableMaps[Random.Range(0, availableMaps.Count)];
     }
 }

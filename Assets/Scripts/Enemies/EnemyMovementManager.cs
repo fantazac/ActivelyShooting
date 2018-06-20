@@ -22,7 +22,7 @@ public class EnemyMovementManager : MonoBehaviour
     private bool jumpPostStun;
 
     private const float TERMINAL_SPEED = -10;
-    private const float BASE_HORIZONTAL_SPEED = 1.5f;
+    private const float BASE_HORIZONTAL_SPEED = 0.5f;
 
     private EnemyMovementManager()
     {
