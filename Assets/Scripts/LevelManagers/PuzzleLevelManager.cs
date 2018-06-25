@@ -23,6 +23,10 @@ public class PuzzleLevelManager : MonoBehaviour
             TriggerGroupManager tgm = triggerGroupManagers[i];
             tgm.ID = i;
             tgm.OnTriggerGroupPressed += OnTriggerGroupPressed;
+            if (tgm.GetDisableOnPressed() && i % 2 == 1)
+            {
+                tgm.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -37,8 +41,15 @@ public class PuzzleLevelManager : MonoBehaviour
         if (activated)
         {
             puzzleStructureManagers[id].MoveStructureToTargetPosition();
+            if (triggerGroupManagers[id].GetDisableOnPressed())
+            {
+                int nextId = id % 2 == 0 ? 1 : -1;
+                triggerGroupManagers[id].gameObject.SetActive(false);
+                triggerGroupManagers[id + nextId].gameObject.SetActive(true);
+                puzzleStructureManagers[id].SwitchInitialAndTargetPositions();
+            }
         }
-        else
+        else if (triggerGroupManagers[id].gameObject.activeSelf)
         {
             puzzleStructureManagers[id].MoveStructureBackToInitialPosition();
         }

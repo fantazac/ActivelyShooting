@@ -9,6 +9,9 @@ public class TriggerGroupManager : MonoBehaviour
     private int triggersPressedCount;
     private int triggersCount;
 
+    [SerializeField]
+    private bool disableOnPressed;
+
     public int ID { get; set; }
 
     public delegate void OnTriggerGroupPressedHandler(bool activated, int id);
@@ -39,5 +42,10 @@ public class TriggerGroupManager : MonoBehaviour
                 OnTriggerGroupPressed(false, ID);
             }
         }
+    }
+
+    public bool GetDisableOnPressed()
+    {
+        return disableOnPressed;
     }
 }

@@ -32,11 +32,12 @@ public class HubManager : MonoBehaviour
 
     private void LoadPrefabs()
     {
-        availableMaps.Add(Resources.Load<GameObject>("LevelPrefabs/Defense/Level_Defense_1_1"));
+        /*availableMaps.Add(Resources.Load<GameObject>("LevelPrefabs/Defense/Level_Defense_1_1"));
         availableMaps.Add(Resources.Load<GameObject>("LevelPrefabs/Defense/Level_Defense_1_2"));
         availableMaps.Add(Resources.Load<GameObject>("LevelPrefabs/Defense/Level_Defense_1_3"));
 
-        availableMaps.Add(Resources.Load<GameObject>("LevelPrefabs/Puzzle/Level_Puzzle_1_1"));
+        availableMaps.Add(Resources.Load<GameObject>("LevelPrefabs/Puzzle/Level_Puzzle_1_1"));*/
+        availableMaps.Add(Resources.Load<GameObject>("LevelPrefabs/Puzzle/Level_Puzzle_1_2"));
     }
 
     private void OnNextLevelTriggerGroupPressed(bool activated, int id)
