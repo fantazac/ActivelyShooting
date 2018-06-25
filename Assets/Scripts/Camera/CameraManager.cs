@@ -48,16 +48,21 @@ public class CameraManager : MonoBehaviour
 
     private void OnEnable()
     {
-        UpdateCameraDimensions();
+        ResetCameraDimensions();
     }
 
-    public void UpdateCameraDimensions()
+    public void ResetCameraDimensions()
     {
         listAreaNodes = new List<GameObject>();
         foreach (GameObject cameraDimension in GameObject.FindGameObjectsWithTag("CameraDimensions"))
         {
             listAreaNodes.Add(cameraDimension);
         }
+    }
+
+    public void AddNewCameraDimensions(GameObject cameraDimension)
+    {
+        listAreaNodes.Add(cameraDimension);
     }
 
     public void SetCameraOnPlayer(Vector3 position, int cameraDimensionId)

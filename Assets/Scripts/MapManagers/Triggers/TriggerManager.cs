@@ -20,7 +20,7 @@ public class TriggerManager : MonoBehaviour
     {
         if (collider.gameObject.tag == "Player")
         {
-            if (++pressedCount == 1)
+            if (++pressedCount == 1 && OnPressedTrigger != null)
             {
                 OnPressedTrigger(true);
             }
@@ -31,7 +31,7 @@ public class TriggerManager : MonoBehaviour
     {
         if (collider.gameObject.tag == "Player")
         {
-            if (--pressedCount == 0)
+            if (--pressedCount == 0 && OnPressedTrigger != null)
             {
                 OnPressedTrigger(false);
             }

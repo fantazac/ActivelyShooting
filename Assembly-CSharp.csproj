@@ -163,6 +163,7 @@
      <Compile Include="Assets\Scripts\HealthBars\HealthBarManager.cs" />
      <Compile Include="Assets\Scripts\LevelManagers\DefenseLevelManager.cs" />
      <Compile Include="Assets\Scripts\LevelManagers\HubManager.cs" />
+     <Compile Include="Assets\Scripts\LevelManagers\PuzzleLevelManager.cs" />
      <Compile Include="Assets\Scripts\MainMenuManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\CloseWallManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\CloseWallOnPlayersInNextRoomManager.cs" />
@@ -170,6 +171,7 @@
      <Compile Include="Assets\Scripts\MapManagers\EnemyMovementTriggers\EnemyGoRightTriggerManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\EnemyMovementTriggers\EnemyJumpTriggerManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\EnemyMovementTriggers\EnemyStopMovementTriggerManager.cs" />
+     <Compile Include="Assets\Scripts\MapManagers\PuzzleStructureManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\SpawnerManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\Triggers\TriggerGroupManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\Triggers\TriggerManager.cs" />

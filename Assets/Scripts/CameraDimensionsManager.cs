@@ -8,7 +8,7 @@ public class CameraDimensionsManager : MonoBehaviour
     {
         if (StaticObjects.PlayerCamera)
         {
-            StaticObjects.PlayerCamera.GetComponent<CameraManager>().UpdateCameraDimensions();
+            StaticObjects.PlayerCamera.GetComponent<CameraManager>().AddNewCameraDimensions(gameObject);
         }
     }
 }

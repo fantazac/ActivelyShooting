@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class PlayerGroundHitboxManager : MonoBehaviour
 {
-    private Player player;
-
     public delegate void OnTouchesFlyingPlatformOrGroundHandler(GameObject platform, float objectYPosition);
     public event OnTouchesFlyingPlatformOrGroundHandler OnTouchesFlyingPlatformOrGround;
-
-    private void Start()
-    {
-        player = StaticObjects.Player;
-    }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {

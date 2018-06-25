@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4862559563357882}
-  - component: {fileID: 114736619537288484}
+  - component: {fileID: 114865674857841110}
   m_Layer: 0
   m_Name: TriggerGroup
   m_TagString: Untagged
@@ -40,7 +40,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114736619537288484
+--- !u!114 &114865674857841110
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -48,6 +48,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1220597264779354}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70eae5ce5fa754c4e99ae04fe7654b05, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ad15e44caa9c9d4089dc5624de1a942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

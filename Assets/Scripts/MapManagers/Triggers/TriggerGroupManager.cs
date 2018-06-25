@@ -9,7 +9,9 @@ public class TriggerGroupManager : MonoBehaviour
     private int triggersPressedCount;
     private int triggersCount;
 
-    public delegate void OnTriggerGroupPressedHandler();
+    public int ID { get; set; }
+
+    public delegate void OnTriggerGroupPressedHandler(bool activated, int id);
     public event OnTriggerGroupPressedHandler OnTriggerGroupPressed;
 
     private void Awake()
@@ -26,9 +28,16 @@ public class TriggerGroupManager : MonoBehaviour
     private void OnPressedTrigger(bool isPressed)
     {
         triggersPressedCount += isPressed ? 1 : -1;
-        if (triggersPressedCount == triggersCount)
+        if (OnTriggerGroupPressed != null)
         {
-            OnTriggerGroupPressed();
+            if (triggersPressedCount == triggersCount)
+            {
+                OnTriggerGroupPressed(true, ID);
+            }
+            else if (!isPressed && triggersPressedCount + 1 == triggersCount)
+            {
+                OnTriggerGroupPressed(false, ID);
+            }
         }
     }
 }

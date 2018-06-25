@@ -10,6 +10,9 @@ public class DefenseLevelManager : MonoBehaviour
     [SerializeField]
     private TriggerGroupManager nextLevelTriggerGroupManager;
     [SerializeField]
+    private WallManager nextLevelWallManager;
+
+    [SerializeField]
     private TriggerGroupManager spawnEnemiesTriggerGroupManager;
 
     [SerializeField]
@@ -21,9 +24,6 @@ public class DefenseLevelManager : MonoBehaviour
     private GameObject tower;
 
     private Health towerHealth;
-
-    [SerializeField]
-    private WallManager nextLevelWallManager;
 
     private List<Enemy> enemiesSpawned;
 
@@ -55,13 +55,13 @@ public class DefenseLevelManager : MonoBehaviour
         }
     }
 
-    private void OnNextLevelTriggerGroupPressed()
+    private void OnNextLevelTriggerGroupPressed(bool activated, int id)
     {
         nextLevelTriggerGroupManager.gameObject.SetActive(false);
         nextLevelWallManager.OpenWall();
     }
 
-    private void OnSpawnEnemiesTriggerGroupPressed()
+    private void OnSpawnEnemiesTriggerGroupPressed(bool activated, int id)
     {
         spawnEnemiesTriggerGroupManager.gameObject.SetActive(false);
         tower.SetActive(true);

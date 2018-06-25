@@ -16,22 +16,10 @@ public class HubManager : MonoBehaviour
 
     private List<GameObject> availableMaps;
 
-    private GameObject defense_1_1_Prefab;
-    private GameObject defense_1_2_Prefab;
-    private GameObject defense_1_3_Prefab;
-
-    private string defense_1_1_PrefabPath;
-    private string defense_1_2_PrefabPath;
-    private string defense_1_3_PrefabPath;
-
     private HubManager()
     {
         maps = new List<GameObject>();
         availableMaps = new List<GameObject>();
-
-        defense_1_1_PrefabPath = "LevelPrefabs/Defense/Level_Defense_1_1";
-        defense_1_2_PrefabPath = "LevelPrefabs/Defense/Level_Defense_1_2";
-        defense_1_3_PrefabPath = "LevelPrefabs/Defense/Level_Defense_1_3";
     }
 
     private void Awake()
@@ -44,22 +32,20 @@ public class HubManager : MonoBehaviour
 
     private void LoadPrefabs()
     {
-        defense_1_1_Prefab = Resources.Load<GameObject>(defense_1_1_PrefabPath);
-        defense_1_2_Prefab = Resources.Load<GameObject>(defense_1_2_PrefabPath);
-        defense_1_3_Prefab = Resources.Load<GameObject>(defense_1_3_PrefabPath);
+        availableMaps.Add(Resources.Load<GameObject>("LevelPrefabs/Defense/Level_Defense_1_1"));
+        availableMaps.Add(Resources.Load<GameObject>("LevelPrefabs/Defense/Level_Defense_1_2"));
+        availableMaps.Add(Resources.Load<GameObject>("LevelPrefabs/Defense/Level_Defense_1_3"));
 
-        availableMaps.Add(defense_1_1_Prefab);
-        availableMaps.Add(defense_1_2_Prefab);
-        availableMaps.Add(defense_1_3_Prefab);
+        availableMaps.Add(Resources.Load<GameObject>("LevelPrefabs/Puzzle/Level_Puzzle_1_1"));
     }
 
-    private void OnNextLevelTriggerGroupPressed()
+    private void OnNextLevelTriggerGroupPressed(bool activated, int id)
     {
         nextLevelTriggerGroupManager.gameObject.SetActive(false);
         nextLevelWallManager.OpenWall();
     }
 
-    private void OnSpawnLevelsTriggerGroupPressed()
+    private void OnSpawnLevelsTriggerGroupPressed(bool activated, int id)
     {
         spawnLevelsTriggerGroupManager.gameObject.SetActive(false);
         nextLevelTriggerGroupManager.gameObject.SetActive(true);
