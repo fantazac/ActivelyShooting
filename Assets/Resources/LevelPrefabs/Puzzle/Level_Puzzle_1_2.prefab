@@ -311,7 +311,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1234754055392686}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.5, y: -12.25, z: 0}
+  m_LocalPosition: {x: 20, y: -12.25, z: 0}
   m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 4831259259004606}
@@ -367,7 +367,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1521460397333342}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20.5, y: -5.25, z: 0}
+  m_LocalPosition: {x: 20, y: 5.25, z: 0}
   m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 4831259259004606}
@@ -406,7 +406,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1603951746795170}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -16.5, y: -5.25, z: 0}
+  m_LocalPosition: {x: 20, y: -3.75, z: 0}
   m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 4831259259004606}
@@ -792,8 +792,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextLevelTriggerGroupManager: {fileID: 114329952986467686}
   nextLevelWallManager: {fileID: 114018942550655526}
-  triggerGroupManagers: []
-  puzzleStructureManagers: []
+  triggerGroupManagers:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  puzzleStructureManagers:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &114320054226023626
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -15,7 +15,7 @@ public class PuzzleStructureManager : MonoBehaviour
 
     private PuzzleStructureManager()
     {
-        structureSpeed = 25;
+        structureSpeed = 15;
     }
 
     private void Awake()
