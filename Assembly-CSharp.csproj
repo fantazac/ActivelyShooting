@@ -154,6 +154,7 @@
      <Compile Include="Assets\Scripts\Characters\PlayerInputManager.cs" />
      <Compile Include="Assets\Scripts\Characters\PlayerLevelInfoTransmitter.cs" />
      <Compile Include="Assets\Scripts\Characters\PlayerMovementManager.cs" />
+     <Compile Include="Assets\Scripts\Characters\PlayerPortalManager.cs" />
      <Compile Include="Assets\Scripts\Enemies\Enemy.cs" />
      <Compile Include="Assets\Scripts\Enemies\EnemyDamageHitboxManager.cs" />
      <Compile Include="Assets\Scripts\Enemies\EnemyMovementManager.cs" />
@@ -171,6 +172,7 @@
      <Compile Include="Assets\Scripts\MapManagers\EnemyMovementTriggers\EnemyGoRightTriggerManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\EnemyMovementTriggers\EnemyJumpTriggerManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\EnemyMovementTriggers\EnemyStopMovementTriggerManager.cs" />
+     <Compile Include="Assets\Scripts\MapManagers\PortalManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\PuzzleStructureManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\SpawnerManager.cs" />
      <Compile Include="Assets\Scripts\MapManagers\Triggers\TriggerGroupManager.cs" />

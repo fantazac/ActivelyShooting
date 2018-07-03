@@ -20,6 +20,7 @@ public abstract class Player : Entity
     public PlayerInputManager PlayerInputManager { get; private set; }
     public PlayerLevelInfoTransmitter PlayerLevelInfoTransmitter { get; private set; }
     public PlayerMovementManager PlayerMovementManager { get; protected set; }
+    public PlayerPortalManager PlayerPortalManager { get; private set; }
 
     public Player[] Party { get; private set; }
 
@@ -40,6 +41,7 @@ public abstract class Player : Entity
             PlayerGroundHitboxManager = gameObject.AddComponent<PlayerGroundHitboxManager>();
             PlayerHitbox = GetComponent<BoxCollider2D>();
             PlayerInputManager = gameObject.AddComponent<PlayerInputManager>();
+            PlayerPortalManager = gameObject.AddComponent<PlayerPortalManager>();
         }
         else
         {

@@ -792,14 +792,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextLevelTriggerGroupManager: {fileID: 114329952986467686}
   nextLevelWallManager: {fileID: 114018942550655526}
-  triggerGroupManagers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  puzzleStructureManagers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  triggerGroupManagers: []
+  puzzleStructureManagers: []
 --- !u!114 &114320054226023626
 MonoBehaviour:
   m_ObjectHideFlags: 1

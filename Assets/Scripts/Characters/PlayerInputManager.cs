@@ -3,7 +3,7 @@
 public class PlayerInputManager : MonoBehaviour
 {
     public delegate void OnMoveUpWHandler();
-    public event OnMoveUpWHandler OnMoveUp;//Not used unless we have portals to change maps
+    public event OnMoveUpWHandler OnMoveUp;
 
     public delegate void OnMoveRightHandler(bool goesLeft, bool goesRight);
     public event OnMoveRightHandler OnMove;
@@ -60,6 +60,10 @@ public class PlayerInputManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             OnJump();
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            OnMoveUp();
         }
         OnMove(Input.GetKey(KeyCode.A), Input.GetKey(KeyCode.D));
     }
